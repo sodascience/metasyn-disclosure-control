@@ -23,8 +23,10 @@ setup(
     author='Soda Development Team',
     keywords='metasynth disclosure',
     packages=find_namespace_packages(include=['metasynthcontrib.*']),
+    package_data={"metasynthcontrib.disclosure": ["py.typed"]},
+    include_package_data=True,
     install_requires=[
-        "metasynth", "numpy",
+        "metasynth", "numpy>=1.20",
     ],
 
     extras_require={

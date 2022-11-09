@@ -4,13 +4,14 @@ import datetime as dt
 
 import numpy as np
 
-from metasynth.distribution.datetime import UniformDateTimeDistribution
+from metasynth.distribution.datetime import UniformDateTimeDistribution,\
+    convert_numpy_datetime
 from metasynth.distribution.datetime import UniformTimeDistribution
 from metasynth.distribution.datetime import UniformDateDistribution
 
 
 def average_dt(values):
-    return values[0] + np.mean(values - values[0])
+    return values[0] + (values - values[0]).mean()
 
 
 def get_lower_bound(sorted_values, n_avg=10):
@@ -48,7 +49,7 @@ class DisclosureTimeDistribution(UniformTimeDistribution):
     @classmethod
     def _fit(cls, series: Sequence, n_avg: int=10):
         base_date = dt.date.fromisoformat("2020-01-01")
-        sorted_time = np.sort(series)
+        sorted_time = series.sort()
         sorted_dt = np.array([dt.datetime.combine(base_date, x) for x in sorted_time])
         start, end = get_dt_bounds(sorted_dt, n_avg=n_avg)
         if start.date() < base_date:
@@ -67,4 +68,5 @@ class DisclosureTimeDistribution(UniformTimeDistribution):
 class DisclosureDateDistribution(UniformDateDistribution):
     @classmethod
     def _fit(cls, series: Sequence, n_avg: int=10) -> DisclosureDateDistribution:
-        return cls(*get_dt_bounds(series, n_avg))
+        min_dt, max_dt = get_dt_bounds(series, n_avg)
+        return cls(convert_numpy_datetime(min_dt).date(), convert_numpy_datetime(max_dt).date())

@@ -18,6 +18,7 @@ import polars as pl
 #         sum_high += high_est
 #     return sum_low/n_avg, sum_high/n_avg
 
+
 def get_lower_bound(values, n_avg: int=10):
     alpha_one = values[1]-values[0]
     alpha_two = values[2]-values[1]

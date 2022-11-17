@@ -1,7 +1,7 @@
 """Utilities for disclosure control."""
 
 import numpy as np
-
+import polars as pl
 
 # def get_disclosure_bounds(values, n_avg: int=10) -> Tuple[float, float]:
 #     """Get disclosure control bounds."""
@@ -17,6 +17,7 @@ import numpy as np
 #         sum_low += low_est
 #         sum_high += high_est
 #     return sum_low/n_avg, sum_high/n_avg
+
 
 def get_lower_bound(values, n_avg: int=10):
     alpha_one = values[1]-values[0]
@@ -51,6 +52,6 @@ def subsample(values, n_avg: int=10):
     remove_index = np.where(remove_points)[0] + np.random.randint(0, min_block_size, size=leftover)
     sorted_values = sorted_values[np.delete(np.arange(n_values), remove_index)]
     sub_values = sorted_values.reshape(n_blocks, min_block_size).mean(axis=1)
-    if issubclass(values.dtype.type, np.integer):
-        return (sub_values+0.5).astype(values.dtype)
+    if values.dtype in [pl.datatypes.Int64, pl.datatypes.Int32, pl.datatypes.Int32]:
+        return (sub_values+0.5).astype(np.int64)
     return sub_values

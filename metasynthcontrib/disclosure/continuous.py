@@ -8,21 +8,21 @@ from metasynth.distribution.continuous import TruncatedNormalDistribution
 from metasynthcontrib.disclosure.numerical import DisclosureNumerical
 
 
-class DisclosureUniform(DisclosureNumerical, UniformDistribution):
+class DisclosureUniform(UniformDistribution, DisclosureNumerical):
     """Uniform distribution implementation."""
 
 
-class DisclosureTruncatedNormal(DisclosureNumerical, TruncatedNormalDistribution):
+class DisclosureTruncatedNormal(TruncatedNormalDistribution, DisclosureNumerical):
     """Truncated normal distribution implementation."""
 
 
-class DisclosureNormalDistribution(DisclosureNumerical, NormalDistribution):
+class DisclosureNormal(NormalDistribution, DisclosureNumerical):
     """Disclosure normal distribution."""
 
 
-class DisclosureLogNormalDistribution(DisclosureNumerical, LogNormalDistribution):
+class DisclosureLogNormal(LogNormalDistribution, DisclosureNumerical):
     """Disclosure log-normal distribution."""
 
 
-class DisclosureExponentialDistribution(DisclosureNumerical, ExponentialDistribution):
+class DisclosureExponential(ExponentialDistribution, DisclosureNumerical):
     """Disclosure exponential distribution."""

@@ -9,6 +9,18 @@ import polars as pl
 from numpy.core._exceptions import UFuncTypeError
 
 
+def _compute_dominance(block_values, reverse=False):
+    if not reverse:
+        min_values = np.min(block_values, axis=1).reshape(-1, 1)
+        diff_values = (block_values - min_values)
+    else:
+        max_values = np.max(block_values, axis=1).reshape(-1, 1)
+        diff_values = (max_values - block_values)
+    diff_sum = diff_values.sum(axis=1)
+    dominance = diff_values[diff_sum > 0].max(axis=1)/diff_sum[diff_sum > 0]
+    return np.max(dominance)
+
+
 def _create_subsample(values, n_avg: int=11, pre_remove: int=0,  # pylint: disable=too-many-locals
                       post_remove: int=0) -> tuple[list, float]:
     sorted_values = np.sort(values)
@@ -30,19 +42,14 @@ def _create_subsample(values, n_avg: int=11, pre_remove: int=0,  # pylint: disab
     assert len(sorted_values) == n_blocks*min_block_size
 
     block_values = sorted_values.reshape(n_blocks, min_block_size)
-    min_values = np.min(block_values, axis=1).reshape(-1, 1)
-    max_values = np.max(block_values, axis=1).reshape(-1, 1)
-    diff_values = (block_values - min_values)
-    dominance = diff_values.max(axis=1)/diff_values.sum(axis=1)
-    diff_values_reverse = (max_values - block_values)
-    dominance_reverse = diff_values_reverse.max(axis=1)/diff_values_reverse.sum(axis=1)
-    dominance = np.maximum(dominance, dominance_reverse)
+    dominance = max(_compute_dominance(block_values, reverse=False),
+                    _compute_dominance(block_values, reverse=True))
     try:
         sub_values = block_values.mean(axis=1)
     except UFuncTypeError:
         return [dt.datetime.utcfromtimestamp(pl.Series(sub).mean()/1e6)
-                for sub in block_values], np.max(dominance)
-    return sub_values, np.max(dominance)
+                for sub in block_values], dominance
+    return sub_values, dominance
 
 
 def micro_aggregate(values: pl.Series, min_bin: int=11) -> pl.Series:

@@ -12,7 +12,7 @@ from metasynth.distribution.discrete import UniqueKeyDistribution
 from metasynthcontrib.disclosure.numerical import DisclosureNumerical
 
 
-class DisclosureDiscreteUniform(DisclosureNumerical, DiscreteUniformDistribution):
+class DisclosureDiscreteUniform(DiscreteUniformDistribution, DisclosureNumerical):
     """Implementation for discrete uniform distribution."""
 
 
@@ -28,5 +28,5 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
         return cls(uniform_dist.low, orig_dist.consecutive)  # type: ignore
 
 
-class DisclosurePoissonDistribution(DisclosureNumerical, PoissonDistribution):
+class DisclosurePoisson(PoissonDistribution, DisclosureNumerical):
     """Disclosure implementation for Poisson distribution."""

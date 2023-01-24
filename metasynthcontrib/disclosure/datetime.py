@@ -15,6 +15,7 @@ from metasynthcontrib.disclosure.utils import micro_aggregate
 
 class DisclosureDateTimeDistribution(BaseDisclosureDistribution, UniformDateTimeDistribution):
     """Disclosure implementation for the datetime distribution."""
+
     @classmethod
     def _fit(cls, values: Sequence, n_avg: int=10) -> DisclosureDateTimeDistribution:
         sub_series = micro_aggregate(values, n_avg)
@@ -23,6 +24,7 @@ class DisclosureDateTimeDistribution(BaseDisclosureDistribution, UniformDateTime
 
 class DisclosureTimeDistribution(BaseDisclosureDistribution, UniformTimeDistribution):
     """Disclosure implementation for the time distribution."""
+
     @classmethod
     def _fit(cls, values: Sequence, n_avg: int=10):
         # Convert time to a datetime so that the microaggregation works
@@ -37,6 +39,7 @@ class DisclosureTimeDistribution(BaseDisclosureDistribution, UniformTimeDistribu
 
 class DisclosureDateDistribution(BaseDisclosureDistribution, UniformDateDistribution):
     """Disclosure implementation for the date distribution."""
+
     @classmethod
     def _fit(cls, values: Sequence, n_avg: int=10) -> DisclosureDateDistribution:
         # Convert dates to datetimes

@@ -13,6 +13,7 @@ from metasynthcontrib.disclosure.utils import micro_aggregate
 
 class DisclosureNumerical(BaseDisclosureDistribution):
     """Class for numerical distributions of the disclosure kind."""
+
     @classmethod
     def fit(cls, series: Union[Sequence, pl.Series], *args,
             n_avg: int=11, **kwargs) -> BaseDistribution:

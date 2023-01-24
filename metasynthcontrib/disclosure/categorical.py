@@ -11,6 +11,7 @@ class DisclosureMultinoulliDistribution(MultinoulliDistribution):
     It checks that all labels appear at least x times, and that
     there is no label with >90% of the counts.
     """
+
     @classmethod
     def _fit(cls, values: pl.Series, n_avg: int=11):
         dist = super(DisclosureMultinoulliDistribution, cls)._fit(values)

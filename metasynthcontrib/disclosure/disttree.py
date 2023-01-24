@@ -1,4 +1,4 @@
-"""Module contains """
+"""Module contains distribution tree for disclosure control."""
 
 from typing import List, Type
 
@@ -26,6 +26,7 @@ class DisclosureDistributionTree(BuiltinDistributionTree):
     See for more information on disclosure control:
     https://ec.europa.eu/eurostat/cros/system/files/dwb_standalone-document_output-checking-guidelines.pdf
     """
+
     @property
     def continuous_distributions(self) -> List[Type[BaseDistribution]]:
         return [DisclosureUniform, DisclosureTruncatedNormal, DisclosureNormalDistribution,

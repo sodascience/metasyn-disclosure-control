@@ -1,9 +1,16 @@
+"""Disclosure classes for categorical variables."""
+
 import polars as pl
 
 from metasynth.distribution.categorical import MultinoulliDistribution
 
 
 class DisclosureMultinoulliDistribution(MultinoulliDistribution):
+    """Disclosure variant for multinoulli distribution.
+
+    It checks that all labels appear at least x times, and that
+    there is no label with >90% of the counts.
+    """
     @classmethod
     def _fit(cls, values: pl.Series, n_avg: int=11):
         dist = super(DisclosureMultinoulliDistribution, cls)._fit(values)

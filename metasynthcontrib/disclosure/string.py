@@ -1,8 +1,8 @@
+"""Module for disclosure control for string distributions."""
+
 from metasynth.distribution.faker import FakerDistribution
+from metasynthcontrib.disclosure.base import BaseDisclosureDistribution
 
 
-class DisclosureFakerDistribution(FakerDistribution):
-    @classmethod
-    def _fit(cls, values, faker_type: str="city", locale: str="en_US", n_avg: int=11):
-        return super(DisclosureFakerDistribution, cls)._fit(
-            values, faker_type=faker_type, locale=locale)
+class DisclosureFakerDistribution(BaseDisclosureDistribution, FakerDistribution):
+    """Faker distribution for disclosure control."""

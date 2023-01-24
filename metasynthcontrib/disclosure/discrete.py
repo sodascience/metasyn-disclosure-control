@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import numpy as np
+import polars as pl
 
 from metasynth.distribution.discrete import DiscreteUniformDistribution
 from metasynth.distribution.discrete import PoissonDistribution
@@ -19,7 +20,7 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
     """Implementation for unique key distribution."""
 
     @classmethod
-    def _fit(cls, values, n_avg: int=10):
+    def _fit(cls, values: pl.Series, n_avg: int=10):
         orig_dist = super()._fit(values)
         if orig_dist.consecutive == 1:
             return cls(np.random.randint(2*n_avg+1)-n_avg, orig_dist.consecutive)
@@ -28,4 +29,4 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
 
 
 class DisclosurePoissonDistribution(DisclosureNumerical, PoissonDistribution):
-    pass
+    """Disclosure implementation for Poisson distribution."""

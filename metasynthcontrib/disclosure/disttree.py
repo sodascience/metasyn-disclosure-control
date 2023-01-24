@@ -1,3 +1,5 @@
+"""Module contains """
+
 from typing import List, Type
 
 from metasynth.disttree import BuiltinDistributionTree
@@ -16,9 +18,14 @@ from metasynthcontrib.disclosure.datetime import DisclosureDateTimeDistribution
 from metasynthcontrib.disclosure.datetime import DisclosureTimeDistribution
 
 
-# TODO: currently unsafe distributions are included:
+# Currently unsafe distributions are included:
 # DisclosureUniqueKey needs to be checked (no guidelines).
 class DisclosureDistributionTree(BuiltinDistributionTree):
+    """Distribution tree that contains safe distributions.
+
+    See for more information on disclosure control:
+    https://ec.europa.eu/eurostat/cros/system/files/dwb_standalone-document_output-checking-guidelines.pdf
+    """
     @property
     def continuous_distributions(self) -> List[Type[BaseDistribution]]:
         return [DisclosureUniform, DisclosureTruncatedNormal, DisclosureNormalDistribution,

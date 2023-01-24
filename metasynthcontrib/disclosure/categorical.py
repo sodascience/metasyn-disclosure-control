@@ -1,12 +1,14 @@
-from typing import Sequence
+import polars as pl
 
 from metasynth.distribution.categorical import MultinoulliDistribution
 
 
 class DisclosureMultinoulliDistribution(MultinoulliDistribution):
     @classmethod
-    def _fit(cls, values: Sequence[str], n_avg: int=10):
+    def _fit(cls, values: pl.Series, n_avg: int=11):
         dist = super(DisclosureMultinoulliDistribution, cls)._fit(values)
         labels = dist.labels[dist.probs >= n_avg/len(values)]
         probs = dist.probs[dist.probs >= n_avg/len(values)]
+        if probs.max() >= 0.9:
+            return cls.default_distribution()
         return cls(labels, probs)

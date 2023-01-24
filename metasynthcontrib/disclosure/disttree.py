@@ -2,7 +2,6 @@ from typing import List, Type
 
 from metasynth.disttree import BuiltinDistributionTree
 from metasynth.distribution.base import BaseDistribution
-# from metasynth.distribution.categorical import MultinoulliDistribution
 
 from metasynthcontrib.disclosure.continuous import DisclosureUniform, DisclosureTruncatedNormal
 from metasynthcontrib.disclosure.continuous import DisclosureNormalDistribution
@@ -17,7 +16,8 @@ from metasynthcontrib.disclosure.datetime import DisclosureDateTimeDistribution
 from metasynthcontrib.disclosure.datetime import DisclosureTimeDistribution
 
 
-# TODO: currently unsafe distributions are included
+# TODO: currently unsafe distributions are included:
+# DisclosureUniqueKey needs to be checked (no guidelines).
 class DisclosureDistributionTree(BuiltinDistributionTree):
     @property
     def continuous_distributions(self) -> List[Type[BaseDistribution]]:

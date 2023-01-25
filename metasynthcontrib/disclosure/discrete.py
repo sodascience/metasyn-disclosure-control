@@ -20,7 +20,7 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
     """Implementation for unique key distribution."""
 
     @classmethod
-    def _fit(cls, values: pl.Series, n_avg: int=10):
+    def _fit(cls, values: pl.Series, n_avg: int=11):
         orig_dist = super()._fit(values)
         if orig_dist.consecutive == 1:
             return cls(np.random.randint(2*n_avg+1)-n_avg, orig_dist.consecutive)

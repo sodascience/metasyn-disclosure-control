@@ -4,5 +4,5 @@ from metasynth.distribution.faker import FakerDistribution
 from metasynthcontrib.disclosure.base import BaseDisclosureDistribution
 
 
-class DisclosureFakerDistribution(BaseDisclosureDistribution, FakerDistribution):
+class DisclosureFaker(FakerDistribution, BaseDisclosureDistribution):
     """Faker distribution for disclosure control."""

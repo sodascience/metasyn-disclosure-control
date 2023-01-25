@@ -13,11 +13,13 @@ def _compute_dominance(block_values, reverse=False):
     if not reverse:
         min_values = np.min(block_values, axis=1).reshape(-1, 1)
         diff_values = (block_values - min_values)
+        same_vals = np.all(block_values == min_values, axis=1)
     else:
         max_values = np.max(block_values, axis=1).reshape(-1, 1)
         diff_values = (max_values - block_values)
+        same_vals = np.all(block_values == max_values, axis=1)
     diff_sum = diff_values.sum(axis=1)
-    dominance = diff_values[diff_sum > 0].max(axis=1)/diff_sum[diff_sum > 0]
+    dominance = diff_values[~same_vals].max(axis=1)/diff_sum[~same_vals]
     return np.max(dominance)
 
 

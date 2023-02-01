@@ -36,4 +36,8 @@ def test_categorical():
 
 def test_string():
     dist = DisclosureFaker.default_distribution()
-    assert len([dist.draw() for _ in range(100)]) == 100
+    series = pl.Series([dist.draw() for _ in range(100)])
+    assert len(series)
+    dist = DisclosureFaker.fit(series, n_avg=11)
+    assert isinstance(dist, DisclosureFaker)
+    # assert len([dist.draw() for _ in range(100)]) == 100

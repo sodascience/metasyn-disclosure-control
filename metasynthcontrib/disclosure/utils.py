@@ -97,7 +97,7 @@ def micro_aggregate(values: pl.Series, min_bin: int=11) -> pl.Series:
                 if best_solution is None or best_solution.grad < grad:
                     best_solution = Solution(new_bin, new_dom, new_settings, grad)
         if best_solution is None:
-            raise ValueError("Could not find solutution satisfying dominance conditions.")
+            raise ValueError("Could not find solution satisfying dominance conditions.")
         dominance = best_solution.dominance
         cur_settings = best_solution.settings
         sub_values = best_solution.sub_values

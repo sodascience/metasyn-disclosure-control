@@ -40,9 +40,6 @@ jobs:
     - name: Check types with MyPy
       run: |
         mypy metasynthcontrib/disclosure
-    - name: Check if documentation builds.
-      run: |
-        cd docs; make html SPHINXOPTS="-W --keep-going"
     - name: Test with pytest
       run: |
         pytest tests

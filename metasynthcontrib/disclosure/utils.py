@@ -12,11 +12,11 @@ from numpy.core._exceptions import UFuncTypeError
 def _compute_dominance(block_values, reverse=False):
     if not reverse:
         min_values = np.min(block_values, axis=1).reshape(-1, 1)
-        diff_values = (block_values - min_values)
+        diff_values = block_values - min_values
         same_vals = np.all(block_values == min_values, axis=1)
     else:
         max_values = np.max(block_values, axis=1).reshape(-1, 1)
-        diff_values = (max_values - block_values)
+        diff_values = max_values - block_values
         same_vals = np.all(block_values == max_values, axis=1)
     diff_sum = diff_values.sum(axis=1)
     dominance = diff_values[~same_vals].max(axis=1)/diff_sum[~same_vals]
@@ -102,6 +102,7 @@ def micro_aggregate(values: pl.Series, min_bin: int=11) -> pl.Series:
         cur_settings = best_solution.settings
         sub_values = best_solution.sub_values
 
+    # If the values are integer types, round the values to the nearest integer.
     if values.dtype in [pl.datatypes.Int64, pl.datatypes.Int32, pl.datatypes.Int32]:
         return pl.Series((np.array(sub_values)+0.5).astype(np.int64))
     return pl.Series(sub_values)

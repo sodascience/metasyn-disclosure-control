@@ -6,6 +6,7 @@ from metasynth.distribution.faker import FakerDistribution
 
 class DisclosureFaker(FakerDistribution):
     """Faker distribution for disclosure control."""
+
     @classmethod
     def _fit(cls, values,
              faker_type: str="city",

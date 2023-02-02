@@ -8,11 +8,11 @@ import polars as pl
 from metasynth.distribution.datetime import UniformDateTimeDistribution
 from metasynth.distribution.datetime import UniformTimeDistribution
 from metasynth.distribution.datetime import UniformDateDistribution
-from metasynthcontrib.disclosure.base import BaseDisclosureDistribution
+# from metasynthcontrib.disclosure.base import BaseDisclosureDistribution
 from metasynthcontrib.disclosure.utils import micro_aggregate
 
 
-class DisclosureDateTime(BaseDisclosureDistribution, UniformDateTimeDistribution):
+class DisclosureDateTime(UniformDateTimeDistribution):
     """Disclosure implementation for the datetime distribution."""
 
     @classmethod
@@ -21,7 +21,7 @@ class DisclosureDateTime(BaseDisclosureDistribution, UniformDateTimeDistribution
         return cls(sub_series.min(), sub_series.max(), cls._get_precision(values))
 
 
-class DisclosureTime(BaseDisclosureDistribution, UniformTimeDistribution):
+class DisclosureTime(UniformTimeDistribution):
     """Disclosure implementation for the time distribution."""
 
     @classmethod
@@ -36,7 +36,7 @@ class DisclosureTime(BaseDisclosureDistribution, UniformTimeDistribution):
         return cls(sub_series.min(), sub_series.max(), cls._get_precision(values))
 
 
-class DisclosureDate(BaseDisclosureDistribution, UniformDateDistribution):
+class DisclosureDate(UniformDateDistribution):
     """Disclosure implementation for the date distribution."""
 
     @classmethod

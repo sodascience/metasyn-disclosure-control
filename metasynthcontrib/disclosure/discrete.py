@@ -2,40 +2,31 @@
 
 from __future__ import annotations
 
-from typing import Sequence
-
-import numpy as np
+import polars as pl
 
 from metasynth.distribution.discrete import DiscreteUniformDistribution
 from metasynth.distribution.discrete import PoissonDistribution
 from metasynth.distribution.discrete import UniqueKeyDistribution
 
-from metasynthcontrib.disclosure.utils import get_bounds
 from metasynthcontrib.disclosure.numerical import DisclosureNumerical
+from metasynthcontrib.disclosure.utils import micro_aggregate
 
 
-class DisclosureDiscreteUniform(DisclosureNumerical, DiscreteUniformDistribution):
+class DisclosureDiscreteUniform(DiscreteUniformDistribution, DisclosureNumerical):
     """Implementation for discrete uniform distribution."""
-
-    @classmethod
-    def _fit(cls, values, n_avg: int=10):
-        low, high = get_bounds(values, n_avg)
-        return cls(round(low), round(high))
 
 
 class DisclosureUniqueKey(UniqueKeyDistribution):
     """Implementation for unique key distribution."""
 
     @classmethod
-    def _fit(cls, values, n_avg: int=10):
+    def _fit(cls, values: pl.Series, n_avg: int=11):
         orig_dist = super()._fit(values)
         if orig_dist.consecutive == 1:
-            return cls(np.random.randint(2*n_avg+1)-n_avg, orig_dist.consecutive)
-        uniform_dist = DisclosureDiscreteUniform.fit(values, n_avg=n_avg)
-        return cls(uniform_dist.low, orig_dist.consecutive)  # type: ignore
+            return cls(0, 1)
+        sub_values = micro_aggregate(values, n_avg)
+        return super()._fit(sub_values)
 
 
-class DisclosurePoissonDistribution(DisclosureNumerical, PoissonDistribution):
-    @classmethod
-    def _fit(cls, values: Sequence, n_avg: int=10) -> DisclosurePoissonDistribution:
-        return super(DisclosurePoissonDistribution, cls)._fit(values)
+class DisclosurePoisson(PoissonDistribution, DisclosureNumerical):
+    """Disclosure implementation for Poisson distribution."""

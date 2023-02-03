@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=45", "setuptools-scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "metasynth-disclosure"
+authors = [
+    {name = "Raoul Schram", email = "r.d.schram@uu.nl"},
+]
+description = "Plugin package for MetaSynth that applies the disclosure control."
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["metasynth", "disclosure control"]
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+	"metasynth",
+	"polars",
+	"numpy>=1.20",
+]
+dynamic = ["version"]
+
+[tool.setuptools]
+packages = ["metasynthcontrib"]
+
+[project.entry-points."metasynth.disttree"]
+disclosure = "metasynthcontrib.disclosure.disttree:DisclosureDistributionTree"

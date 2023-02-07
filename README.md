@@ -1,10 +1,12 @@
 # Metasynth disclosure control
 
-This is a plugin for the [MetaSynth](https://github.com/sodascience/metasynth) Python library.
-While the base MetaSynth package protects against some privacy leakage, it doesn't completely
-fix the issue. For example, the uniform distributions in the base package will simply find
+This is a plugin for the [MetaSynth](https://github.com/sodascience/metasynth) Python library. MetaSynth
+is a package to create synthetic data for tabular datasets automatically.
+While the base MetaSynth package is generally good at protecting privacy, it doesn't adhere to any
+standard level of privacy. For example, the uniform distributions in the base package will simply find
 the lowest and highest values in the dataset, and use those as the boundaries for the uniform
-distribution. The minimum and maximum values can be very disclosive in some cases!
+distribution. In some cases the minimum and maximum values can be disclosive. That is why we have
+built this plugin that implements the disclosure control standard.
 
 ## Rule of Thumb
 
@@ -12,11 +14,13 @@ In this package we have implemented the "rule of thumb" as described in the
 [European guidelines](https://ec.europa.eu/eurostat/cros/system/files/dwb_standalone-document_output-checking-guidelines.pdf)
 for output checking. The main idea behind the rule of thumb is that it is on the safe side
 of what you are allowed to disclose. If you follow the rule of thumb then the idea is that
-the output should be considered privacy conserving, without the need for a specialist to determine this.
+the output should be considered privacy conserving, without the need for a specialist that
+looks at the specific context.
 
 ## Current status of the plugin
 
-Currently, there the disclosure plugin is work in progress. For most of the distributions
+Currently, there the disclosure plugin is work in progress. Especially in light of this, we disclaim
+any responsibility as a result of using this plugin. For most of the distributions
 the micro-aggregation technique is used. This technique pre-averages a sorted version of the data,
 which then supplied to the original fitting mechanism. The idea is that during this pre-averaging
 step, we ensure that the rule of thumb is followed, so that the fitting method doesn't need to do
@@ -46,8 +50,8 @@ Implemented:
 
 ### String
 
-Currently only Faker distribution is implemented (which doesn't do anything on its own,
-since it's already not using the original data). The regex distribution should also be implemented at some point.
+Currently only Faker distribution is implemented (which is the same as the MetaSynth base package,
+since the distribution is not fit to any data). The regex distribution is currently not implemented.
 
 ### Categorical
 

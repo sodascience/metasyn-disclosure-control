@@ -18,8 +18,6 @@ from metasynthcontrib.disclosure.datetime import DisclosureDateTime
 from metasynthcontrib.disclosure.datetime import DisclosureTime
 
 
-# Currently unsafe distributions are included:
-# DisclosureUniqueKey needs to be checked (no guidelines).
 class DisclosureDistributionTree(BuiltinDistributionTree):
     """Distribution tree that contains safe distributions.
 
@@ -34,7 +32,7 @@ class DisclosureDistributionTree(BuiltinDistributionTree):
 
     @property
     def discrete_distributions(self) -> List[Type[BaseDistribution]]:
-        return [DisclosureDiscreteUniform,  DisclosureUniqueKey, DisclosurePoisson]
+        return [DisclosureDiscreteUniform, DisclosureUniqueKey, DisclosurePoisson]
 
     @property
     def categorical_distributions(self) -> List[Type[BaseDistribution]]:

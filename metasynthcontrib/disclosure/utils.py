@@ -6,6 +6,7 @@ from typing import NamedTuple, Optional
 
 import numpy as np
 import polars as pl
+
 from numpy.core._exceptions import UFuncTypeError
 
 
@@ -49,8 +50,12 @@ def _create_subsample(values, n_avg: int=11, pre_remove: int=0,  # pylint: disab
     try:
         sub_values = block_values.mean(axis=1)
     except UFuncTypeError:
-        return [dt.datetime.utcfromtimestamp(pl.Series(sub).dt.cast_time_unit("us").mean()/1e6)
-                for sub in block_values], dominance
+        # Datetime detected
+        # Workaround for years < 1970 that should work for Windows and Linux/OS X
+        sub_values = []
+        for block in block_values:
+            t = pl.Series(block).dt.cast_time_unit("us").mean()/1e6
+            sub_values.append(dt.datetime.utcfromtimestamp(0) + dt.timedelta(seconds=t))
     return sub_values, dominance
 
 

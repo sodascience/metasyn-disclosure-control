@@ -54,8 +54,9 @@ def _create_subsample(values, n_avg: int=11, pre_remove: int=0,  # pylint: disab
         # Workaround for years < 1970 that should work for Windows and Linux/OS X
         sub_values = []
         for block in block_values:
-            t = pl.Series(block).dt.cast_time_unit("us").mean()/1e6
-            sub_values.append(dt.datetime.utcfromtimestamp(0) + dt.timedelta(seconds=t))
+            sec_since_1970 = pl.Series(block).dt.cast_time_unit("us").mean()/1e6
+            sub_values.append(dt.datetime.utcfromtimestamp(0)
+                              + dt.timedelta(seconds=sec_since_1970))
     return sub_values, dominance
 
 

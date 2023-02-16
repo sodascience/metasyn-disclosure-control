@@ -19,6 +19,7 @@ dependencies = [
 	"metasynth",
 	"polars",
 	"numpy>=1.20",
+	"matplotlib",
 ]
 dynamic = ["version"]
 

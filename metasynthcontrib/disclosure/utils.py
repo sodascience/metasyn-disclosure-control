@@ -6,6 +6,7 @@ from typing import NamedTuple, Optional
 
 import numpy as np
 import polars as pl
+
 from numpy.core._exceptions import UFuncTypeError
 
 
@@ -49,8 +50,15 @@ def _create_subsample(values, n_avg: int=11, pre_remove: int=0,  # pylint: disab
     try:
         sub_values = block_values.mean(axis=1)
     except UFuncTypeError:
-        return [dt.datetime.utcfromtimestamp(pl.Series(sub).mean()/1e6)
-                for sub in block_values], dominance
+        # Datetime detected
+        # Workaround for years < 1970 that should work for Windows and Linux/OS X
+        sub_values = []
+        for block in block_values:
+            mean_time = pl.Series(block).dt.cast_time_unit("us").mean()
+            assert mean_time is not None
+            sec_since_1970 = mean_time/1e6
+            sub_values.append(dt.datetime.utcfromtimestamp(0)
+                              + dt.timedelta(seconds=sec_since_1970))
     return sub_values, dominance
 
 
@@ -69,6 +77,7 @@ def micro_aggregate(values: pl.Series, min_bin: int=11) -> pl.Series:
     new_values:
         Aggregated values.
     """
+    assert min_bin > 6, "Please use a bigger minimum bin size, or disclosure control will not work."
     cur_settings = [min_bin, 0, 0]
     sub_values, dominance = _create_subsample(values, *cur_settings)
 
@@ -97,7 +106,8 @@ def micro_aggregate(values: pl.Series, min_bin: int=11) -> pl.Series:
                 if best_solution is None or best_solution.grad < grad:
                     best_solution = Solution(new_bin, new_dom, new_settings, grad)
         if best_solution is None:
-            raise ValueError("Could not find solution satisfying dominance conditions.")
+            raise ValueError("Could not find solution satisfying dominance conditions for column"
+                             f" '{values.name}'.")
         dominance = best_solution.dominance
         cur_settings = best_solution.settings
         sub_values = best_solution.sub_values

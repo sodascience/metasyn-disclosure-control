@@ -1,8 +1,7 @@
 """Module contains distribution tree for disclosure control."""
 
-from typing import List, Type
-
-from metasynth.disttree import BuiltinDistributionTree
+from __future__ import annotations
+from metasynth.provider import BaseProvider
 from metasynth.distribution.base import BaseDistribution
 
 from metasynthcontrib.disclosure.continuous import DisclosureUniform, DisclosureTruncatedNormal
@@ -18,7 +17,7 @@ from metasynthcontrib.disclosure.datetime import DisclosureDateTime
 from metasynthcontrib.disclosure.datetime import DisclosureTime
 
 
-class DisclosureDistributionTree(BuiltinDistributionTree):
+class DisclosureProvider(BaseProvider):
     """Distribution tree that contains safe distributions.
 
     See for more information on disclosure control:
@@ -26,30 +25,22 @@ class DisclosureDistributionTree(BuiltinDistributionTree):
     """
 
     @property
-    def continuous_distributions(self) -> List[Type[BaseDistribution]]:
-        return [DisclosureUniform, DisclosureTruncatedNormal, DisclosureNormal,
-                DisclosureLogNormal, DisclosureExponential]
+    def name(self):
+        return "disclosure"
 
     @property
-    def discrete_distributions(self) -> List[Type[BaseDistribution]]:
-        return [DisclosureDiscreteUniform, DisclosureUniqueKey, DisclosurePoisson]
+    def version(self):
+        return "1.0"
 
     @property
-    def categorical_distributions(self) -> List[Type[BaseDistribution]]:
-        return [DisclosureMultinoulli]
-
-    @property
-    def string_distributions(self) -> List[Type[BaseDistribution]]:
-        return [DisclosureFaker]
-
-    @property
-    def date_distributions(self) -> List[Type[BaseDistribution]]:
-        return [DisclosureDate]
-
-    @property
-    def time_distributions(self) -> List[Type[BaseDistribution]]:
-        return [DisclosureTime]
-
-    @property
-    def datetime_distributions(self) -> List[Type[BaseDistribution]]:
-        return [DisclosureDateTime]
+    def distributions(self) -> list[type[BaseDistribution]]:
+        return [
+            DisclosureUniform, DisclosureTruncatedNormal, DisclosureNormal,
+            DisclosureLogNormal, DisclosureExponential,
+            DisclosureDiscreteUniform, DisclosureUniqueKey, DisclosurePoisson,
+            DisclosureMultinoulli,
+            DisclosureFaker,
+            DisclosureDate,
+            DisclosureTime,
+            DisclosureDateTime,
+        ]

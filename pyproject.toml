@@ -26,5 +26,5 @@ dynamic = ["version"]
 [tool.setuptools]
 packages = ["metasynthcontrib"]
 
-[project.entry-points."metasynth.disttree"]
-disclosure = "metasynthcontrib.disclosure.disttree:DisclosureDistributionTree"
+[project.entry-points."metasynth.provider"]
+disclosure = "metasynthcontrib.disclosure.provider:DisclosureProvider"

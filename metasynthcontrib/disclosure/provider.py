@@ -1,7 +1,7 @@
 """Module contains distribution tree for disclosure control."""
 
 from __future__ import annotations
-from metasynth.provider import BaseProvider
+from metasynth.provider import BaseDistributionProvider
 from metasynth.distribution.base import BaseDistribution
 
 from metasynthcontrib.disclosure.continuous import DisclosureUniform, DisclosureTruncatedNormal
@@ -17,7 +17,7 @@ from metasynthcontrib.disclosure.datetime import DisclosureDateTime
 from metasynthcontrib.disclosure.datetime import DisclosureTime
 
 
-class DisclosureProvider(BaseProvider):
+class DisclosureProvider(BaseDistributionProvider):
     """Distribution tree that contains safe distributions.
 
     See for more information on disclosure control:

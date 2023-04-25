@@ -3,9 +3,10 @@
 import polars as pl
 
 from metasynth.distribution.categorical import MultinoulliDistribution
+from metasynthcontrib.disclosure.base import BaseDisclosure
 
 
-class DisclosureMultinoulli(MultinoulliDistribution):
+class DisclosureMultinoulli(BaseDisclosure, MultinoulliDistribution):
     """Disclosure variant for multinoulli distribution.
 
     It checks that all labels appear at least x times, and that

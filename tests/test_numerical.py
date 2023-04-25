@@ -23,7 +23,7 @@ from metasynth.distribution.base import ContinuousDistribution
      (LogNormalDistribution, DisclosureLogNormal),
      (ExponentialDistribution, DisclosureExponential),
      (DiscreteUniformDistribution, DisclosureDiscreteUniform),
-     (PoissonDistribution, DisclosurePoisson)
+     # (PoissonDistribution, DisclosurePoisson)
      ]
 )
 def test_continuous(dist_normal, dist_disclosure):

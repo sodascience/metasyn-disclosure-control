@@ -10,9 +10,10 @@ from metasynth.distribution.datetime import UniformTimeDistribution
 from metasynth.distribution.datetime import UniformDateDistribution
 # from metasynthcontrib.disclosure.base import BaseDisclosureDistribution
 from metasynthcontrib.disclosure.utils import micro_aggregate
+from metasynthcontrib.disclosure.base import BaseDisclosure
 
 
-class DisclosureDateTime(UniformDateTimeDistribution):
+class DisclosureDateTime(BaseDisclosure, UniformDateTimeDistribution):
     """Disclosure implementation for the datetime distribution."""
 
     @classmethod
@@ -21,7 +22,7 @@ class DisclosureDateTime(UniformDateTimeDistribution):
         return cls(sub_series.min(), sub_series.max(), cls._get_precision(values))
 
 
-class DisclosureTime(UniformTimeDistribution):
+class DisclosureTime(BaseDisclosure, UniformTimeDistribution):
     """Disclosure implementation for the time distribution."""
 
     @classmethod
@@ -36,7 +37,7 @@ class DisclosureTime(UniformTimeDistribution):
         return cls(sub_series.min(), sub_series.max(), cls._get_precision(values))
 
 
-class DisclosureDate(UniformDateDistribution):
+class DisclosureDate(BaseDisclosure, UniformDateDistribution):
     """Disclosure implementation for the date distribution."""
 
     @classmethod

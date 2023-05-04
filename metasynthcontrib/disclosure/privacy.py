@@ -1,5 +1,7 @@
 """Disclosure control privacy class."""
 
+from __future__ import annotations
+
 from metasynth.privacy import BasePrivacy
 
 
@@ -16,3 +18,9 @@ class DisclosurePrivacy(BasePrivacy):
 
     def __init__(self, n_avg: int=10):
         self.n_avg = n_avg
+
+    def to_dict(self) -> dict:
+        return {
+            "type": self.name,
+            "parameters": {"n_avg": self.n_avg}
+        }

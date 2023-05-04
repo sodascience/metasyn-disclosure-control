@@ -1,0 +1,18 @@
+"""Disclosure control privacy class."""
+
+from metasynth.privacy import BasePrivacy
+
+
+class DisclosurePrivacy(BasePrivacy):
+    """Disclosure control privacy class that uses micro-aggregation.
+
+    Arguments
+    ---------
+    n_avg:
+        Number of elements to aggregate into one bin. Higher values
+        mean better protected privacy, but lower statistical accuracy.
+    """
+    name = "disclosure"
+
+    def __init__(self, n_avg: int=10):
+        self.n_avg = n_avg

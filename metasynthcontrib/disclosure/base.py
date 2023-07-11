@@ -1,9 +1,16 @@
 """Base class for all disclosure control distributions."""
 
-from metasynth.distribution.base import BaseDistribution
 
+def metadist_disclosure():
+    """Decorate class to create a distribution with disclosure control.
 
-class BaseDisclosure(BaseDistribution):
-    """Disclosure class to set privacy and provenance of distributions."""
-    privacy = "disclosure"
-    provenance = "disclosure"
+    Returns
+    -------
+    cls:
+        Class with the appropriate class variables.
+    """
+    def _wrap(cls):
+        cls.provenance = "metasynth-disclosure"
+        cls.privacy = "disclosure"
+        return cls
+    return _wrap

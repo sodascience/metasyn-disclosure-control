@@ -10,14 +10,16 @@ from metasynth.distribution.discrete import UniqueKeyDistribution
 
 from metasynthcontrib.disclosure.numerical import DisclosureNumerical
 from metasynthcontrib.disclosure.utils import micro_aggregate
-from metasynthcontrib.disclosure.base import BaseDisclosure
+from metasynthcontrib.disclosure.base import metadist_disclosure
 
 
+@metadist_disclosure()
 class DisclosureDiscreteUniform(DisclosureNumerical, DiscreteUniformDistribution):
     """Implementation for discrete uniform distribution."""
 
 
-class DisclosureUniqueKey(BaseDisclosure, UniqueKeyDistribution):
+@metadist_disclosure()
+class DisclosureUniqueKey(UniqueKeyDistribution):
     """Implementation for unique key distribution."""
 
     @classmethod
@@ -29,5 +31,6 @@ class DisclosureUniqueKey(BaseDisclosure, UniqueKeyDistribution):
         return super()._fit(sub_values)
 
 
+@metadist_disclosure()
 class DisclosurePoisson(DisclosureNumerical, PoissonDistribution):
     """Disclosure implementation for Poisson distribution."""

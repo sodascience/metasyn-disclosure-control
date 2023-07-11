@@ -8,10 +8,9 @@ import polars as pl
 from metasynth.distribution.base import BaseDistribution
 
 from metasynthcontrib.disclosure.utils import micro_aggregate
-from metasynthcontrib.disclosure.base import BaseDisclosure
 
 
-class DisclosureNumerical(BaseDisclosure):
+class DisclosureNumerical(BaseDistribution):
     """Class for numerical distributions of the disclosure kind."""
 
     @classmethod

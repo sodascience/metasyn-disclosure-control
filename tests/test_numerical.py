@@ -12,7 +12,6 @@ from metasynthcontrib.disclosure.discrete import DisclosurePoisson
 
 from metasynth.distribution.discrete import DiscreteUniformDistribution,\
     PoissonDistribution
-from metasynth.distribution.base import ContinuousDistribution
 
 
 @mark.parametrize(
@@ -31,11 +30,11 @@ def test_continuous(dist_normal, dist_disclosure):
     series = pl.Series([unif.draw() for _ in range(500)])
     unif = dist_normal.fit(series)
     unif_disc = dist_disclosure.fit(series)
-    if isinstance(unif, ContinuousDistribution):
+    if unif.var_type == "continuous":
         assert unif.to_dict() != unif_disc.to_dict()
 
     # Test with outliers
-    if isinstance(unif, ContinuousDistribution):
+    if unif.var_type == "continuous":
         series_out = pl.Series([x for x in series] + [99999999.0])
     else:
         series_out = pl.Series([x for x in series] + [99999999])

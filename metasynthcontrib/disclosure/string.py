@@ -1,11 +1,11 @@
 """Module for disclosure control for string distributions."""
 
 from metasynth.distribution.faker import FakerDistribution
-from metasynthcontrib.disclosure.base import BaseDisclosure
-# from metasynthcontrib.disclosure.base import BaseDisclosureDistribution
+from metasynthcontrib.disclosure.base import metadist_disclosure
 
 
-class DisclosureFaker(BaseDisclosure, FakerDistribution):
+@metadist_disclosure()
+class DisclosureFaker(FakerDistribution):
     """Faker distribution for disclosure control."""
 
     @classmethod

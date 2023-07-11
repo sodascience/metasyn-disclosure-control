@@ -23,7 +23,7 @@ class DisclosureProvider(BaseDistributionProvider):
     https://ec.europa.eu/eurostat/cros/system/files/dwb_standalone-document_output-checking-guidelines.pdf
     """
 
-    name = "disclosure"
+    name = "metasynth-disclosure"
     version = "1.0"
     distributions = [
         DisclosureUniform, DisclosureTruncatedNormal, DisclosureNormal,

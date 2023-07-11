@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 from metasynth.provider import BaseDistributionProvider
-from metasynth.distribution.base import BaseDistribution
 
 from metasynthcontrib.disclosure.continuous import DisclosureUniform, DisclosureTruncatedNormal
 from metasynthcontrib.disclosure.continuous import DisclosureNormal
@@ -24,23 +23,15 @@ class DisclosureProvider(BaseDistributionProvider):
     https://ec.europa.eu/eurostat/cros/system/files/dwb_standalone-document_output-checking-guidelines.pdf
     """
 
-    @property
-    def name(self):
-        return "disclosure"
-
-    @property
-    def version(self):
-        return "1.0"
-
-    @property
-    def distributions(self) -> list[type[BaseDistribution]]:
-        return [
-            DisclosureUniform, DisclosureTruncatedNormal, DisclosureNormal,
-            DisclosureLogNormal, DisclosureExponential,
-            DisclosureDiscreteUniform, DisclosureUniqueKey, DisclosurePoisson,
-            DisclosureMultinoulli,
-            DisclosureFaker,
-            DisclosureDate,
-            DisclosureTime,
-            DisclosureDateTime,
-        ]
+    name = "disclosure"
+    version = "1.0"
+    distributions = [
+        DisclosureUniform, DisclosureTruncatedNormal, DisclosureNormal,
+        DisclosureLogNormal, DisclosureExponential,
+        DisclosureDiscreteUniform, DisclosureUniqueKey, DisclosurePoisson,
+        DisclosureMultinoulli,
+        DisclosureFaker,
+        DisclosureDate,
+        DisclosureTime,
+        DisclosureDateTime,
+    ]

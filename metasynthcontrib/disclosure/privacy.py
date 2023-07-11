@@ -14,6 +14,7 @@ class DisclosurePrivacy(BasePrivacy):
         Number of elements to aggregate into one bin. Higher values
         mean better protected privacy, but lower statistical accuracy.
     """
+
     name = "disclosure"
 
     def __init__(self, n_avg: int=10):

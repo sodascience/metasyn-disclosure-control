@@ -9,7 +9,7 @@ from metasynthcontrib.disclosure.continuous import DisclosureLogNormal
 from metasynthcontrib.disclosure.continuous import DisclosureExponential
 from metasynthcontrib.disclosure.discrete import DisclosureDiscreteUniform, DisclosureUniqueKey
 from metasynthcontrib.disclosure.discrete import DisclosurePoisson
-from metasynthcontrib.disclosure.string import DisclosureFaker
+from metasynthcontrib.disclosure.string import DisclosureFaker, DisclosureUniqueFaker
 from metasynthcontrib.disclosure.categorical import DisclosureMultinoulli
 from metasynthcontrib.disclosure.datetime import DisclosureDate
 from metasynthcontrib.disclosure.datetime import DisclosureDateTime
@@ -30,7 +30,7 @@ class DisclosureProvider(BaseDistributionProvider):
         DisclosureLogNormal, DisclosureExponential,
         DisclosureDiscreteUniform, DisclosureUniqueKey, DisclosurePoisson,
         DisclosureMultinoulli,
-        DisclosureFaker,
+        DisclosureFaker, DisclosureUniqueFaker,
         DisclosureDate,
         DisclosureTime,
         DisclosureDateTime,

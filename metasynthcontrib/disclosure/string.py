@@ -19,6 +19,7 @@ class DisclosureFaker(FakerDistribution):
 @metadist_disclosure()
 class DisclosureUniqueFaker(UniqueFakerDistribution):
     """Faker distribution for disclosure control that produces unique values."""
+
     @classmethod
     def _fit(cls, values,
              faker_type: str = "city",

@@ -15,8 +15,10 @@ class DisclosureFaker(FakerDistribution):
         return super(DisclosureFaker, cls)._fit(values, faker_type=faker_type,
                                                 locale=locale)
 
+
 @metadist_disclosure()
 class DisclosureUniqueFaker(UniqueFakerDistribution):
+    """Faker distribution for disclosure control that produces unique values."""
     @classmethod
     def _fit(cls, values,
              faker_type: str = "city",

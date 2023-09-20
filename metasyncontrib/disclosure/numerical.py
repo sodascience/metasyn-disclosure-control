@@ -15,7 +15,7 @@ class DisclosureNumerical(BaseDistribution):
 
     @classmethod
     def fit(cls, series: Union[Sequence, pl.Series], *args,
-            n_avg: int=11, **kwargs) -> BaseDistribution:
+            n_avg: int = 11, **kwargs) -> BaseDistribution:
         pl_series = cls._to_series(series)
         sub_series = micro_aggregate(pl_series, n_avg)
         return cls._fit(sub_series, *args, **kwargs)

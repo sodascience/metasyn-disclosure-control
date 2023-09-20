@@ -17,7 +17,7 @@ class DisclosurePrivacy(BasePrivacy):
 
     name = "disclosure"
 
-    def __init__(self, n_avg: int=10):
+    def __init__(self, n_avg: int = 11):
         self.n_avg = n_avg
 
     def to_dict(self) -> dict:

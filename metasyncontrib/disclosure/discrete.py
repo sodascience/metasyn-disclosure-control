@@ -23,7 +23,7 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
     """Implementation for unique key distribution."""
 
     @classmethod
-    def _fit(cls, values: pl.Series, n_avg: int=11):
+    def _fit(cls, values: pl.Series, n_avg: int = 11):
         orig_dist = super()._fit(values)
         if orig_dist.consecutive == 1:
             return cls(0, 1)

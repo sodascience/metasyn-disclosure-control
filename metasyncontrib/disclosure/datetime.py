@@ -18,7 +18,7 @@ class DisclosureDateTime(UniformDateTimeDistribution):
     """Disclosure implementation for the datetime distribution."""
 
     @classmethod
-    def _fit(cls, values: pl.Series, n_avg: int=11) -> DisclosureDateTime:
+    def _fit(cls, values: pl.Series, n_avg: int = 11) -> DisclosureDateTime:
         sub_series = micro_aggregate(values, n_avg)
         return cls(sub_series.min(), sub_series.max(), cls._get_precision(values))
 
@@ -28,7 +28,7 @@ class DisclosureTime(UniformTimeDistribution):
     """Disclosure implementation for the time distribution."""
 
     @classmethod
-    def _fit(cls, values: pl.Series, n_avg: int=11):
+    def _fit(cls, values: pl.Series, n_avg: int = 11):
         # Convert time to a datetime so that the microaggregation works
         today = dt.date(1970, 1, 1)
         dt_series = pl.Series([dt.datetime.combine(today, t) for t in values])
@@ -44,7 +44,7 @@ class DisclosureDate(UniformDateDistribution):
     """Disclosure implementation for the date distribution."""
 
     @classmethod
-    def _fit(cls, values: pl.Series, n_avg: int=11) -> DisclosureDate:
+    def _fit(cls, values: pl.Series, n_avg: int = 11) -> DisclosureDate:
         # Convert dates to datetimes
         dt_series = pl.Series([dt.datetime.combine(d, dt.time(hour=12)) for d in values])
         dt_sub_series = micro_aggregate(dt_series, n_avg)

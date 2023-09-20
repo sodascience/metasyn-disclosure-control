@@ -24,8 +24,9 @@ def _compute_dominance(block_values, reverse=False):
     return np.max(dominance)
 
 
-def _create_subsample(values, n_avg: int=11, pre_remove: int=0,  # pylint: disable=too-many-locals
-                      post_remove: int=0) -> tuple[list, float]:
+def _create_subsample(values, n_avg: int = 11,  # pylint: disable=too-many-locals
+                      pre_remove: int = 0,
+                      post_remove: int = 0) -> tuple[list, float]:
     sorted_values = np.sort(values)
     sorted_values = sorted_values[pre_remove:len(values)-post_remove]
     n_values = len(sorted_values)
@@ -62,7 +63,7 @@ def _create_subsample(values, n_avg: int=11, pre_remove: int=0,  # pylint: disab
     return sub_values, dominance
 
 
-def micro_aggregate(values: pl.Series, min_bin: int=11) -> pl.Series:
+def micro_aggregate(values: pl.Series, min_bin: int = 11) -> pl.Series:
     """Use micro-aggregation to make the data safe for disclosure purposes.
 
     Arguments

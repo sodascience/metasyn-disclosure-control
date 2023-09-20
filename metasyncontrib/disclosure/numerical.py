@@ -5,9 +5,9 @@ from collections.abc import Sequence
 
 import polars as pl
 
-from metasynth.distribution.base import BaseDistribution
+from metasyn.distribution.base import BaseDistribution
 
-from metasynthcontrib.disclosure.utils import micro_aggregate
+from metasyncontrib.disclosure.utils import micro_aggregate
 
 
 class DisclosureNumerical(BaseDistribution):

@@ -5,12 +5,12 @@ import datetime as dt
 
 import polars as pl
 
-from metasynth.distribution.datetime import UniformDateTimeDistribution
-from metasynth.distribution.datetime import UniformTimeDistribution
-from metasynth.distribution.datetime import UniformDateDistribution
-# from metasynthcontrib.disclosure.base import BaseDisclosureDistribution
-from metasynthcontrib.disclosure.utils import micro_aggregate
-from metasynthcontrib.disclosure.base import metadist_disclosure
+from metasyn.distribution.datetime import UniformDateTimeDistribution
+from metasyn.distribution.datetime import UniformTimeDistribution
+from metasyn.distribution.datetime import UniformDateDistribution
+# from metasyncontrib.disclosure.base import BaseDisclosureDistribution
+from metasyncontrib.disclosure.utils import micro_aggregate
+from metasyncontrib.disclosure.base import metadist_disclosure
 
 
 @metadist_disclosure()

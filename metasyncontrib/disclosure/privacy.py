@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from metasynth.privacy import BasePrivacy
+from metasyn.privacy import BasePrivacy
 
 
 class DisclosurePrivacy(BasePrivacy):

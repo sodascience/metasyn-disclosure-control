@@ -1,12 +1,12 @@
 import polars as pl
-from metasynth.distribution.datetime import UniformDateDistribution
-from metasynth.distribution.datetime import UniformDateTimeDistribution
-from metasynth.distribution.datetime import UniformTimeDistribution
-from metasynthcontrib.disclosure.datetime import DisclosureDate, DisclosureDateTime, DisclosureTime
+from metasyn.distribution.datetime import UniformDateDistribution
+from metasyn.distribution.datetime import UniformDateTimeDistribution
+from metasyn.distribution.datetime import UniformTimeDistribution
+from metasyncontrib.disclosure.datetime import DisclosureDate, DisclosureDateTime, DisclosureTime
 from pytest import mark
-from metasynth.distribution.categorical import MultinoulliDistribution
-from metasynthcontrib.disclosure.categorical import DisclosureMultinoulli
-from metasynthcontrib.disclosure.string import DisclosureFaker
+from metasyn.distribution.categorical import MultinoulliDistribution
+from metasyncontrib.disclosure.categorical import DisclosureMultinoulli
+from metasyncontrib.disclosure.string import DisclosureFaker
 
 
 @mark.parametrize(

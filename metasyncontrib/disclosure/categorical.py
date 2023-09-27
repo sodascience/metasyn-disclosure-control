@@ -2,8 +2,8 @@
 
 import polars as pl
 
-from metasynth.distribution.categorical import MultinoulliDistribution
-from metasynthcontrib.disclosure.base import metadist_disclosure
+from metasyn.distribution.categorical import MultinoulliDistribution
+from metasyncontrib.disclosure.base import metadist_disclosure
 
 
 @metadist_disclosure()
@@ -15,10 +15,10 @@ class DisclosureMultinoulli(MultinoulliDistribution):
     """
 
     @classmethod
-    def _fit(cls, values: pl.Series, n_avg: int=11):
+    def _fit(cls, values: pl.Series, n_avg: int = 11):
         dist = super(DisclosureMultinoulli, cls)._fit(values)
         labels = dist.labels[dist.probs >= n_avg/len(values)]
         probs = dist.probs[dist.probs >= n_avg/len(values)]
-        if probs.max() >= 0.9:
+        if len(probs) == 0 or probs.max() >= 0.9:
             return cls.default_distribution()
         return cls(labels, probs)

@@ -10,7 +10,7 @@ def metadist_disclosure():
         Class with the appropriate class variables.
     """
     def _wrap(cls):
-        cls.provenance = "metasynth-disclosure"
+        cls.provenance = "metasyn-disclosure"
         cls.privacy = "disclosure"
         return cls
     return _wrap

@@ -3,20 +3,20 @@ requires = ["setuptools>=45", "setuptools-scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "metasynth-disclosure"
+name = "metasyn-disclosure"
 authors = [
     {name = "Raoul Schram", email = "r.d.schram@uu.nl"},
 ]
-description = "Plugin package for MetaSynth that applies the disclosure control."
+description = "Plugin package for metasyn that applies the disclosure control."
 readme = "README.md"
 requires-python = ">=3.8"
-keywords = ["metasynth", "disclosure control"]
+keywords = ["metasyn", "disclosure control"]
 license = {text = "MIT"}
 classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-	"metasynth>0.4.0",
+	"metasyn",
 	"polars",
 	"numpy>=1.20",
 	"matplotlib",
@@ -24,7 +24,7 @@ dependencies = [
 dynamic = ["version"]
 
 [tool.setuptools]
-packages = ["metasynthcontrib"]
+packages = ["metasyncontrib"]
 
-[project.entry-points."metasynth.distribution_provider"]
-metasynth-disclosure = "metasynthcontrib.disclosure.provider:DisclosureProvider"
+[project.entry-points."metasyn.distribution_provider"]
+metasyn-disclosure = "metasyncontrib.disclosure.provider:DisclosureProvider"

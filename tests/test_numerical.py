@@ -1,16 +1,16 @@
 from pytest import mark
 import polars as pl
 
-from metasynth.distribution.continuous import UniformDistribution, TruncatedNormalDistribution
-from metasynth.distribution.continuous import NormalDistribution, LogNormalDistribution
-from metasynth.distribution.continuous import ExponentialDistribution
-from metasynthcontrib.disclosure.continuous import DisclosureUniform, DisclosureTruncatedNormal
-from metasynthcontrib.disclosure.continuous import DisclosureNormal, DisclosureLogNormal
-from metasynthcontrib.disclosure.continuous import DisclosureExponential
-from metasynthcontrib.disclosure.discrete import DisclosureDiscreteUniform
-from metasynthcontrib.disclosure.discrete import DisclosurePoisson
+from metasyn.distribution.continuous import UniformDistribution, TruncatedNormalDistribution
+from metasyn.distribution.continuous import NormalDistribution, LogNormalDistribution
+from metasyn.distribution.continuous import ExponentialDistribution
+from metasyncontrib.disclosure.continuous import DisclosureUniform, DisclosureTruncatedNormal
+from metasyncontrib.disclosure.continuous import DisclosureNormal, DisclosureLogNormal
+from metasyncontrib.disclosure.continuous import DisclosureExponential
+from metasyncontrib.disclosure.discrete import DisclosureDiscreteUniform
+from metasyncontrib.disclosure.discrete import DisclosurePoisson
 
-from metasynth.distribution.discrete import DiscreteUniformDistribution,\
+from metasyn.distribution.discrete import DiscreteUniformDistribution,\
     PoissonDistribution
 
 

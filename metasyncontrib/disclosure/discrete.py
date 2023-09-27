@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import polars as pl
 
-from metasynth.distribution.discrete import DiscreteUniformDistribution
-from metasynth.distribution.discrete import PoissonDistribution
-from metasynth.distribution.discrete import UniqueKeyDistribution
+from metasyn.distribution.discrete import DiscreteUniformDistribution
+from metasyn.distribution.discrete import PoissonDistribution
+from metasyn.distribution.discrete import UniqueKeyDistribution
 
-from metasynthcontrib.disclosure.numerical import DisclosureNumerical
-from metasynthcontrib.disclosure.utils import micro_aggregate
-from metasynthcontrib.disclosure.base import metadist_disclosure
+from metasyncontrib.disclosure.numerical import DisclosureNumerical
+from metasyncontrib.disclosure.utils import micro_aggregate
+from metasyncontrib.disclosure.base import metadist_disclosure
 
 
 @metadist_disclosure()
@@ -23,7 +23,7 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
     """Implementation for unique key distribution."""
 
     @classmethod
-    def _fit(cls, values: pl.Series, n_avg: int=11):
+    def _fit(cls, values: pl.Series, n_avg: int = 11):
         orig_dist = super()._fit(values)
         if orig_dist.consecutive == 1:
             return cls(0, 1)

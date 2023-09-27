@@ -1,8 +1,8 @@
-# Metasynth disclosure control
+# Metasyn disclosure control
 
-This is a plugin for the [MetaSynth](https://github.com/sodascience/metasynth) Python library. MetaSynth
+This is a plugin for the [metasyn](https://github.com/sodascience/metasyn) Python library. Metasyn
 is a package to create synthetic data for tabular datasets automatically.
-While the base MetaSynth package is generally good at protecting privacy, it doesn't adhere to any
+While the base metasyn package is generally good at protecting privacy, it doesn't adhere to any
 standard level of privacy. For example, the uniform distributions in the base package will simply find
 the lowest and highest values in the dataset, and use those as the boundaries for the uniform
 distribution. In some cases the minimum and maximum values can be disclosive. That is why we have
@@ -50,7 +50,7 @@ Implemented:
 
 ### String
 
-Currently only Faker distribution is implemented (which is the same as the MetaSynth base package,
+Currently only Faker distribution is implemented (which is the same as the metasyn base package,
 since the distribution is not fit to any data). The regex distribution is currently not implemented.
 
 ### Categorical

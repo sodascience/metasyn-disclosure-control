@@ -1,7 +1,7 @@
 import polars as pl
-from metasyn.distribution.datetime import UniformDateDistribution
-from metasyn.distribution.datetime import UniformDateTimeDistribution
-from metasyn.distribution.datetime import UniformTimeDistribution
+from metasyn.distribution.datetime import DateUniformDistribution
+from metasyn.distribution.datetime import DateTimeUniformDistribution
+from metasyn.distribution.datetime import TimeUniformDistribution
 from metasyncontrib.disclosure.datetime import DisclosureDate, DisclosureDateTime, DisclosureTime
 from pytest import mark
 from metasyn.distribution.categorical import MultinoulliDistribution
@@ -11,9 +11,9 @@ from metasyncontrib.disclosure.string import DisclosureFaker
 
 @mark.parametrize(
     "class_norm,class_disc",
-    [(UniformDateDistribution, DisclosureDate),
-     (UniformDateTimeDistribution, DisclosureDateTime),
-     (UniformTimeDistribution, DisclosureTime)]
+    [(DateUniformDistribution, DisclosureDate),
+     (DateTimeUniformDistribution, DisclosureDateTime),
+     (TimeUniformDistribution, DisclosureTime)]
     )
 def test_datetime(class_norm, class_disc):
     dist_norm = class_norm.default_distribution()
@@ -22,7 +22,7 @@ def test_datetime(class_norm, class_disc):
     dist_disc = class_disc.fit(series)
     assert dist_norm.start < dist_disc.start
     assert dist_norm.end > dist_disc.end
-    if not isinstance(dist_norm, UniformDateDistribution):
+    if not isinstance(dist_norm, DateUniformDistribution):
         assert dist_norm.precision == dist_disc.precision
 
 

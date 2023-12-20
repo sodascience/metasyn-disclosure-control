@@ -5,16 +5,16 @@ import datetime as dt
 
 import polars as pl
 
-from metasyn.distribution.datetime import UniformDateTimeDistribution
-from metasyn.distribution.datetime import UniformTimeDistribution
-from metasyn.distribution.datetime import UniformDateDistribution
+from metasyn.distribution.datetime import DateTimeUniformDistribution
+from metasyn.distribution.datetime import TimeUniformDistribution
+from metasyn.distribution.datetime import DateUniformDistribution
 # from metasyncontrib.disclosure.base import BaseDisclosureDistribution
 from metasyncontrib.disclosure.utils import micro_aggregate
 from metasyncontrib.disclosure.base import metadist_disclosure
 
 
 @metadist_disclosure()
-class DisclosureDateTime(UniformDateTimeDistribution):
+class DisclosureDateTime(DateTimeUniformDistribution):
     """Disclosure implementation for the datetime distribution."""
 
     @classmethod
@@ -24,7 +24,7 @@ class DisclosureDateTime(UniformDateTimeDistribution):
 
 
 @metadist_disclosure()
-class DisclosureTime(UniformTimeDistribution):
+class DisclosureTime(TimeUniformDistribution):
     """Disclosure implementation for the time distribution."""
 
     @classmethod
@@ -40,7 +40,7 @@ class DisclosureTime(UniformTimeDistribution):
 
 
 @metadist_disclosure()
-class DisclosureDate(UniformDateDistribution):
+class DisclosureDate(DateUniformDistribution):
     """Disclosure implementation for the date distribution."""
 
     @classmethod

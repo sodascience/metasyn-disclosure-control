@@ -21,4 +21,5 @@ class DisclosureMultinoulli(MultinoulliDistribution):
         probs = dist.probs[dist.probs >= n_avg/len(values)]
         if len(probs) == 0 or probs.max() >= 0.9:
             return cls.default_distribution()
+        probs /= probs.sum()
         return cls(labels, probs)

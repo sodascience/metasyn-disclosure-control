@@ -28,3 +28,7 @@ packages = ["metasyncontrib"]
 
 [project.entry-points."metasyn.distribution_provider"]
 metasyn-disclosure = "metasyncontrib.disclosure.provider:DisclosureProvider"
+
+[project.entry-points."metasyn.privacy"]
+
+disclosure = "metasyncontrib.disclosure.privacy:DisclosurePrivacy"

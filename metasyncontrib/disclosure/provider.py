@@ -3,17 +3,31 @@
 from __future__ import annotations
 from metasyn.provider import BaseDistributionProvider
 
-from metasyncontrib.disclosure.continuous import DisclosureUniform, DisclosureTruncatedNormal
+from metasyncontrib.disclosure.continuous import (
+    DisclosureUniform,
+    DisclosureTruncatedNormal,
+)
 from metasyncontrib.disclosure.continuous import DisclosureNormal
 from metasyncontrib.disclosure.continuous import DisclosureLogNormal
 from metasyncontrib.disclosure.continuous import DisclosureExponential
-from metasyncontrib.disclosure.discrete import DisclosureDiscreteUniform, DisclosureUniqueKey
+from metasyncontrib.disclosure.discrete import (
+    DisclosureDiscreteUniform,
+    DisclosureUniqueKey,
+)
 from metasyncontrib.disclosure.discrete import DisclosurePoisson
 from metasyncontrib.disclosure.string import DisclosureFaker, DisclosureUniqueFaker
 from metasyncontrib.disclosure.categorical import DisclosureMultinoulli
 from metasyncontrib.disclosure.datetime import DisclosureDate
 from metasyncontrib.disclosure.datetime import DisclosureDateTime
 from metasyncontrib.disclosure.datetime import DisclosureTime
+from metasyncontrib.disclosure.constant import (
+    DisclosureConstant,
+    DisclosureDiscreteConstant,
+    DisclosureStringConstant,
+    DisclosureDateTimeConstant,
+    DisclosureTimeConstant,
+    DisclosureDateConstant,
+)
 
 
 class DisclosureProvider(BaseDistributionProvider):
@@ -26,12 +40,24 @@ class DisclosureProvider(BaseDistributionProvider):
     name = "metasyn-disclosure"
     version = "1.0"
     distributions = [
-        DisclosureUniform, DisclosureTruncatedNormal, DisclosureNormal,
-        DisclosureLogNormal, DisclosureExponential,
-        DisclosureDiscreteUniform, DisclosureUniqueKey, DisclosurePoisson,
+        DisclosureUniform,
+        DisclosureTruncatedNormal,
+        DisclosureNormal,
+        DisclosureLogNormal,
+        DisclosureExponential,
+        DisclosureDiscreteUniform,
+        DisclosureUniqueKey,
+        DisclosurePoisson,
         DisclosureMultinoulli,
-        DisclosureFaker, DisclosureUniqueFaker,
+        DisclosureFaker,
+        DisclosureUniqueFaker,
         DisclosureDate,
         DisclosureTime,
         DisclosureDateTime,
+        DisclosureConstant,
+        DisclosureDiscreteConstant,
+        DisclosureStringConstant,
+        DisclosureDateTimeConstant,
+        DisclosureTimeConstant,
+        DisclosureDateConstant,
     ]

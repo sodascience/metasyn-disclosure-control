@@ -20,8 +20,8 @@ def test_datetime(class_norm, class_disc):
     series = pl.Series([dist_norm.draw() for _ in range(100)])
     dist_norm = class_norm.fit(series)
     dist_disc = class_disc.fit(series)
-    assert dist_norm.start < dist_disc.start
-    assert dist_norm.end > dist_disc.end
+    assert dist_norm.lower < dist_disc.lower
+    assert dist_norm.upper > dist_disc.upper
     if not isinstance(dist_norm, DateUniformDistribution):
         assert dist_norm.precision == dist_disc.precision
 

@@ -1,9 +1,5 @@
 """Module that contains a class useful for both discrete and continuous distributions."""
 from __future__ import annotations
-from typing import Union
-from collections.abc import Sequence
-
-import polars as pl
 
 from metasyn.distribution.base import BaseDistribution
 

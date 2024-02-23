@@ -6,7 +6,7 @@ from metasyncontrib.disclosure.datetime import DisclosureDate, DisclosureDateTim
 from pytest import mark
 from metasyn.distribution.categorical import MultinoulliDistribution
 from metasyncontrib.disclosure.categorical import DisclosureMultinoulli
-from metasyncontrib.disclosure.string import DisclosureFaker
+from metasyncontrib.disclosure.faker import DisclosureFaker
 
 
 @mark.parametrize(

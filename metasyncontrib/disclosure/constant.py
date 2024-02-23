@@ -1,6 +1,5 @@
 "Module for constant distributions"
 import polars as pl
-from metasyncontrib.disclosure.base import metadist_disclosure
 from metasyn.distribution.constant import (
     ConstantDistribution,
     DiscreteConstantDistribution,
@@ -9,6 +8,7 @@ from metasyn.distribution.constant import (
     TimeConstantDistribution,
     DateConstantDistribution,
 )
+from metasyncontrib.disclosure.base import metadist_disclosure
 
 
 def disclosure_constant(cls):
@@ -25,9 +25,9 @@ def disclosure_constant(cls):
 
         if count >= n_avg:
             return cls(value)
-        
+
         return cls.default_distribution()
-    
+
     setattr(cls, "_fit", _fit)
     return cls
 
@@ -61,4 +61,3 @@ class DisclosureTimeConstant(TimeConstantDistribution):
 @disclosure_constant
 class DisclosureDateConstant(DateConstantDistribution):
     "Disclosure controlled DateConstantDistribution"
-

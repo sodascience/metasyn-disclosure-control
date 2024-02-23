@@ -1,33 +1,39 @@
-"""Module contains distribution tree for disclosure control."""
+"""Module contains distribution provider for disclosure control."""
 
 from __future__ import annotations
+
 from metasyn.provider import BaseDistributionProvider
 
-from metasyncontrib.disclosure.continuous import (
-    DisclosureUniform,
-    DisclosureTruncatedNormal,
-)
-from metasyncontrib.disclosure.continuous import DisclosureNormal
-from metasyncontrib.disclosure.continuous import DisclosureLogNormal
-from metasyncontrib.disclosure.continuous import DisclosureExponential
-from metasyncontrib.disclosure.discrete import (
-    DisclosureDiscreteUniform,
-    DisclosureUniqueKey,
-)
-from metasyncontrib.disclosure.discrete import DisclosurePoisson
-from metasyncontrib.disclosure.string import DisclosureFaker, DisclosureUniqueFaker
 from metasyncontrib.disclosure.categorical import DisclosureMultinoulli
-from metasyncontrib.disclosure.datetime import DisclosureDate
-from metasyncontrib.disclosure.datetime import DisclosureDateTime
-from metasyncontrib.disclosure.datetime import DisclosureTime
 from metasyncontrib.disclosure.constant import (
     DisclosureConstant,
+    DisclosureDateConstant,
+    DisclosureDateTimeConstant,
     DisclosureDiscreteConstant,
     DisclosureStringConstant,
-    DisclosureDateTimeConstant,
     DisclosureTimeConstant,
-    DisclosureDateConstant,
 )
+from metasyncontrib.disclosure.continuous import (
+    DisclosureExponential,
+    DisclosureLogNormal,
+    DisclosureNormal,
+    DisclosureTruncatedNormal,
+    DisclosureUniform,
+)
+from metasyncontrib.disclosure.datetime import DisclosureDate, DisclosureDateTime, DisclosureTime
+from metasyncontrib.disclosure.discrete import (
+    DisclosureDiscreteNormal,
+    DisclosureDiscreteTruncatedNormal,
+    DisclosureDiscreteUniform,
+    DisclosurePoisson,
+    DisclosureUniqueKey,
+)
+from metasyncontrib.disclosure.faker import (
+    DisclosureFaker,
+    DisclosureFreetext,
+    DisclosureUniqueFaker,
+)
+from metasyncontrib.disclosure.na import DisclosureNA
 
 
 class DisclosureProvider(BaseDistributionProvider):
@@ -40,24 +46,28 @@ class DisclosureProvider(BaseDistributionProvider):
     name = "metasyn-disclosure"
     version = "1.0"
     distributions = [
-        DisclosureUniform,
-        DisclosureTruncatedNormal,
-        DisclosureNormal,
-        DisclosureLogNormal,
-        DisclosureExponential,
-        DisclosureDiscreteUniform,
-        DisclosureUniqueKey,
-        DisclosurePoisson,
         DisclosureMultinoulli,
-        DisclosureFaker,
-        DisclosureUniqueFaker,
-        DisclosureDate,
-        DisclosureTime,
-        DisclosureDateTime,
         DisclosureConstant,
+        DisclosureDateConstant,
+        DisclosureDateTimeConstant,
         DisclosureDiscreteConstant,
         DisclosureStringConstant,
-        DisclosureDateTimeConstant,
         DisclosureTimeConstant,
-        DisclosureDateConstant,
+        DisclosureExponential,
+        DisclosureLogNormal,
+        DisclosureNormal,
+        DisclosureTruncatedNormal,
+        DisclosureUniform,
+        DisclosureDate, 
+        DisclosureDateTime, 
+        DisclosureTime,
+        DisclosureDiscreteNormal,
+        DisclosureDiscreteTruncatedNormal,
+        DisclosureDiscreteUniform,
+        DisclosurePoisson,
+        DisclosureUniqueKey,
+        DisclosureFaker, 
+        DisclosureUniqueFaker,
+        DisclosureFreetext,
+        DisclosureNA,
     ]

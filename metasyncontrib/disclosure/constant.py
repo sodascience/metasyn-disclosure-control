@@ -1,63 +1,61 @@
 """Module for disclosure controlled constant distributions."""
+from __future__ import annotations
+
 import polars as pl
+from metasyn.distribution.base import BaseDistribution
 from metasyn.distribution.constant import (
     ConstantDistribution,
+    DateConstantDistribution,
+    DateTimeConstantDistribution,
     DiscreteConstantDistribution,
     StringConstantDistribution,
-    DateTimeConstantDistribution,
     TimeConstantDistribution,
-    DateConstantDistribution,
 )
+
 from metasyncontrib.disclosure.base import metadist_disclosure
 
 
-def disclosure_constant(cls):
-    """Override _fit method for constant distributions using this decorator."""
-    def _fit(values: pl.Series, n_avg=11):
+class DisclosureConstantMixin(BaseDistribution):
+    """Mixin class to overload fit method for constant distributions."""
+
+    @classmethod
+    def fit(cls, series, *args, n_avg: int = 11, **kwargs) -> BaseDistribution:
+        """Fit constant distributions with disclosure control rules in place."""
+        pl_series: pl.Series = cls._to_series(series)
+
         # if unique, just get that value if it occurs at least n_avg times
-        if values.n_unique() == 1 & values.len() >= n_avg:
-            return cls(values.unique()[0])
-
-        # otherwise get most common value
-        val_counts = values.value_counts(sort=True)
-        value = val_counts[0,0]
-        count = val_counts[0,1]
-
-        if count >= n_avg:
-            return cls(value)
-
+        if pl_series.n_unique() == 1 and pl_series.len() >= n_avg:
+            return cls._fit(pl_series, *args, **kwargs)
+            
+        if pl_series.n_unique() > 1:
+            # if not unique, ensure most common value occurs at least n_avg times
+            _value, count = pl_series.value_counts(sort=True).row(0)
+            if count >= n_avg:
+                return cls._fit(pl_series, *args, **kwargs)
+        
         return cls.default_distribution()
-
-    setattr(cls, "_fit", _fit)
-    return cls
 
 
 @metadist_disclosure()
-@disclosure_constant
-class DisclosureConstant(ConstantDistribution):
+class DisclosureConstant(DisclosureConstantMixin, ConstantDistribution):
     """Disclosure controlled ConstantDistribution."""
 
 @metadist_disclosure()
-@disclosure_constant
-class DisclosureDiscreteConstant(DiscreteConstantDistribution):
+class DisclosureDiscreteConstant(DisclosureConstantMixin, DiscreteConstantDistribution):
     """Disclosure controlled DiscreteConstantDistribution."""
 
 @metadist_disclosure()
-@disclosure_constant
-class DisclosureStringConstant(StringConstantDistribution):
+class DisclosureStringConstant(DisclosureConstantMixin, StringConstantDistribution):
     """Disclosure controlled StringConstantDistribution."""
 
 @metadist_disclosure()
-@disclosure_constant
-class DisclosureDateTimeConstant(DateTimeConstantDistribution):
+class DisclosureDateTimeConstant(DisclosureConstantMixin, DateTimeConstantDistribution):
     """Disclosure controlled DateTimeConstantDistribution."""
 
 @metadist_disclosure()
-@disclosure_constant
-class DisclosureTimeConstant(TimeConstantDistribution):
+class DisclosureTimeConstant(DisclosureConstantMixin, TimeConstantDistribution):
     """Disclosure controlled TimeConstantDistribution."""
 
 @metadist_disclosure()
-@disclosure_constant
-class DisclosureDateConstant(DateConstantDistribution):
+class DisclosureDateConstant(DisclosureConstantMixin, DateConstantDistribution):
     """Disclosure controlled DateConstantDistribution."""

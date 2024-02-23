@@ -1,12 +1,12 @@
 """Utilities for disclosure control."""
 
 from __future__ import annotations
+
 import datetime as dt
 from typing import NamedTuple, Optional
 
 import numpy as np
 import polars as pl
-
 from numpy.core._exceptions import UFuncTypeError
 
 
@@ -66,14 +66,14 @@ def _create_subsample(values, n_avg: int = 11,  # pylint: disable=too-many-local
 def micro_aggregate(values: pl.Series, min_bin: int = 11) -> pl.Series:
     """Use micro-aggregation to make the data safe for disclosure purposes.
 
-    Arguments
+    Arguments:
     ---------
     values:
         Values that need to be micro-aggregated.
     min_bin:
         Micro-aggregate over at least this many values.
 
-    Returns
+    Returns:
     -------
     new_values:
         Aggregated values.

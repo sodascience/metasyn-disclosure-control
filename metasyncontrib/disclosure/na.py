@@ -6,6 +6,6 @@ from metasyn.distribution.na import NADistribution
 from metasyncontrib.disclosure.base import metadist_disclosure
 
 
-@metadist_disclosure
+@metadist_disclosure()
 class DisclosureNA(NADistribution):
     """Disclosure version of NA distribution."""

@@ -32,5 +32,5 @@ class DisclosureFreetext(FreeTextDistribution):
     """Disclosure implementation of freetext distribution."""
 
     @classmethod
-    def _fit(cls, values, faker_type: str = "city", locale: str = "en_US", n_avg: int = 11):  # pylint: disable=unused-argument
-        return super()._fit(values, faker_type=faker_type, locale=locale)
+    def _fit(cls, values, max_values: int = 50, n_avg: int = 11):  # pylint: disable=unused-argument
+        return super()._fit(values, max_values=max_values)

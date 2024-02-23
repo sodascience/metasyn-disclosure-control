@@ -25,8 +25,8 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
     @classmethod
     def _fit(cls, values: pl.Series, n_avg: int = 11):
         orig_dist = super()._fit(values)
-        if orig_dist.consecutive == 1:
-            return cls(0, 1)
+        if orig_dist.consecutive:
+            return cls(0, True)
         sub_values = micro_aggregate(values, n_avg)
         return super()._fit(sub_values)
 

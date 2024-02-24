@@ -24,7 +24,7 @@ from metasyncontrib.disclosure.constant import (
         (ConstantDistribution, DisclosureConstant, 8.0),
         (DiscreteConstantDistribution, DisclosureDiscreteConstant, 8),
         (StringConstantDistribution, DisclosureStringConstant, "Secretvalue"),
-        (DateTimeConstantDistribution, DisclosureDateTimeConstant, "2024-02-23T12:08:38+00:00"),
+        (DateTimeConstantDistribution, DisclosureDateTimeConstant, "2024-02-23T12:08:38"),
         (TimeConstantDistribution, DisclosureTimeConstant, "12:08:38"),
         (DateConstantDistribution, DisclosureDateConstant, "2024-02-23"),
     ],

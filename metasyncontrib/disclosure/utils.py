@@ -83,6 +83,7 @@ def micro_aggregate(values: pl.Series, min_bin: int = 11) -> pl.Series:
     -------
     new_values:
         Aggregated values.
+
     """
     assert min_bin > 6, "Please use a bigger minimum bin size, or disclosure control will not work."
     cur_settings = [min_bin, 0, 0]

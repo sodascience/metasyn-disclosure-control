@@ -13,6 +13,7 @@ class DisclosurePrivacy(BasePrivacy):
     n_avg:
         Number of elements to aggregate into one bin. Higher values
         mean better protected privacy, but lower statistical accuracy.
+
     """
 
     name = "disclosure"

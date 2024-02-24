@@ -8,6 +8,7 @@ def metadist_disclosure():
     -------
     cls:
         Class with the appropriate class variables.
+
     """
 
     def _wrap(cls):

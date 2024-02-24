@@ -27,7 +27,9 @@ class DisclosureDiscreteNormal(DisclosureNumericalMixin, DiscreteNormalDistribut
 
 
 @metadist_disclosure()
-class DisclosureDiscreteTruncatedNormal(DisclosureNumericalMixin, DiscreteTruncatedNormalDistribution):
+class DisclosureDiscreteTruncatedNormal(
+    DisclosureNumericalMixin, DiscreteTruncatedNormalDistribution
+):
     """Implementation for discrete uniform distribution."""
 
 

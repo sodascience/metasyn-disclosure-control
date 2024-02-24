@@ -26,13 +26,13 @@ class DisclosureConstantMixin(BaseDistribution):
         # if unique, just get that value if it occurs at least n_avg times
         if pl_series.n_unique() == 1 and pl_series.len() >= n_avg:
             return cls._fit(pl_series, *args, **kwargs)
-            
+
         if pl_series.n_unique() > 1:
             # if not unique, ensure most common value occurs at least n_avg times
             _value, count = pl_series.value_counts(sort=True).row(0)
             if count >= n_avg:
                 return cls._fit(pl_series, *args, **kwargs)
-        
+
         return cls.default_distribution()
 
 
@@ -40,21 +40,26 @@ class DisclosureConstantMixin(BaseDistribution):
 class DisclosureConstant(DisclosureConstantMixin, ConstantDistribution):
     """Disclosure controlled ConstantDistribution."""
 
+
 @metadist_disclosure()
 class DisclosureDiscreteConstant(DisclosureConstantMixin, DiscreteConstantDistribution):
     """Disclosure controlled DiscreteConstantDistribution."""
+
 
 @metadist_disclosure()
 class DisclosureStringConstant(DisclosureConstantMixin, StringConstantDistribution):
     """Disclosure controlled StringConstantDistribution."""
 
+
 @metadist_disclosure()
 class DisclosureDateTimeConstant(DisclosureConstantMixin, DateTimeConstantDistribution):
     """Disclosure controlled DateTimeConstantDistribution."""
 
+
 @metadist_disclosure()
 class DisclosureTimeConstant(DisclosureConstantMixin, TimeConstantDistribution):
     """Disclosure controlled TimeConstantDistribution."""
+
 
 @metadist_disclosure()
 class DisclosureDateConstant(DisclosureConstantMixin, DateConstantDistribution):

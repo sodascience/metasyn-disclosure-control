@@ -1,20 +1,26 @@
+import numpy as np
 import polars as pl
-from metasyn.distribution.datetime import DateUniformDistribution
-from metasyn.distribution.datetime import DateTimeUniformDistribution
-from metasyn.distribution.datetime import TimeUniformDistribution
-from metasyncontrib.disclosure.datetime import DisclosureDate, DisclosureDateTime, DisclosureTime
-from pytest import mark
 from metasyn.distribution.categorical import MultinoulliDistribution
+from metasyn.distribution.datetime import (
+    DateTimeUniformDistribution,
+    DateUniformDistribution,
+    TimeUniformDistribution,
+)
+from pytest import mark
+
 from metasyncontrib.disclosure.categorical import DisclosureMultinoulli
+from metasyncontrib.disclosure.datetime import DisclosureDate, DisclosureDateTime, DisclosureTime
 from metasyncontrib.disclosure.faker import DisclosureFaker
 
 
 @mark.parametrize(
     "class_norm,class_disc",
-    [(DateUniformDistribution, DisclosureDate),
-     (DateTimeUniformDistribution, DisclosureDateTime),
-     (TimeUniformDistribution, DisclosureTime)]
-    )
+    [
+        (DateUniformDistribution, DisclosureDate),
+        (DateTimeUniformDistribution, DisclosureDateTime),
+        (TimeUniformDistribution, DisclosureTime),
+    ],
+)
 def test_datetime(class_norm, class_disc):
     dist_norm = class_norm.default_distribution()
     series = pl.Series([dist_norm.draw() for _ in range(100)])
@@ -27,6 +33,7 @@ def test_datetime(class_norm, class_disc):
 
 
 def test_categorical():
+    np.random.seed()
     dist_norm = MultinoulliDistribution.default_distribution()
     series = pl.Series([dist_norm.draw() for _ in range(40)], dtype=pl.Categorical)
     dist_norm = MultinoulliDistribution.fit(series)

@@ -1,29 +1,35 @@
-from pytest import mark
 import polars as pl
+from metasyn.distribution.continuous import (
+    ExponentialDistribution,
+    LogNormalDistribution,
+    NormalDistribution,
+    TruncatedNormalDistribution,
+    UniformDistribution,
+)
+from metasyn.distribution.discrete import DiscreteUniformDistribution
+from pytest import mark
 
-from metasyn.distribution.continuous import UniformDistribution, TruncatedNormalDistribution
-from metasyn.distribution.continuous import NormalDistribution, LogNormalDistribution
-from metasyn.distribution.continuous import ExponentialDistribution
-from metasyncontrib.disclosure.continuous import DisclosureUniform, DisclosureTruncatedNormal
-from metasyncontrib.disclosure.continuous import DisclosureNormal, DisclosureLogNormal
-from metasyncontrib.disclosure.continuous import DisclosureExponential
+from metasyncontrib.disclosure.continuous import (
+    DisclosureExponential,
+    DisclosureLogNormal,
+    DisclosureNormal,
+    DisclosureTruncatedNormal,
+    DisclosureUniform,
+)
 from metasyncontrib.disclosure.discrete import DisclosureDiscreteUniform
-from metasyncontrib.disclosure.discrete import DisclosurePoisson
-
-from metasyn.distribution.discrete import DiscreteUniformDistribution,\
-    PoissonDistribution
 
 
 @mark.parametrize(
     "dist_normal,dist_disclosure",
-    [(UniformDistribution, DisclosureUniform),
-     (TruncatedNormalDistribution, DisclosureTruncatedNormal),
-     (NormalDistribution, DisclosureNormal),
-     (LogNormalDistribution, DisclosureLogNormal),
-     (ExponentialDistribution, DisclosureExponential),
-     (DiscreteUniformDistribution, DisclosureDiscreteUniform),
-     # (PoissonDistribution, DisclosurePoisson)
-     ]
+    [
+        (UniformDistribution, DisclosureUniform),
+        (TruncatedNormalDistribution, DisclosureTruncatedNormal),
+        (NormalDistribution, DisclosureNormal),
+        (LogNormalDistribution, DisclosureLogNormal),
+        (ExponentialDistribution, DisclosureExponential),
+        (DiscreteUniformDistribution, DisclosureDiscreteUniform),
+        # (PoissonDistribution, DisclosurePoisson)
+    ],
 )
 def test_continuous(dist_normal, dist_disclosure):
     unif = dist_normal.default_distribution()

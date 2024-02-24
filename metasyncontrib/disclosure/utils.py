@@ -20,34 +20,39 @@ def _compute_dominance(block_values, reverse=False):
         diff_values = max_values - block_values
         same_vals = np.all(block_values == max_values, axis=1)
     diff_sum = diff_values.sum(axis=1)
-    dominance = diff_values[~same_vals].max(axis=1)/diff_sum[~same_vals]
+    dominance = diff_values[~same_vals].max(axis=1) / diff_sum[~same_vals]
     return np.max(dominance)
 
 
-def _create_subsample(values, n_avg: int = 11,  # pylint: disable=too-many-locals
-                      pre_remove: int = 0,
-                      post_remove: int = 0) -> tuple[list, float]:
+def _create_subsample( # pylint: disable=too-many-locals
+    values,
+    n_avg: int = 11,
+    pre_remove: int = 0,
+    post_remove: int = 0,
+) -> tuple[list, float]:
     sorted_values = np.sort(values)
-    sorted_values = sorted_values[pre_remove:len(values)-post_remove]
+    sorted_values = sorted_values[pre_remove : len(values) - post_remove]
     n_values = len(sorted_values)
 
-    n_blocks = n_values//n_avg
+    n_blocks = n_values // n_avg
     if n_blocks <= 1:
         raise ValueError("Cannot find subsample with current settings.")
-    min_block_size = n_values//n_blocks
-    leftover = n_values - n_blocks*min_block_size
+    min_block_size = n_values // n_blocks
+    leftover = n_values - n_blocks * min_block_size
     if leftover == 1:
-        sorted_values = np.delete(sorted_values, [n_values//2])
+        sorted_values = np.delete(sorted_values, [n_values // 2])
     if leftover > 1:
-        base_skip = round(n_values/(leftover+1))
-        skip_start = (n_values - base_skip*(leftover-1) + 1) // 2
-        delete_values = skip_start + base_skip*np.arange(leftover)
+        base_skip = round(n_values / (leftover + 1))
+        skip_start = (n_values - base_skip * (leftover - 1) + 1) // 2
+        delete_values = skip_start + base_skip * np.arange(leftover)
         sorted_values = np.delete(sorted_values, delete_values)
-    assert len(sorted_values) == n_blocks*min_block_size
+    assert len(sorted_values) == n_blocks * min_block_size
 
     block_values = sorted_values.reshape(n_blocks, min_block_size)
-    dominance = max(_compute_dominance(block_values, reverse=False),
-                    _compute_dominance(block_values, reverse=True))
+    dominance = max(
+        _compute_dominance(block_values, reverse=False),
+        _compute_dominance(block_values, reverse=True),
+    )
     try:
         sub_values = block_values.mean(axis=1)
     except UFuncTypeError:
@@ -57,9 +62,10 @@ def _create_subsample(values, n_avg: int = 11,  # pylint: disable=too-many-local
         for block in block_values:
             mean_time = pl.Series(block).dt.cast_time_unit("us").mean()
             assert mean_time is not None
-            sec_since_1970 = mean_time/1e6
-            sub_values.append(dt.datetime.utcfromtimestamp(0)
-                              + dt.timedelta(seconds=sec_since_1970))
+            sec_since_1970 = mean_time / 1e6
+            sub_values.append(
+                dt.datetime.utcfromtimestamp(0) + dt.timedelta(seconds=sec_since_1970)
+            )
     return sub_values, dominance
 
 
@@ -93,27 +99,30 @@ def micro_aggregate(values: pl.Series, min_bin: int = 11) -> pl.Series:
             break
 
         best_solution: Optional[Solution] = None
-        max_diff = cur_settings[0]//2
+        max_diff = cur_settings[0] // 2
         for i_par in range(3):
             for add_par in range(1, max_diff):
-                new_settings = [x if j_par != i_par else x+add_par
-                                for j_par, x in enumerate(cur_settings)]
+                new_settings = [
+                    x if j_par != i_par else x + add_par for j_par, x in enumerate(cur_settings)
+                ]
                 try:
                     new_bin, new_dom = _create_subsample(values, *new_settings)
                 except ValueError:
                     continue
-                grad = (dominance-new_dom) / add_par
+                grad = (dominance - new_dom) / add_par
 
                 if best_solution is None or best_solution.grad < grad:
                     best_solution = Solution(new_bin, new_dom, new_settings, grad)
         if best_solution is None:
-            raise ValueError("Could not find solution satisfying dominance conditions for column"
-                             f" '{values.name}'.")
+            raise ValueError(
+                "Could not find solution satisfying dominance conditions for column"
+                f" '{values.name}'."
+            )
         dominance = best_solution.dominance
         cur_settings = best_solution.settings
         sub_values = best_solution.sub_values
 
     # If the values are integer types, round the values to the nearest integer.
     if values.dtype in [pl.datatypes.Int64, pl.datatypes.Int32, pl.datatypes.Int32]:
-        return pl.Series((np.array(sub_values)+0.5).astype(np.int64))
+        return pl.Series((np.array(sub_values) + 0.5).astype(np.int64))
     return pl.Series(sub_values)

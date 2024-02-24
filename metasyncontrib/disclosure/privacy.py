@@ -23,7 +23,4 @@ class DisclosurePrivacy(BasePrivacy):
 
     def to_dict(self) -> dict:
         """Create a dictionary that gives the privacy type, and parameters."""
-        return {
-            "name": self.name,
-            "parameters": {"n_avg": self.n_avg}
-        }
+        return {"name": self.name, "parameters": {"n_avg": self.n_avg}}

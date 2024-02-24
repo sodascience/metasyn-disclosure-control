@@ -43,7 +43,7 @@ jobs:
         pylint metasyncontrib/disclosure
     - name: Check docstrings with pydocstyle
       run: |
-        pydocstyle metasyncontrib/disclosure --convention=numpy --add-select=D417 --add-ignore="D102,D105"
+        pydocstyle metasyncontrib/disclosure --convention=numpy --add-select=D417 --add-ignore="D102,D105,D406"
     - name: Check types with MyPy
       run: |
         mypy metasyncontrib/disclosure

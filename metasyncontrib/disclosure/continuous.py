@@ -1,34 +1,37 @@
 """Disclosure control implementations for continuous distributions."""
 
-from metasyn.distribution.continuous import UniformDistribution
-from metasyn.distribution.continuous import NormalDistribution, LogNormalDistribution
-from metasyn.distribution.continuous import ExponentialDistribution
-from metasyn.distribution.continuous import TruncatedNormalDistribution
+from metasyn.distribution.continuous import (
+    ExponentialDistribution,
+    LogNormalDistribution,
+    NormalDistribution,
+    TruncatedNormalDistribution,
+    UniformDistribution,
+)
 
-from metasyncontrib.disclosure.numerical import DisclosureNumerical
 from metasyncontrib.disclosure.base import metadist_disclosure
+from metasyncontrib.disclosure.numerical import DisclosureNumericalMixin
 
 
 @metadist_disclosure()
-class DisclosureUniform(DisclosureNumerical, UniformDistribution):
+class DisclosureUniform(DisclosureNumericalMixin, UniformDistribution):
     """Uniform distribution implementation."""
 
 
 @metadist_disclosure()
-class DisclosureTruncatedNormal(DisclosureNumerical, TruncatedNormalDistribution):
-    """Truncated normal distribution implementation."""
-
-
-@metadist_disclosure()
-class DisclosureNormal(DisclosureNumerical, NormalDistribution):
+class DisclosureNormal(DisclosureNumericalMixin, NormalDistribution):
     """Disclosure normal distribution."""
 
 
 @metadist_disclosure()
-class DisclosureLogNormal(DisclosureNumerical, LogNormalDistribution):
+class DisclosureLogNormal(DisclosureNumericalMixin, LogNormalDistribution):
     """Disclosure log-normal distribution."""
 
 
 @metadist_disclosure()
-class DisclosureExponential(DisclosureNumerical, ExponentialDistribution):
+class DisclosureTruncatedNormal(DisclosureNumericalMixin, TruncatedNormalDistribution):
+    """Truncated normal distribution implementation."""
+
+
+@metadist_disclosure()
+class DisclosureExponential(DisclosureNumericalMixin, ExponentialDistribution):
     """Disclosure exponential distribution."""

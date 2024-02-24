@@ -3,19 +3,39 @@
 from __future__ import annotations
 
 import polars as pl
+from metasyn.distribution.discrete import (
+    DiscreteNormalDistribution,
+    DiscreteTruncatedNormalDistribution,
+    DiscreteUniformDistribution,
+    PoissonDistribution,
+    UniqueKeyDistribution,
+)
 
-from metasyn.distribution.discrete import DiscreteUniformDistribution
-from metasyn.distribution.discrete import PoissonDistribution
-from metasyn.distribution.discrete import UniqueKeyDistribution
-
-from metasyncontrib.disclosure.numerical import DisclosureNumerical
-from metasyncontrib.disclosure.utils import micro_aggregate
 from metasyncontrib.disclosure.base import metadist_disclosure
+from metasyncontrib.disclosure.numerical import DisclosureNumericalMixin
+from metasyncontrib.disclosure.utils import micro_aggregate
 
 
 @metadist_disclosure()
-class DisclosureDiscreteUniform(DisclosureNumerical, DiscreteUniformDistribution):
+class DisclosureDiscreteUniform(DisclosureNumericalMixin, DiscreteUniformDistribution):
     """Implementation for discrete uniform distribution."""
+
+
+@metadist_disclosure()
+class DisclosureDiscreteNormal(DisclosureNumericalMixin, DiscreteNormalDistribution):
+    """Implementation for discrete uniform distribution."""
+
+
+@metadist_disclosure()
+class DisclosureDiscreteTruncatedNormal(
+    DisclosureNumericalMixin, DiscreteTruncatedNormalDistribution
+):
+    """Implementation for discrete uniform distribution."""
+
+
+@metadist_disclosure()
+class DisclosurePoisson(DisclosureNumericalMixin, PoissonDistribution):
+    """Disclosure implementation for Poisson distribution."""
 
 
 @metadist_disclosure()
@@ -29,8 +49,3 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
             return cls(0, True)
         sub_values = micro_aggregate(values, n_avg)
         return super()._fit(sub_values)
-
-
-@metadist_disclosure()
-class DisclosurePoisson(DisclosureNumerical, PoissonDistribution):
-    """Disclosure implementation for Poisson distribution."""

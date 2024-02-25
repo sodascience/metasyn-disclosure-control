@@ -33,7 +33,7 @@ def test_datetime(class_norm, class_disc):
 
 
 def test_categorical():
-    np.random.seed()
+    np.random.seed(45)
     dist_norm = MultinoulliDistribution.default_distribution()
     series = pl.Series([dist_norm.draw() for _ in range(40)], dtype=pl.Categorical)
     dist_norm = MultinoulliDistribution.fit(series)

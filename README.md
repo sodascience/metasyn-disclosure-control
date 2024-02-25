@@ -1,21 +1,32 @@
 # Metasyn disclosure control
 
-This is a plugin for the [metasyn](https://github.com/sodascience/metasyn) Python library. Metasyn
-is a package to create synthetic data for tabular datasets automatically.
-While the base metasyn package is generally good at protecting privacy, it doesn't adhere to any
-standard level of privacy. For example, the uniform distributions in the base package will simply find
-the lowest and highest values in the dataset, and use those as the boundaries for the uniform
-distribution. In some cases the minimum and maximum values can be disclosive. That is why we have
-built this plugin that implements the disclosure control standard.
+A privacy plugin for [metasyn](https://github.com/sodascience/metasyn), based on statistical disclosure control (SDC) rules as found in the following documents:
 
-## Rule of Thumb
+- The [SDC handbook](https://securedatagroup.org/guides-and-resources/sdc-handbook/) of the Secure Data group in the UK
+- The Data Without Boundaries document [Guidelines for output checking](https://wayback.archive-it.org/12090/*/https:/cros-legacy.ec.europa.eu/system/files/dwb_standalone-document_output-checking-guidelines.pdf) (pdf)
+- Statistics Netherlands' output guidelines
 
-In this package we have implemented the "rule of thumb" as described in the
-[European guidelines](https://ec.europa.eu/eurostat/cros/system/files/dwb_standalone-document_output-checking-guidelines.pdf)
-for output checking. The main idea behind the rule of thumb is that it is on the safe side
-of what you are allowed to disclose. If you follow the rule of thumb then the idea is that
-the output should be considered privacy conserving, without the need for a specialist that
-looks at the specific context.
+
+While the base metasyn package is generally good at protecting privacy, it doesn't adhere to any standard level of privacy. For example, the uniform distributions in the base package will simply find the lowest and highest values in the dataset, and use those as the boundaries for the uniform distribution. In some cases the minimum and maximum values can be disclosive. That is why we have built this plugin that implements the disclosure control standard.
+
+## Usage
+
+The most basic usage is as follows:
+
+```py
+import polars as pl
+from metasyn import MetaFrame
+from metasyncontrib.disclosure import DisclosurePrivacy
+
+df = pl.read_csv("your_data.csv")
+mf = MetaFrame.fit_dataframe(
+    df=df, 
+    dist_providers=["builtin", "metasyn-disclosure"],
+    privacy=DisclosurePrivacy()
+)
+mf.synthesize()
+```
+
 
 ## Current status of the plugin
 

@@ -27,7 +27,6 @@ dependencies = [
 	"metasyn",
 	"polars",
 	"numpy>=1.20",
-	"matplotlib",
 ]
 dynamic = ["version"]
 
@@ -36,6 +35,10 @@ dev = [
 	"ruff",
 	"mypy", 
 	"pytest"
+]
+
+examples = [
+    "matplotlib"
 ]
 
 [tool.setuptools]

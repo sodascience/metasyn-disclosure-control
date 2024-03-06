@@ -1,3 +1,5 @@
+import datetime as dt
+
 import numpy as np
 import polars as pl
 from metasyn.distribution.categorical import MultinoulliDistribution
@@ -14,20 +16,21 @@ from metasyncontrib.disclosure.faker import DisclosureFaker
 
 
 @mark.parametrize(
-    "class_norm,class_disc",
+    "class_norm,class_disc,input_type",
     [
-        (DateUniformDistribution, DisclosureDate),
-        (DateTimeUniformDistribution, DisclosureDateTime),
-        (TimeUniformDistribution, DisclosureTime),
+        (DateUniformDistribution, DisclosureDate, dt.date),
+        (DateTimeUniformDistribution, DisclosureDateTime, dt.datetime),
+        (TimeUniformDistribution, DisclosureTime, dt.time),
     ],
 )
-def test_datetime(class_norm, class_disc):
+def test_datetime(class_norm, class_disc, input_type):
     dist_norm = class_norm.default_distribution()
     series = pl.Series([dist_norm.draw() for _ in range(100)])
     dist_norm = class_norm.fit(series)
     dist_disc = class_disc.fit(series)
     assert dist_norm.lower < dist_disc.lower
     assert dist_norm.upper > dist_disc.upper
+    assert isinstance(dist_norm.draw(), input_type)
     if not isinstance(dist_norm, DateUniformDistribution):
         assert dist_norm.precision == dist_disc.precision
 

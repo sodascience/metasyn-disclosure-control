@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import datetime as dt
 from typing import NamedTuple, Optional
 
 import numpy as np
@@ -61,11 +60,7 @@ def _create_subsample( # pylint: disable=too-many-locals
         sub_values = []
         for block in block_values:
             mean_time = pl.Series(block).dt.cast_time_unit("us").mean()
-            assert mean_time is not None
-            sec_since_1970 = mean_time / 1e6
-            sub_values.append(
-                dt.datetime.utcfromtimestamp(0) + dt.timedelta(seconds=sec_since_1970)
-            )
+            sub_values.append(mean_time)
     return sub_values, dominance
 
 

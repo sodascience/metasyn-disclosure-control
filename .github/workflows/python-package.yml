@@ -32,7 +32,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install ${{ matrix.metasyn-version }}
         python -m pip install ruff mypy pytest nbval
-        python -m pip install .
+        python -m pip install ".[examples]"
     - name: Lint with ruff
       run: |
         ruff metasyncontrib/disclosure

@@ -20,6 +20,9 @@ def _compute_dominance(block_values, reverse=False):
         same_vals = np.all(block_values == max_values, axis=1)
     diff_sum = diff_values.sum(axis=1)
     dominance = diff_values[~same_vals].max(axis=1) / diff_sum[~same_vals]
+    # If all values are the same, then dominance is 0.
+    if len(dominance) == 0:
+        return 0
     return np.max(dominance)
 
 

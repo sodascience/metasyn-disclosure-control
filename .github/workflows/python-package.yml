@@ -16,8 +16,11 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-        metasyn-version: [ "git+https://github.com/sodascience/metasyn.git@main", "metasyn==0.8.0" ]
-       
+        metasyn-version: [ "git+https://github.com/sodascience/metasyn.git@main"]
+        include:
+          - python-version: "3.11"
+            metasyn-version: "metasyn==0.8.0"
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}

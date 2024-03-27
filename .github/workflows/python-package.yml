@@ -16,8 +16,11 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-        metasyn-version: [ "git+https://github.com/sodascience/metasyn.git@main" ]
-       
+        metasyn-version: [ "git+https://github.com/sodascience/metasyn.git@main"]
+        include:
+          - python-version: "3.11"
+            metasyn-version: "metasyn==0.8.0"
+
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -29,7 +32,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install ${{ matrix.metasyn-version }}
         python -m pip install ruff mypy pytest nbval
-        python -m pip install .
+        python -m pip install ".[examples]"
     - name: Lint with ruff
       run: |
         ruff metasyncontrib/disclosure

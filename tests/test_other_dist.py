@@ -12,7 +12,7 @@ from pytest import mark
 
 from metasyncontrib.disclosure.categorical import DisclosureMultinoulli
 from metasyncontrib.disclosure.datetime import DisclosureDate, DisclosureDateTime, DisclosureTime
-from metasyncontrib.disclosure.faker import DisclosureFaker
+from metasyncontrib.disclosure.string import DisclosureFaker
 
 
 @mark.parametrize(

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import polars as pl
 from metasyn.distribution.discrete import (
+    DiscreteConstantDistribution,
     DiscreteNormalDistribution,
     DiscreteTruncatedNormalDistribution,
     DiscreteUniformDistribution,
@@ -11,7 +12,7 @@ from metasyn.distribution.discrete import (
     UniqueKeyDistribution,
 )
 
-from metasyncontrib.disclosure.base import metadist_disclosure
+from metasyncontrib.disclosure.base import DisclosureConstantMixin, metadist_disclosure
 from metasyncontrib.disclosure.numerical import DisclosureNumericalMixin
 from metasyncontrib.disclosure.utils import micro_aggregate
 
@@ -49,3 +50,7 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
             return cls(0, True)
         sub_values = micro_aggregate(values, n_avg)
         return super()._fit(sub_values)
+
+@metadist_disclosure()
+class DisclosureDiscreteConstant(DisclosureConstantMixin, DiscreteConstantDistribution):
+    """Disclosure controlled DiscreteConstantDistribution."""

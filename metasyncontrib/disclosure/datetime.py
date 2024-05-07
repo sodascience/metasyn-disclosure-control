@@ -6,12 +6,15 @@ import datetime as dt
 
 import polars as pl
 from metasyn.distribution.datetime import (
+    DateConstantDistribution,
+    DateTimeConstantDistribution,
     DateTimeUniformDistribution,
     DateUniformDistribution,
+    TimeConstantDistribution,
     TimeUniformDistribution,
 )
 
-from metasyncontrib.disclosure.base import metadist_disclosure
+from metasyncontrib.disclosure.base import DisclosureConstantMixin, metadist_disclosure
 
 # from metasyncontrib.disclosure.base import BaseDisclosureDistribution
 from metasyncontrib.disclosure.utils import micro_aggregate
@@ -56,3 +59,17 @@ class DisclosureDate(DateUniformDistribution):
         # Convert back into dates
         sub_series = pl.Series([dt_val.date() for dt_val in dt_sub_series])
         return cls(sub_series.min(), sub_series.max())
+
+@metadist_disclosure()
+class DisclosureDateTimeConstant(DisclosureConstantMixin, DateTimeConstantDistribution):
+    """Disclosure controlled DateTimeConstantDistribution."""
+
+
+@metadist_disclosure()
+class DisclosureTimeConstant(DisclosureConstantMixin, TimeConstantDistribution):
+    """Disclosure controlled TimeConstantDistribution."""
+
+
+@metadist_disclosure()
+class DisclosureDateConstant(DisclosureConstantMixin, DateConstantDistribution):
+    """Disclosure controlled DateConstantDistribution."""

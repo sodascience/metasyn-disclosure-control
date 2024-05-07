@@ -1,6 +1,7 @@
 """Disclosure control implementations for continuous distributions."""
 
 from metasyn.distribution.continuous import (
+    ConstantDistribution,
     ExponentialDistribution,
     LogNormalDistribution,
     NormalDistribution,
@@ -8,7 +9,7 @@ from metasyn.distribution.continuous import (
     UniformDistribution,
 )
 
-from metasyncontrib.disclosure.base import metadist_disclosure
+from metasyncontrib.disclosure.base import DisclosureConstantMixin, metadist_disclosure
 from metasyncontrib.disclosure.numerical import DisclosureNumericalMixin
 
 
@@ -35,3 +36,7 @@ class DisclosureTruncatedNormal(DisclosureNumericalMixin, TruncatedNormalDistrib
 @metadist_disclosure()
 class DisclosureExponential(DisclosureNumericalMixin, ExponentialDistribution):
     """Disclosure exponential distribution."""
+
+@metadist_disclosure()
+class DisclosureConstant(DisclosureConstantMixin, ConstantDistribution):
+    """Disclosure controlled ConstantDistribution."""

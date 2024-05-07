@@ -1,5 +1,6 @@
 """Base class for all disclosure control distributions."""
 
+import polars as pl
 from metasyn.distribution.base import BaseDistribution
 
 

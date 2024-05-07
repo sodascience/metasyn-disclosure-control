@@ -3,11 +3,11 @@
 from metasyn.distribution.string import (
     FakerDistribution,
     FreeTextDistribution,
-    UniqueFakerDistribution,
     StringConstantDistribution,
+    UniqueFakerDistribution,
 )
 
-from metasyncontrib.disclosure.base import metadist_disclosure, DisclosureConstantMixin
+from metasyncontrib.disclosure.base import DisclosureConstantMixin, metadist_disclosure
 
 
 @metadist_disclosure()

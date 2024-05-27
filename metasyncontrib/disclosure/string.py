@@ -1,12 +1,13 @@
 """Module for disclosure control for string distributions."""
 
-from metasyn.distribution.faker import (
+from metasyn.distribution.string import (
     FakerDistribution,
     FreeTextDistribution,
+    StringConstantDistribution,
     UniqueFakerDistribution,
 )
 
-from metasyncontrib.disclosure.base import metadist_disclosure
+from metasyncontrib.disclosure.base import DisclosureConstantMixin, metadist_disclosure
 
 
 @metadist_disclosure()
@@ -34,3 +35,7 @@ class DisclosureFreetext(FreeTextDistribution):
     @classmethod
     def _fit(cls, values, max_values: int = 50, n_avg: int = 11):  # pylint: disable=unused-argument
         return super()._fit(values, max_values=max_values)
+
+@metadist_disclosure()
+class DisclosureStringConstant(DisclosureConstantMixin, StringConstantDistribution):
+    """Disclosure controlled StringConstantDistribution."""

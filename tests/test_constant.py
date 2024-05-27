@@ -1,21 +1,21 @@
-from metasyn.distribution.constant import (
-    ConstantDistribution,
+from metasyn.distribution.continuous import ConstantDistribution
+from metasyn.distribution.datetime import (
     DateConstantDistribution,
     DateTimeConstantDistribution,
-    DiscreteConstantDistribution,
-    StringConstantDistribution,
     TimeConstantDistribution,
 )
+from metasyn.distribution.discrete import DiscreteConstantDistribution
+from metasyn.distribution.string import StringConstantDistribution
 from pytest import mark
 
-from metasyncontrib.disclosure.constant import (
-    DisclosureConstant,
+from metasyncontrib.disclosure.continuous import DisclosureConstant
+from metasyncontrib.disclosure.datetime import (
     DisclosureDateConstant,
     DisclosureDateTimeConstant,
-    DisclosureDiscreteConstant,
-    DisclosureStringConstant,
     DisclosureTimeConstant,
 )
+from metasyncontrib.disclosure.discrete import DisclosureDiscreteConstant
+from metasyncontrib.disclosure.string import DisclosureStringConstant
 
 
 @mark.parametrize(

@@ -14,6 +14,12 @@ While producing synthetic data with [metasyn](https://github.com/sodascience/met
 > Currently, the disclosure control plugin is work in progress. Especially in light of this, we disclaim
 any responsibility as a result of using this plugin. 
 
+## Installing the plugin
+
+1. **Clone the Repository**: Click the green `code` button at the top right of this page, and follow the instructions from there.
+
+2. **Install the Plugin**: In your terminal (with the Python environment that you want to install to active) run the following command: ``pip install <path to cloned repository>``. Or alternatively, to install it from a notebook: ``!pip install <path to cloned repository>``.
+
 ## Usage
 
 Basic usage for our built-in titanic dataset is as follows:

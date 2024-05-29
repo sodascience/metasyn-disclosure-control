@@ -21,7 +21,7 @@ Basic usage for our built-in titanic dataset is as follows:
 ```py
 from metasyn import MetaFrame, demo_dataframe
 from metasyncontrib.disclosure import DisclosurePrivacy
-from metasyncontrib.disclosure.faker import DisclosureFaker
+from metasyncontrib.disclosure.string import DisclosureFaker
 
 df = demo_dataframe("titanic")
 

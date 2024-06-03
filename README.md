@@ -16,9 +16,10 @@ any responsibility as a result of using this plugin.
 
 ## Installing the plugin
 
-1. **Clone the Repository**: Click the green `code` button at the top right of this page, and follow the instructions from there.
+The easiest way to install the plugin is by using pip. 
 
-2. **Install the Plugin**: In your terminal (with the Python environment that you want to install to active) run the following command: ``pip install <path to cloned repository>``. Or alternatively, to install it from a notebook: ``!pip install <path to cloned repository>``.
+In your terminal (with the Python environment that you want to install to active) run the following command: ``pip install git+https://github.com/sodascience/metasyn-disclosure-control.git``. 
+Alternatively, to install it within a Jupyter notebook: ``!pip install git+https://github.com/sodascience/metasyn-disclosure-control.git``.
 
 ## Usage
 

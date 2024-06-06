@@ -60,16 +60,29 @@ class DisclosureDate(DateUniformDistribution):
         sub_series = pl.Series([dt_val.date() for dt_val in dt_sub_series])
         return cls(sub_series.min(), sub_series.max())
 
+
 @metadist_disclosure()
 class DisclosureDateTimeConstant(DisclosureConstantMixin, DateTimeConstantDistribution):
     """Disclosure controlled DateTimeConstantDistribution."""
+
+    @classmethod
+    def default_distribution(cls):
+        return cls("1970-01-01T00:00:00")
 
 
 @metadist_disclosure()
 class DisclosureTimeConstant(DisclosureConstantMixin, TimeConstantDistribution):
     """Disclosure controlled TimeConstantDistribution."""
 
+    @classmethod
+    def default_distribution(cls):
+        return cls("00:00:00")
+
 
 @metadist_disclosure()
 class DisclosureDateConstant(DisclosureConstantMixin, DateConstantDistribution):
     """Disclosure controlled DateConstantDistribution."""
+
+    @classmethod
+    def default_distribution(cls):
+        return cls("1970-01-01")

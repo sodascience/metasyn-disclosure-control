@@ -37,6 +37,11 @@ class DisclosureTruncatedNormal(DisclosureNumericalMixin, TruncatedNormalDistrib
 class DisclosureExponential(DisclosureNumericalMixin, ExponentialDistribution):
     """Disclosure exponential distribution."""
 
+
 @metadist_disclosure()
 class DisclosureConstant(DisclosureConstantMixin, ConstantDistribution):
     """Disclosure controlled ConstantDistribution."""
+
+    @classmethod
+    def default_distribution(cls):
+        return cls(99999.9)

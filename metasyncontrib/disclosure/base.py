@@ -30,6 +30,13 @@ class DisclosureConstantMixin(BaseDistribution):
         """Fit constant distributions with disclosure control rules in place."""
         pl_series: pl.Series = cls._to_series(series)
 
+        # NB: dominance rule ensures that constant distribution is essentially never
+        # allowed under formal disclosure control. Always return default distribution.
+        apply_dominance_rule: bool = True
+
+        if apply_dominance_rule:
+            return cls.default_distribution()
+
         # if unique, just get that value if it occurs at least n_avg times
         if pl_series.n_unique() == 1 and pl_series.len() >= n_avg:
             return cls._fit(pl_series, *args, **kwargs)
@@ -41,4 +48,3 @@ class DisclosureConstantMixin(BaseDistribution):
                 return cls._fit(pl_series, *args, **kwargs)
 
         return cls.default_distribution()
-

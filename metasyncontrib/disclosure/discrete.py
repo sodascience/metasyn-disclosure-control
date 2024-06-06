@@ -51,6 +51,11 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
         sub_values = micro_aggregate(values, n_avg)
         return super()._fit(sub_values)
 
+
 @metadist_disclosure()
 class DisclosureDiscreteConstant(DisclosureConstantMixin, DiscreteConstantDistribution):
     """Disclosure controlled DiscreteConstantDistribution."""
+
+    @classmethod
+    def default_distribution(cls):
+        return cls(99999)

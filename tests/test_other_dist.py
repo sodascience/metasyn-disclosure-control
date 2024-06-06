@@ -48,6 +48,6 @@ def test_string():
     dist = DisclosureFaker.default_distribution()
     series = pl.Series([dist.draw() for _ in range(100)])
     assert len(series)
-    dist = DisclosureFaker.fit(series, n_avg=11)
+    dist = DisclosureFaker.fit(series, partition_size=11)
     assert isinstance(dist, DisclosureFaker)
     # assert len([dist.draw() for _ in range(100)]) == 100

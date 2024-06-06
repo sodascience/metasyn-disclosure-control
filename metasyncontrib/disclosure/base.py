@@ -41,4 +41,3 @@ class DisclosureConstantMixin(BaseDistribution):
                 return cls._fit(pl_series, *args, **kwargs)
 
         return cls.default_distribution()
-

@@ -10,7 +10,7 @@ class DisclosurePrivacy(BasePrivacy):
 
     Arguments:
     ---------
-    n_avg:
+    partition_size:
         Number of elements to aggregate into one bin. Higher values
         mean better protected privacy, but lower statistical accuracy.
 
@@ -18,10 +18,10 @@ class DisclosurePrivacy(BasePrivacy):
 
     name = "disclosure"
 
-    def __init__(self, n_avg: int = 11):
+    def __init__(self, partition_size: int = 11):
         """Initialize the disclosure privacy object."""
-        self.n_avg = n_avg
+        self.partition_size = partition_size
 
     def to_dict(self) -> dict:
         """Create a dictionary that gives the privacy type, and parameters."""
-        return {"name": self.name, "parameters": {"n_avg": self.n_avg}}
+        return {"name": self.name, "parameters": {"partition_size": self.partition_size}}

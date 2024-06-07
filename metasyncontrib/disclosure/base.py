@@ -26,19 +26,18 @@ class DisclosureConstantMixin(BaseDistribution):
     """Mixin class to overload fit method for constant distributions."""
 
     @classmethod
-    def fit(cls, series, *args, n_avg: int = 11, **kwargs) -> BaseDistribution:
+    def fit(cls, series, *args, partition_size: int = 11, **kwargs) -> BaseDistribution:
         """Fit constant distributions with disclosure control rules in place."""
         pl_series: pl.Series = cls._to_series(series)
 
-        # if unique, just get that value if it occurs at least n_avg times
-        if pl_series.n_unique() == 1 and pl_series.len() >= n_avg:
+        # if unique, just get that value if it occurs at least partition_size times
+        if pl_series.n_unique() == 1 and pl_series.len() >= partition_size:
             return cls._fit(pl_series, *args, **kwargs)
 
         if pl_series.n_unique() > 1:
-            # if not unique, ensure most common value occurs at least n_avg times
+            # if not unique, ensure most common value occurs at least partition_size times
             _value, count = pl_series.value_counts(sort=True).row(0)
-            if count >= n_avg:
+            if count >= partition_size:
                 return cls._fit(pl_series, *args, **kwargs)
 
         return cls.default_distribution()
-

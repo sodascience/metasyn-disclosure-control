@@ -28,7 +28,7 @@ def _compute_dominance(block_values, reverse=False):
 
 def _create_subsample( # pylint: disable=too-many-locals
     values,
-    n_avg: int = 11,
+    partition_size: int = 11,
     pre_remove: int = 0,
     post_remove: int = 0,
 ) -> tuple[list, float]:
@@ -36,7 +36,7 @@ def _create_subsample( # pylint: disable=too-many-locals
     sorted_values = sorted_values[pre_remove : len(values) - post_remove]
     n_values = len(sorted_values)
 
-    n_blocks = n_values // n_avg
+    n_blocks = n_values // partition_size
     if n_blocks <= 1:
         raise ValueError("Cannot find subsample with current settings.")
     min_block_size = n_values // n_blocks

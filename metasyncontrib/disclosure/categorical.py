@@ -13,15 +13,15 @@ from metasyncontrib.disclosure.base import metadist_disclosure
 class DisclosureMultinoulli(MultinoulliDistribution):
     """Disclosure variant for multinoulli distribution.
 
-    It checks that all labels appear at least n_avg times, and that
+    It checks that all labels appear at least partition_size times, and that
     there is no label with >90% of the counts.
     """
 
     @classmethod
-    def _fit(cls, values: pl.Series, n_avg: int = 11):
+    def _fit(cls, values: pl.Series, partition_size: int = 11):
         dist = super()._fit(values)
-        labels = dist.labels[dist.probs >= n_avg / len(values)]
-        probs = dist.probs[dist.probs >= n_avg / len(values)]
+        labels = dist.labels[dist.probs >= partition_size / len(values)]
+        probs = dist.probs[dist.probs >= partition_size / len(values)]
         if len(probs) == 0 or probs.max() >= 0.9:
             if MetaVar.get_var_type(values) == "discrete":
                 return cls([77777, 88888, 99999], [0.1, 0.2, 0.7])  # type: ignore

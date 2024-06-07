@@ -33,4 +33,4 @@ def test_constant(dist_builtin, dist_disclosure, value, disclosurevalue):  # noq
     dist = dist_builtin(value)
     data = [dist.draw() for _ in range(21)]
 
-    assert dist_disclosure.fit(data, n_avg=11)._param_dict().get("value") == disclosurevalue
+    assert dist_disclosure.fit(data, partition_size=11)._param_dict().get("value") == disclosurevalue

@@ -11,7 +11,7 @@ def test_disclosure_provider():
 
 
 @mark.parametrize("distribution", get_distribution_provider("metasyn-disclosure").distributions)
-@mark.parametrize("privacy_kwargs", ({}, {"n_avg": 10}, {"n_avg": 15}))
+@mark.parametrize("privacy_kwargs", ({}, {"partition_size": 10}, {"partition_size": 15}))
 def test_dist_validation(distribution, privacy_kwargs):
     np.random.seed(45)
     privacy = DisclosurePrivacy(**privacy_kwargs)

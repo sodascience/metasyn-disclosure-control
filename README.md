@@ -26,11 +26,11 @@ Alternatively, to install it within a Jupyter notebook: ``!pip install git+https
 Basic usage for our built-in titanic dataset is as follows:
 
 ```py
-from metasyn import MetaFrame, demo_data
+from metasyn import MetaFrame, demo_dataframe
 from metasyncontrib.disclosure import DisclosurePrivacy
-from metasyncontrib.disclosure.faker import DisclosureFaker
+from metasyncontrib.disclosure.string import DisclosureFaker
 
-df = demo_data("titanic")
+df = demo_dataframe("titanic")
 
 spec = [
     {"name": "PassengerId", "distribution": {"unique": True}},

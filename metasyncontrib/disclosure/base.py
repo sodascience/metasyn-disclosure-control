@@ -28,7 +28,6 @@ class DisclosureConstantMixin(BaseDistribution):
     @classmethod
     def fit(cls, series, *args, partition_size: int = 11, **kwargs) -> BaseDistribution:
         """Fit constant distributions with disclosure control rules in place."""
-        pl_series: pl.Series = cls._to_series(series)
 
         # NB: dominance rule ensures that constant distribution is essentially never
         # allowed under formal disclosure control. Always return default distribution.

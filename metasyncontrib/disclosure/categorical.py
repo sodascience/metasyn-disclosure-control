@@ -24,7 +24,11 @@ class DisclosureMultinoulli(MultinoulliDistribution):
         probs = dist.probs[dist.probs >= n_avg / len(values)]
         if len(probs) == 0 or probs.max() >= 0.9:
             if MetaVar.get_var_type(values) == "discrete":
-                return cls([1, 2, 3], [0.1, 0.2, 0.7]) # type: ignore
+                return cls([77777, 88888, 99999], [0.1, 0.2, 0.7])  # type: ignore
             return cls.default_distribution()
         probs /= probs.sum()
         return cls(labels, probs)
+
+    @classmethod
+    def default_distribution(cls):  # noqa: D102
+        return cls(["A_REDACTED", "B_REDACTED", "C_REDACTED"], [0.1, 0.3, 0.6])

@@ -66,7 +66,7 @@ class DisclosureDateTimeConstant(DisclosureConstantMixin, DateTimeConstantDistri
     """Disclosure controlled DateTimeConstantDistribution."""
 
     @classmethod
-    def default_distribution(cls):
+    def default_distribution(cls):  # noqa: D102
         return cls("1970-01-01T00:00:00")
 
 
@@ -75,7 +75,7 @@ class DisclosureTimeConstant(DisclosureConstantMixin, TimeConstantDistribution):
     """Disclosure controlled TimeConstantDistribution."""
 
     @classmethod
-    def default_distribution(cls):
+    def default_distribution(cls):  # noqa: D102
         return cls("00:00:00")
 
 
@@ -84,5 +84,5 @@ class DisclosureDateConstant(DisclosureConstantMixin, DateConstantDistribution):
     """Disclosure controlled DateConstantDistribution."""
 
     @classmethod
-    def default_distribution(cls):
+    def default_distribution(cls):  # noqa: D102
         return cls("1970-01-01")

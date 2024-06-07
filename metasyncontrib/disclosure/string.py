@@ -42,5 +42,5 @@ class DisclosureStringConstant(DisclosureConstantMixin, StringConstantDistributi
     """Disclosure controlled StringConstantDistribution."""
 
     @classmethod
-    def default_distribution(cls):
+    def default_distribution(cls):  # noqa: D102
         return cls("REDACTED")

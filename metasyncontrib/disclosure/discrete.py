@@ -57,5 +57,5 @@ class DisclosureDiscreteConstant(DisclosureConstantMixin, DiscreteConstantDistri
     """Disclosure controlled DiscreteConstantDistribution."""
 
     @classmethod
-    def default_distribution(cls):
+    def default_distribution(cls):  # noqa: D102
         return cls(99999)

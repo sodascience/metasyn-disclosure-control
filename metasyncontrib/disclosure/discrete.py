@@ -51,6 +51,11 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
         sub_values = micro_aggregate(values, partition_size)
         return super()._fit(sub_values)
 
+
 @metadist_disclosure()
 class DisclosureDiscreteConstant(DisclosureConstantMixin, DiscreteConstantDistribution):
     """Disclosure controlled DiscreteConstantDistribution."""
+
+    @classmethod
+    def default_distribution(cls):  # noqa: D102
+        return cls(99999)

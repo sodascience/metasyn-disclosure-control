@@ -19,19 +19,18 @@ from metasyncontrib.disclosure.string import DisclosureStringConstant
 
 
 @mark.parametrize(
-    "dist_builtin, dist_disclosure, value",
+    "dist_builtin, dist_disclosure, value, disclosurevalue",
     [
-        (ConstantDistribution, DisclosureConstant, 8.0),
-        (DiscreteConstantDistribution, DisclosureDiscreteConstant, 8),
-        (StringConstantDistribution, DisclosureStringConstant, "Secretvalue"),
-        (DateTimeConstantDistribution, DisclosureDateTimeConstant, "2024-02-23T12:08:38"),
-        (TimeConstantDistribution, DisclosureTimeConstant, "12:08:38"),
-        (DateConstantDistribution, DisclosureDateConstant, "2024-02-23"),
+        (ConstantDistribution, DisclosureConstant, 8.0, 99999.9),
+        (DiscreteConstantDistribution, DisclosureDiscreteConstant, 8, 99999),
+        (StringConstantDistribution, DisclosureStringConstant, "Secretvalue", "REDACTED"),
+        (DateTimeConstantDistribution, DisclosureDateTimeConstant, "2024-02-23T12:08:38", "1970-01-01T00:00:00"),  # noqa: E501
+        (TimeConstantDistribution, DisclosureTimeConstant, "12:08:38", "00:00:00"),
+        (DateConstantDistribution, DisclosureDateConstant, "2024-02-23", "1970-01-01"),
     ],
 )
-def test_constant(dist_builtin, dist_disclosure, value):
+def test_constant(dist_builtin, dist_disclosure, value, disclosurevalue):  # noqa: D103
     dist = dist_builtin(value)
     data = [dist.draw() for _ in range(21)]
 
-    assert dist_disclosure.fit(data, partition_size=22)._param_dict().get("value") != value
-    assert dist_disclosure.fit(data, partition_size=11)._param_dict().get("value") == value
+    assert dist_disclosure.fit(data, partition_size=11)._param_dict().get("value") == disclosurevalue

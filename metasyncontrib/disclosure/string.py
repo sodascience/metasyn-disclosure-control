@@ -38,6 +38,11 @@ class DisclosureFreetext(FreeTextDistribution):
     def _fit(cls, values, max_values: int = 50, partition_size: int = 11):  # pylint: disable=unused-argument
         return super()._fit(values, max_values=max_values)
 
+
 @metadist_disclosure()
 class DisclosureStringConstant(DisclosureConstantMixin, StringConstantDistribution):
     """Disclosure controlled StringConstantDistribution."""
+
+    @classmethod
+    def default_distribution(cls):  # noqa: D102
+        return cls("REDACTED")

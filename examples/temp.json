@@ -1,0 +1,403 @@
+{
+    "n_rows": 891,
+    "n_columns": 13,
+    "provenance": {
+        "created by": {
+            "name": "metasyn",
+            "version": "1.0.0"
+        },
+        "creation time": "2024-06-10T11:55:57.471190"
+    },
+    "vars": [
+        {
+            "name": "PassengerId",
+            "type": "discrete",
+            "dtype": "Int64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "implements": "core.unique_key",
+                "version": "1.0",
+                "provenance": "metasyn-disclosure",
+                "class_name": "DisclosureUniqueKey",
+                "unique": true,
+                "parameters": {
+                    "lower": 0,
+                    "consecutive": true
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "unique": true,
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Name",
+            "type": "string",
+            "dtype": "String",
+            "prop_missing": 0.0,
+            "distribution": {
+                "implements": "core.faker",
+                "version": "1.0",
+                "provenance": "builtin",
+                "class_name": "FakerDistribution",
+                "unique": false,
+                "parameters": {
+                    "faker_type": "name",
+                    "locale": "en_US"
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "implements": "core.faker",
+                "unique": false,
+                "parameters": {
+                    "faker_type": "name",
+                    "locale": "en_US"
+                },
+                "version": "1.0",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Sex",
+            "type": "categorical",
+            "dtype": "Categorical(ordering='physical')",
+            "prop_missing": 0.0,
+            "distribution": {
+                "implements": "core.multinoulli",
+                "version": "1.0",
+                "provenance": "metasyn-disclosure",
+                "class_name": "DisclosureMultinoulli",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "female",
+                        "male"
+                    ],
+                    "probs": [
+                        0.35241301907968575,
+                        0.6475869809203143
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Age",
+            "type": "discrete",
+            "dtype": "Int64",
+            "prop_missing": 0.19865319865319866,
+            "distribution": {
+                "implements": "core.uniform",
+                "version": "1.0",
+                "provenance": "builtin",
+                "class_name": "DiscreteUniformDistribution",
+                "unique": false,
+                "parameters": {
+                    "lower": 20,
+                    "upper": 40
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "implements": "core.uniform",
+                "unique": false,
+                "parameters": {
+                    "lower": 20,
+                    "upper": 40
+                },
+                "version": "1.0",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Parch",
+            "type": "discrete",
+            "dtype": "Int64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "implements": "core.multinoulli",
+                "version": "1.0",
+                "provenance": "metasyn-disclosure",
+                "class_name": "DisclosureMultinoulli",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        0,
+                        1,
+                        2
+                    ],
+                    "probs": [
+                        0.773972602739726,
+                        0.13470319634703198,
+                        0.091324200913242
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Ticket",
+            "type": "string",
+            "dtype": "String",
+            "prop_missing": 0.0,
+            "distribution": {
+                "implements": "core.na",
+                "version": "1.0",
+                "provenance": "metasyn-disclosure",
+                "class_name": "DisclosureNA",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Fare",
+            "type": "continuous",
+            "dtype": "Float64",
+            "prop_missing": 0.0,
+            "distribution": {
+                "implements": "core.exponential",
+                "version": "1.0",
+                "provenance": "metasyn-disclosure",
+                "class_name": "DisclosureExponential",
+                "unique": false,
+                "parameters": {
+                    "rate": 0.031930518147512243
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "implements": "core.exponential",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Cabin",
+            "type": "string",
+            "dtype": "String",
+            "prop_missing": 0.7710437710437711,
+            "distribution": {
+                "implements": "core.regex",
+                "version": "2.0",
+                "provenance": "builtin",
+                "class_name": "RegexDistribution",
+                "unique": false,
+                "parameters": {
+                    "regex_data": {
+                        "regex": "[ABCDEF][0-9]{2,3}",
+                        "counts": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "implements": "core.regex",
+                "unique": false,
+                "parameters": {
+                    "regex_data": {
+                        "regex": "[ABCDEF][0-9]{2,3}",
+                        "counts": [
+                            1,
+                            1,
+                            1
+                        ]
+                    }
+                },
+                "version": "2.0",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Embarked",
+            "type": "categorical",
+            "dtype": "Categorical(ordering='physical')",
+            "prop_missing": 0.002244668911335578,
+            "distribution": {
+                "implements": "core.multinoulli",
+                "version": "1.0",
+                "provenance": "metasyn-disclosure",
+                "class_name": "DisclosureMultinoulli",
+                "unique": false,
+                "parameters": {
+                    "labels": [
+                        "C",
+                        "Q",
+                        "S"
+                    ],
+                    "probs": [
+                        0.1889763779527559,
+                        0.08661417322834646,
+                        0.7244094488188977
+                    ]
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Birthday",
+            "type": "date",
+            "dtype": "Date",
+            "prop_missing": 0.08754208754208755,
+            "distribution": {
+                "implements": "core.uniform",
+                "version": "1.0",
+                "provenance": "metasyn-disclosure",
+                "class_name": "DisclosureDate",
+                "unique": false,
+                "parameters": {
+                    "lower": "1903-11-03",
+                    "upper": "1940-02-24"
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Board time",
+            "type": "time",
+            "dtype": "Time",
+            "prop_missing": 0.08866442199775533,
+            "distribution": {
+                "implements": "core.uniform",
+                "version": "1.0",
+                "provenance": "metasyn-disclosure",
+                "class_name": "DisclosureTime",
+                "unique": false,
+                "parameters": {
+                    "lower": "10:41:52",
+                    "upper": "18:38:18",
+                    "precision": "seconds"
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "Married since",
+            "type": "datetime",
+            "dtype": "Datetime(time_unit='us', time_zone=None)",
+            "prop_missing": 0.10325476992143659,
+            "distribution": {
+                "implements": "core.uniform",
+                "version": "1.0",
+                "provenance": "metasyn-disclosure",
+                "class_name": "DisclosureDateTime",
+                "unique": false,
+                "parameters": {
+                    "lower": "2022-07-15T17:12:24",
+                    "upper": "2022-08-15T07:56:54",
+                    "precision": "seconds"
+                }
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        },
+        {
+            "name": "all_NA",
+            "type": "string",
+            "dtype": "String",
+            "prop_missing": 1.0,
+            "distribution": {
+                "implements": "core.na",
+                "version": "1.0",
+                "provenance": "builtin",
+                "class_name": "NADistribution",
+                "unique": false,
+                "parameters": {}
+            },
+            "creation_method": {
+                "created_by": "metasyn",
+                "privacy": {
+                    "name": "disclosure",
+                    "parameters": {
+                        "partition_size": 11
+                    }
+                }
+            }
+        }
+    ]
+}

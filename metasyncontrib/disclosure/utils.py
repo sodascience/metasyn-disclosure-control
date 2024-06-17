@@ -8,9 +8,9 @@ import numpy as np
 import polars as pl
 
 try:
-    from numpy.core._exceptions import UFuncTypeError
+    from numpy.core._exceptions import UFuncTypeError  # type: ignore
 except ImportError:
-    from numpy._core._exceptions import UFuncTypeError
+    from numpy._core._exceptions import UFuncTypeError  # type: ignore
 
 
 def _compute_dominance(block_values, reverse=False):

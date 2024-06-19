@@ -6,7 +6,11 @@ from typing import NamedTuple, Optional
 
 import numpy as np
 import polars as pl
-from numpy.core._exceptions import UFuncTypeError
+
+try:
+    from numpy.core._exceptions import UFuncTypeError  # type: ignore
+except ImportError:
+    from numpy._core._exceptions import UFuncTypeError  # type: ignore
 
 
 def _compute_dominance(block_values, reverse=False):

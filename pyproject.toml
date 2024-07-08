@@ -38,7 +38,8 @@ dev = [
 ]
 
 examples = [
-    "matplotlib"
+    "matplotlib",
+    "seaborn"
 ]
 
 [tool.setuptools]

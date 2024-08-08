@@ -9,40 +9,42 @@ A privacy plugin for [metasyn](https://github.com/sodascience/metasyn), based on
 - The Data Without Boundaries document [Guidelines for output checking](https://wayback.archive-it.org/12090/*/https:/cros-legacy.ec.europa.eu/system/files/dwb_standalone-document_output-checking-guidelines.pdf) (pdf)
 - Statistics Netherlands' output guidelines
 
-While producing synthetic data with [metasyn](https://github.com/sodascience/metasyn) is already a great first step towards protecting privacy, it doesn't adhere to official standards. For example, fitting a uniform distribution will disclose the lowest and highest values in the dataset, which may be a privacy issue in sensitive data. This plugin solves these kinds of problems.
+Producing synthetic data with [metasyn](https://github.com/sodascience/metasyn) is already a great first step towards protecting privacy, but it doesn't adhere to official standards. For example, fitting a uniform distribution will disclose the lowest and highest values in the dataset, which may be a privacy issue in particularly sensitive data. This plugin solves these kinds of problems.
 
 > Currently, the disclosure control plugin is work in progress. Especially in light of this, we disclaim
 any responsibility as a result of using this plugin. 
 
 ## Installing the plugin
 
-The easiest way to install the plugin is by using pip. 
+`metasyn-disclosure-control` is not yet on PyPi, so it needs to be installed directly using git. Through `pip` you can install the package with the following command:
 
-In your terminal (with the Python environment that you want to install to active) run the following command: ``pip install git+https://github.com/sodascience/metasyn-disclosure-control.git``. 
-Alternatively, to install it within a Jupyter notebook: ``!pip install git+https://github.com/sodascience/metasyn-disclosure-control.git``.
+ ```sh
+ pip install git+https://github.com/sodascience/metasyn-disclosure-control.git
+ ```
 
 ## Usage
 
 Basic usage for our built-in titanic dataset is as follows:
 
 ```py
-from metasyn import MetaFrame, demo_dataframe
 from metasyncontrib.disclosure import DisclosurePrivacy
 from metasyncontrib.disclosure.string import DisclosureFaker
+
+from metasyn import MetaFrame, VarSpec, demo_dataframe
 
 df = demo_dataframe("titanic")
 
 spec = [
-    {"name": "PassengerId", "distribution": {"unique": True}},
-    {"name": "Name", "distribution": DisclosureFaker("name")},
+    VarSpec(name="PassengerId", unique=True),
+    VarSpec(name="Name", distribution=DisclosureFaker("name")),
 ]
 
 mf = MetaFrame.fit_dataframe(
-    df=df, 
-    dist_providers=["builtin", "metasyn-disclosure"],
+    df=df,
+    var_specs=spec,
     privacy=DisclosurePrivacy(),
-    var_specs=spec
 )
+
 mf.synthesize(5)
 ```
 

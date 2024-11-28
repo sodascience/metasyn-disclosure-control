@@ -25,3 +25,31 @@ class DisclosurePrivacy(BasePrivacy):
     def to_dict(self) -> dict:
         """Create a dictionary that gives the privacy type, and parameters."""
         return {"name": self.name, "parameters": {"partition_size": self.partition_size}}
+
+    def comment(self, var):
+        """Comment on a specific variable in the .toml GMF file.
+
+        Parameters
+        ----------
+        var
+            Variable to create a comment about.
+
+        Returns
+        -------
+            A string with the comment.
+
+        """
+        base_msg = (
+            f"The above parameters for column '{var.name}' were generated using disclosure "
+            f"control\n# with a maximum dominance of 0.5 and data aggregated into partitions of "
+            f"size {self.partition_size}\n"
+            f"# before any parameters of the distribution were estimated.")
+
+        intersect_lower = set(("lower", "upper")).intersection(  # noqa: C405
+            var.distribution.to_dict()["parameters"])
+        if len(intersect_lower) > 0:
+            base_msg = base_msg[:-1]
+            base_msg += (f"\n# The parameter(s) {', '.join(intersect_lower)} were estimated by the"
+                         f" average of the {self.partition_size} lowest or highest values.")
+
+        return base_msg

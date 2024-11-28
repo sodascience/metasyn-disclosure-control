@@ -15,11 +15,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
-        metasyn-version: [ "git+https://github.com/sodascience/metasyn.git@main"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        metasyn-version: [ "git+https://github.com/sodascience/metasyn.git@develop"]
         include:
           - python-version: "3.11"
             metasyn-version: "metasyn==1.0.1"
+          - python-version: "3.11"
+            metasyn-version: "metasyn==1.1.0"
 
     steps:
     - uses: actions/checkout@v4

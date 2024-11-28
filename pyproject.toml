@@ -25,7 +25,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
-	"metasyn>=1.0.1",
+	"metasyn>=1.0.3",
 	"polars",
 	"numpy>=1.20",
 ]

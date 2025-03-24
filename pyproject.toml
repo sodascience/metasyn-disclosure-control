@@ -45,7 +45,7 @@ examples = [
 ]
 
 [tool.setuptools]
-packages = ["metasyncontrib"]
+packages = ["metasyncontrib", "metasyncontrib.disclosure"]
 
 [project.entry-points."metasyn.distribution_provider"]
 metasyn-disclosure = "metasyncontrib.disclosure.provider:DisclosureProvider"

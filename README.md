@@ -16,7 +16,12 @@ any responsibility as a result of using this plugin.
 
 ## Installing the plugin
 
-`metasyn-disclosure-control` is not yet on PyPi, so it needs to be installed directly using git. Through `pip` you can install the package with the following command:
+To install the package with pip, run the following:
+```sh
+pip install metasyn-disclosure
+```
+
+For the development, installed the package directly through git with the following command:
 
  ```sh
  pip install git+https://github.com/sodascience/metasyn-disclosure-control.git

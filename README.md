@@ -11,6 +11,7 @@ A privacy plugin for [metasyn](https://github.com/sodascience/metasyn), based on
 
 Producing synthetic data with [metasyn](https://github.com/sodascience/metasyn) is already a great first step towards protecting privacy, but it doesn't adhere to official standards. For example, fitting a uniform distribution will disclose the lowest and highest values in the dataset, which may be a privacy issue in particularly sensitive data. This plugin solves these kinds of problems.
 
+> [!WARNING]
 > Currently, the disclosure control plugin is work in progress. Especially in light of this, we disclaim
 any responsibility as a result of using this plugin. 
 

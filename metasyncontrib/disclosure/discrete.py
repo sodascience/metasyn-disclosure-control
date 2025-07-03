@@ -41,14 +41,23 @@ class DisclosurePoisson(DisclosureNumericalMixin, PoissonDistribution):
 
 @metadist_disclosure()
 class DisclosureUniqueKey(UniqueKeyDistribution):
-    """Implementation for unique key distribution."""
+    """Implementation for unique key distribution.
+
+    This implementation will for series longer than the partition size either
+    a) be consecutive from 0 if the original series is consecutive or
+    b) Find the minimum of the microaggregated series.
+    """
 
     @classmethod
-    def _fit(cls, values: pl.Series, partition_size: int = 11):
+    def _fit(cls, values: pl.Series, partition_size: int = 11, max_dominance: float = 0.5):
+        # Return the default distribution if there are not enough values to micro aggregate
+        if len(values) < partition_size:
+            return cls.default_distribution()
+
         orig_dist = super()._fit(values)
         if orig_dist.consecutive:
             return cls(0, True)
-        sub_values = micro_aggregate(values, partition_size)
+        sub_values = micro_aggregate(values, partition_size, max_dominance=max_dominance)
         return super()._fit(sub_values)
 
 

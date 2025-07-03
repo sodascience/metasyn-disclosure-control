@@ -16,7 +16,7 @@ class DisclosureFaker(FakerDistribution):
 
     @classmethod
     def _fit(cls, values, faker_type: str = "city", locale: str = "en_US",
-             partition_size: int = 11):  # pylint: disable=unused-argument
+             partition_size: int = 11, max_dominance: float = 0.5):  # pylint: disable=unused-argument
         return super()._fit(values, faker_type=faker_type, locale=locale)
 
 
@@ -26,16 +26,20 @@ class DisclosureUniqueFaker(UniqueFakerDistribution):
 
     @classmethod
     def _fit(cls, values, faker_type: str = "city", locale: str = "en_US",
-             partition_size: int = 11):  # pylint: disable=unused-argument
+             partition_size: int = 11, max_dominance: float = 0.5):  # pylint: disable=unused-argument
         return super()._fit(values, faker_type=faker_type, locale=locale)
 
 
 @metadist_disclosure()
 class DisclosureFreetext(FreeTextDistribution):
-    """Disclosure implementation of freetext distribution."""
+    """Disclosure implementation of freetext distribution.
+
+    This implementation is the same as the original.
+    """
 
     @classmethod
-    def _fit(cls, values, max_values: int = 50, partition_size: int = 11):  # pylint: disable=unused-argument
+    def _fit(cls, values, max_values: int = 50, partition_size: int = 11,
+             max_dominance: float = 0.5):  # pylint: disable=unused-argument
         return super()._fit(values, max_values=max_values)
 
 

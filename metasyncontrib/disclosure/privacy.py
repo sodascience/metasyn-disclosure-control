@@ -18,13 +18,15 @@ class DisclosurePrivacy(BasePrivacy):
 
     name = "disclosure"
 
-    def __init__(self, partition_size: int = 11):
+    def __init__(self, partition_size: int = 11, max_dominance: float = 0.5):
         """Initialize the disclosure privacy object."""
         self.partition_size = partition_size
+        self.max_dominance = max_dominance
 
     def to_dict(self) -> dict:
         """Create a dictionary that gives the privacy type, and parameters."""
-        return {"name": self.name, "parameters": {"partition_size": self.partition_size}}
+        return {"name": self.name, "parameters": {"partition_size": self.partition_size,
+                                                  "max_dominance": self.max_dominance}}
 
     def comment(self, var):
         """Comment on a specific variable in the .toml GMF file.
@@ -41,7 +43,8 @@ class DisclosurePrivacy(BasePrivacy):
         """
         base_msg = (
             f"The above parameters for column '{var.name}' were generated using disclosure "
-            f"control\n# with a maximum dominance of 0.5 and data aggregated into partitions of "
+            f"control\n# with a maximum dominance of {self.max_dominance} and data aggregated into "
+            "partitions of "
             f"size {self.partition_size}\n"
             f"# before any parameters of the distribution were estimated.")
 

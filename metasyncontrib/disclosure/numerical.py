@@ -10,8 +10,9 @@ class DisclosureNumericalMixin(BaseDistribution):
     """Mixin class to create numerical distributions of the disclosure kind."""
 
     @classmethod
-    def fit(cls, series, *args, partition_size: int = 11, **kwargs) -> BaseDistribution:
+    def fit(cls, series, *args, partition_size: int = 11, max_dominance: float = 0.5,
+            **kwargs) -> BaseDistribution:
         """Fit numeric distributions with disclosure control rules in place."""
         pl_series = cls._to_series(series)
-        sub_series = micro_aggregate(pl_series, partition_size)
+        sub_series = micro_aggregate(pl_series, partition_size, max_dominance=max_dominance)
         return cls._fit(sub_series, *args, **kwargs)

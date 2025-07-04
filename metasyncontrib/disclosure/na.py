@@ -11,5 +11,5 @@ class DisclosureNA(NADistribution):
     """Disclosure version of NA distribution."""
 
     @classmethod
-    def _fit(cls, values, partition_size: int = 11):
+    def _fit(cls, values):
         return cls.default_distribution()

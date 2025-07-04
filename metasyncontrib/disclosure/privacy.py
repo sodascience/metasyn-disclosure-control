@@ -18,15 +18,19 @@ class DisclosurePrivacy(BasePrivacy):
 
     name = "disclosure"
 
-    def __init__(self, partition_size: int = 11, max_dominance: float = 0.5):
+    def __init__(self, partition_size: int = 11, max_dominance: float = 0.5,
+                 group_disclosure_threshold: float = 0.9):
         """Initialize the disclosure privacy object."""
         self.partition_size = partition_size
         self.max_dominance = max_dominance
+        self.group_disclosure_threshold = group_disclosure_threshold
 
     def to_dict(self) -> dict:
         """Create a dictionary that gives the privacy type, and parameters."""
-        return {"name": self.name, "parameters": {"partition_size": self.partition_size,
-                                                  "max_dominance": self.max_dominance}}
+        return {"name": self.name,
+                "parameters": {"partition_size": self.partition_size,
+                               "max_dominance": self.max_dominance,
+                               "group_disclosure_threshold": self.group_disclosure_threshold}}
 
     def comment(self, var):
         """Comment on a specific variable in the .toml GMF file.
@@ -43,9 +47,10 @@ class DisclosurePrivacy(BasePrivacy):
         """
         base_msg = (
             f"The above parameters for column '{var.name}' were generated using disclosure "
-            f"control\n# with a maximum dominance of {self.max_dominance} and data aggregated into "
+            f"control\n# with a maximum dominance of {self.max_dominance}, data aggregated into "
             "partitions of "
-            f"size {self.partition_size}\n"
+            f"size {self.partition_size} and a group disclosure threshold "
+            f"of {self.group_disclosure_threshold}\n"
             f"# before any parameters of the distribution were estimated.")
 
         intersect_lower = set(("lower", "upper")).intersection(  # noqa: C405

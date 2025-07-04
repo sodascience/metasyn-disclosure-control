@@ -14,6 +14,7 @@ from metasyn.distribution.discrete import (
 
 from metasyncontrib.disclosure.base import DisclosureConstantMixin, metadist_disclosure
 from metasyncontrib.disclosure.numerical import DisclosureNumericalMixin
+from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 from metasyncontrib.disclosure.utils import micro_aggregate
 
 
@@ -49,15 +50,16 @@ class DisclosureUniqueKey(UniqueKeyDistribution):
     """
 
     @classmethod
-    def _fit(cls, values: pl.Series, partition_size: int = 11, max_dominance: float = 0.5):
+    def _fit(cls, values: pl.Series, privacy: DisclosurePrivacy):
         # Return the default distribution if there are not enough values to micro aggregate
-        if len(values) < partition_size:
+        if len(values) < privacy.partition_size:
             return cls.default_distribution()
 
         orig_dist = super()._fit(values)
         if orig_dist.consecutive:
             return cls(0, True)
-        sub_values = micro_aggregate(values, partition_size, max_dominance=max_dominance)
+        sub_values = micro_aggregate(values, privacy.partition_size,
+                                     max_dominance=privacy.max_dominance)
         return super()._fit(sub_values)
 
 

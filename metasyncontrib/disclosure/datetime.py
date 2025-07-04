@@ -15,6 +15,7 @@ from metasyn.distribution.datetime import (
 )
 
 from metasyncontrib.disclosure.base import DisclosureConstantMixin, metadist_disclosure
+from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 from metasyncontrib.disclosure.utils import micro_aggregate
 
 
@@ -23,9 +24,9 @@ class DisclosureDateTime(DateTimeUniformDistribution):
     """Disclosure implementation for the datetime distribution."""
 
     @classmethod
-    def _fit(cls, values: pl.Series, partition_size: int = 11,
-             max_dominance: float = 0.5) -> DisclosureDateTime:
-        sub_series = micro_aggregate(values, partition_size, max_dominance=max_dominance)
+    def _fit(cls, values: pl.Series, privacy: DisclosurePrivacy) -> DisclosureDateTime:
+        sub_series = micro_aggregate(values, privacy.partition_size,
+                                     max_dominance=privacy.max_dominance)
         return cls(sub_series.min(), sub_series.max(), cls._get_precision(values))
 
 
@@ -34,12 +35,12 @@ class DisclosureTime(TimeUniformDistribution):
     """Disclosure implementation for the time distribution."""
 
     @classmethod
-    def _fit(cls, values: pl.Series, partition_size: int = 11,
-             max_dominance: float = 0.5):
+    def _fit(cls, values: pl.Series, privacy: DisclosurePrivacy):
         # Convert time to a datetime so that the microaggregation works
         today = dt.date(1970, 1, 1)
         dt_series = pl.Series([dt.datetime.combine(today, t) for t in values])
-        dt_sub_series = micro_aggregate(dt_series, partition_size, max_dominance=max_dominance)
+        dt_sub_series = micro_aggregate(dt_series, privacy.partition_size,
+                                        max_dominance=privacy.max_dominance)
 
         # Convert back into time
         sub_series = pl.Series([dt_val.time() for dt_val in dt_sub_series])
@@ -51,11 +52,11 @@ class DisclosureDate(DateUniformDistribution):
     """Disclosure implementation for the date distribution."""
 
     @classmethod
-    def _fit(cls, values: pl.Series, partition_size: int = 11,
-             max_dominance: float = 0.5) -> DisclosureDate:
+    def _fit(cls, values: pl.Series, privacy: DisclosurePrivacy) -> DisclosureDate:
         # Convert dates to datetimes
         dt_series = pl.Series([dt.datetime.combine(d, dt.time(hour=12)) for d in values])
-        dt_sub_series = micro_aggregate(dt_series, partition_size, max_dominance=max_dominance)
+        dt_sub_series = micro_aggregate(dt_series, privacy.partition_size,
+                                        max_dominance=privacy.max_dominance)
 
         # Convert back into dates
         sub_series = pl.Series([dt_val.date() for dt_val in dt_sub_series])

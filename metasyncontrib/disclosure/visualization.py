@@ -1,3 +1,4 @@
+"""Various plotting functions to show the disclosure control features."""
 from collections import defaultdict
 
 import numpy as np
@@ -10,13 +11,29 @@ from metasyncontrib.disclosure import DisclosurePrivacy
 
 
 def plot_outliers(dist_type, distribution_name, series_size=50, n_outliers=1):
+    """Create a plot of how outliers affect the resultant parameters.
+
+    Parameters
+    ----------
+    dist_type
+        Variable type, either continuous or discrete.
+    distribution_name
+        Name of the distribution, e.g. uniform, normal
+    series_size, optional
+        How big the series should be for showing the results, by default 50
+    n_outliers, optional
+        Number of outliers to be added to the default distribution, by default 1
+
+    """
     # Create a list of distribution providers
     dist_providers = DistributionProviderList(["builtin", "metasyn-disclosure"])
-    disc_class = dist_providers.find_distribution(distribution_name, dist_type, privacy=DisclosurePrivacy())
+    disc_class = dist_providers.find_distribution(distribution_name, dist_type,
+                                                  privacy=DisclosurePrivacy())
     disc_privacy = DisclosurePrivacy()
 
     # Find the base class of the disclosure distribution
-    var_type = disc_class.var_type if isinstance(disc_class.var_type, str) else disc_class.var_type[0]
+    var_type = (disc_class.var_type if isinstance(disc_class.var_type, str)
+                else disc_class.var_type[0])
     base_class = dist_providers.find_distribution(disc_class.implements, var_type)
     base_privacy = BasicPrivacy()
     # Get the default distribution of the base class

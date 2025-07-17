@@ -7,6 +7,7 @@ from metasyn.distribution.continuous import (
     UniformDistribution,
 )
 from metasyn.distribution.discrete import DiscreteUniformDistribution
+from metasyn.privacy import BasicPrivacy
 from pytest import mark
 
 from metasyncontrib.disclosure.continuous import (
@@ -17,6 +18,7 @@ from metasyncontrib.disclosure.continuous import (
     DisclosureUniform,
 )
 from metasyncontrib.disclosure.discrete import DisclosureDiscreteUniform
+from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 
 
 @mark.parametrize(
@@ -34,8 +36,8 @@ from metasyncontrib.disclosure.discrete import DisclosureDiscreteUniform
 def test_continuous(dist_normal, dist_disclosure):
     unif = dist_normal.default_distribution()
     series = pl.Series([unif.draw() for _ in range(500)])
-    unif = dist_normal.fit(series)
-    unif_disc = dist_disclosure.fit(series)
+    unif = dist_normal.fit(series, BasicPrivacy())
+    unif_disc = dist_disclosure.fit(series, DisclosurePrivacy())
     if unif.var_type == "continuous":
         assert unif.to_dict() != unif_disc.to_dict()
 
@@ -44,8 +46,8 @@ def test_continuous(dist_normal, dist_disclosure):
         series_out = pl.Series([x for x in series] + [99999999.0])
     else:
         series_out = pl.Series([x for x in series] + [99999999])
-    unif_out = dist_normal.fit(series_out)
-    unif_disc_out = dist_disclosure.fit(series_out)
+    unif_out = dist_normal.fit(series_out, BasicPrivacy())
+    unif_disc_out = dist_disclosure.fit(series_out, DisclosurePrivacy())
     assert unif_out.to_dict() != unif.to_dict()
 
     # This will fail from time to time for discrete distributions

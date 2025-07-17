@@ -7,6 +7,7 @@ from metasyn.distribution.categorical import MultinoulliDistribution
 from metasyn.var import MetaVar
 
 from metasyncontrib.disclosure.base import metadist_disclosure
+from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 
 
 @metadist_disclosure()
@@ -18,16 +19,15 @@ class DisclosureMultinoulli(MultinoulliDistribution):
     """
 
     @classmethod
-    def _fit(cls, values: pl.Series, partition_size: int = 11, max_dominance: float = 0.5,
-             group_disclosure_threshold = 0.9):
+    def _fit(cls, values: pl.Series, privacy: DisclosurePrivacy):
         dist = super()._fit(values)
         # Remove labels with counts < partition_size
-        labels = dist.labels[dist.probs >= partition_size / len(values)]
-        probs = dist.probs[dist.probs >= partition_size / len(values)]
+        labels = dist.labels[dist.probs >= privacy.partition_size / len(values)]
+        probs = dist.probs[dist.probs >= privacy.partition_size / len(values)]
 
         # If no more categories are present or the dominance criterion is not satisfied return
         # the default distribution.
-        if len(probs) == 0 or probs.max() >= group_disclosure_threshold:
+        if len(probs) == 0 or probs.max() >= privacy.group_disclosure_threshold:
             if MetaVar.get_var_type(values) == "discrete":
                 return cls([77777, 88888, 99999], [0.1, 0.2, 0.7])  # type: ignore
             return cls.default_distribution()

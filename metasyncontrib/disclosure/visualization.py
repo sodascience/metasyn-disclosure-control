@@ -78,7 +78,8 @@ def plot_outliers(dist_type, distribution_name, series_size=50, n_outliers=1):
     for param in base_param:
         if param == "new_val":
             continue
-        ax = axes[i_ax]
+
+        ax = axes if len(base_param) == 2 else axes[i_ax]
         # Create plot for the base distribution
         ax.plot(
             base_param["new_val"],

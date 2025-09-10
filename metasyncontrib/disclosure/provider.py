@@ -5,37 +5,37 @@ from __future__ import annotations
 from metasyn.provider import BaseDistributionProvider
 
 from metasyncontrib.disclosure.categorical import DisclosureMultinoulli
-from metasyncontrib.disclosure.continuous import (
+from metasyncontrib.disclosure.constant import (
     DisclosureConstant,
-    DisclosureExponential,
+    DisclosureDateConstant,
+    DisclosureDateTimeConstant,
+    DisclosureDiscreteConstant,
+    DisclosureStringConstant,
+    DisclosureTimeConstant,
+)
+from metasyncontrib.disclosure.exponential import DisclosureExponential
+from metasyncontrib.disclosure.faker import (
+    DisclosureFaker,
+    DisclosureUniqueFaker,
+)
+from metasyncontrib.disclosure.freetext import DisclosureFreetext
+from metasyncontrib.disclosure.na import DisclosureNA
+from metasyncontrib.disclosure.normal import (
+    DisclosureDiscreteNormal,
+    DisclosureDiscreteTruncatedNormal,
     DisclosureLogNormal,
     DisclosureNormal,
     DisclosureTruncatedNormal,
-    DisclosureUniform,
 )
-from metasyncontrib.disclosure.datetime import (
+from metasyncontrib.disclosure.poisson import DisclosurePoisson
+from metasyncontrib.disclosure.uniform import (
     DisclosureDate,
-    DisclosureDateConstant,
     DisclosureDateTime,
-    DisclosureDateTimeConstant,
-    DisclosureTime,
-    DisclosureTimeConstant,
-)
-from metasyncontrib.disclosure.discrete import (
-    DisclosureDiscreteConstant,
-    DisclosureDiscreteNormal,
-    DisclosureDiscreteTruncatedNormal,
     DisclosureDiscreteUniform,
-    DisclosurePoisson,
-    DisclosureUniqueKey,
+    DisclosureTime,
+    DisclosureContinuousUniform,
 )
-from metasyncontrib.disclosure.na import DisclosureNA
-from metasyncontrib.disclosure.string import (
-    DisclosureFaker,
-    DisclosureFreetext,
-    DisclosureStringConstant,
-    DisclosureUniqueFaker,
-)
+from metasyncontrib.disclosure.uniquekey import DisclosureUniqueKey
 
 
 class DisclosureProvider(BaseDistributionProvider):
@@ -47,7 +47,7 @@ class DisclosureProvider(BaseDistributionProvider):
 
     name = "metasyn-disclosure"
     version = "1.0"
-    distributions = [
+    fitters = [
         DisclosureMultinoulli,
         DisclosureConstant,
         DisclosureDateConstant,
@@ -59,7 +59,7 @@ class DisclosureProvider(BaseDistributionProvider):
         DisclosureLogNormal,
         DisclosureNormal,
         DisclosureTruncatedNormal,
-        DisclosureUniform,
+        DisclosureContinuousUniform,
         DisclosureDate,
         DisclosureDateTime,
         DisclosureTime,

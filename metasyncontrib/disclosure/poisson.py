@@ -1,4 +1,4 @@
-
+"""Poisson distribution with disclosure control."""
 from metasyn.distribution.poisson import PoissonFitter
 
 from metasyncontrib.disclosure.base import disclosure_fitter

@@ -29,11 +29,11 @@ from metasyncontrib.disclosure.normal import (
 )
 from metasyncontrib.disclosure.poisson import DisclosurePoisson
 from metasyncontrib.disclosure.uniform import (
+    DisclosureContinuousUniform,
     DisclosureDate,
     DisclosureDateTime,
     DisclosureDiscreteUniform,
     DisclosureTime,
-    DisclosureContinuousUniform,
 )
 from metasyncontrib.disclosure.uniquekey import DisclosureUniqueKey
 

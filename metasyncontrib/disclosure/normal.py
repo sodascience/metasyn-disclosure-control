@@ -1,11 +1,11 @@
 """Disclosure control implementations for continuous distributions."""
 
 from metasyn.distribution.normal import (
+    ContinuousNormalFitter,
+    ContinuousTruncatedNormalFitter,
     DiscreteNormalFitter,
     DiscreteTruncatedNormalFitter,
     LogNormalFitter,
-    ContinuousNormalFitter,
-    ContinuousTruncatedNormalFitter,
 )
 
 from metasyncontrib.disclosure.base import disclosure_fitter

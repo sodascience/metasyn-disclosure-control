@@ -4,13 +4,12 @@ from __future__ import annotations
 import datetime as dt
 
 import polars as pl
-
 from metasyn.distribution.uniform import (
+    ContinuousUniformFitter,
     DateTimeUniformFitter,
     DateUniformFitter,
-    TimeUniformFitter,
     DiscreteUniformFitter,
-    ContinuousUniformFitter,
+    TimeUniformFitter,
 )
 
 from metasyncontrib.disclosure.base import disclosure_fitter

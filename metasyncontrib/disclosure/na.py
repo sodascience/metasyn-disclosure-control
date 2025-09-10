@@ -1,15 +1,11 @@
 """Module for disclosure-controlled NA distribution."""
 from __future__ import annotations
 
-from metasyn.distribution.na import NADistribution
+from metasyn.distribution.na import NAFitter
 
-from metasyncontrib.disclosure.base import metadist_disclosure
+from metasyncontrib.disclosure.base import disclosure_fitter
 
 
-@metadist_disclosure()
-class DisclosureNA(NADistribution):
+@disclosure_fitter()
+class DisclosureNA(NAFitter):
     """Disclosure version of NA distribution."""
-
-    @classmethod
-    def _fit(cls, values):
-        return cls.default_distribution()

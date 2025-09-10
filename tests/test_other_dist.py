@@ -12,9 +12,9 @@ from metasyn.privacy import BasicPrivacy
 from pytest import mark
 
 from metasyncontrib.disclosure.categorical import DisclosureMultinoulli
-from metasyncontrib.disclosure.uniform import DisclosureDate, DisclosureDateTime, DisclosureTime
-from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 from metasyncontrib.disclosure.faker import DisclosureFaker
+from metasyncontrib.disclosure.privacy import DisclosurePrivacy
+from metasyncontrib.disclosure.uniform import DisclosureDate, DisclosureDateTime, DisclosureTime
 
 
 @mark.parametrize(

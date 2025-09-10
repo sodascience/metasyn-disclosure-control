@@ -1,16 +1,15 @@
 import polars as pl
+from metasyn.distribution.exponential import (
+    ExponentialFitter,
+)
+from metasyn.distribution.normal import (
+    ContinuousNormalFitter,
+    ContinuousTruncatedNormalFitter,
+    LogNormalFitter,
+)
 from metasyn.distribution.uniform import (
     ContinuousUniformFitter,
     DiscreteUniformFitter,
-)
-from metasyn.distribution.normal import (
-    LogNormalFitter,
-    ContinuousNormalFitter,
-    ContinuousTruncatedNormalFitter,
-)
-from metasyn.distribution.exponential import (
-    ExponentialFitter,
-
 )
 from metasyn.privacy import BasicPrivacy
 from pytest import mark
@@ -22,7 +21,7 @@ from metasyncontrib.disclosure.normal import (
     DisclosureTruncatedNormal,
 )
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy
-from metasyncontrib.disclosure.uniform import DisclosureDiscreteUniform, DisclosureContinuousUniform
+from metasyncontrib.disclosure.uniform import DisclosureContinuousUniform, DisclosureDiscreteUniform
 
 
 @mark.parametrize(

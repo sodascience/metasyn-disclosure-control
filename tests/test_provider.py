@@ -1,6 +1,6 @@
 import numpy as np
 from metasyn.provider import get_distribution_provider
-from metasyn.testutils import check_fitter, check_distribution_provider
+from metasyn.testutils import check_distribution_provider, check_fitter
 from pytest import mark
 
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy

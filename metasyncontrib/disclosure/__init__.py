@@ -1,6 +1,5 @@
 """Metasyn plugin that implements disclosure control."""
 
-from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 from metasyncontrib.disclosure.categorical import DisclosureMultinoulli
 from metasyncontrib.disclosure.constant import (
     DisclosureConstant,
@@ -25,6 +24,7 @@ from metasyncontrib.disclosure.normal import (
     DisclosureTruncatedNormal,
 )
 from metasyncontrib.disclosure.poisson import DisclosurePoisson
+from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 from metasyncontrib.disclosure.uniform import (
     DisclosureContinuousUniform,
     DisclosureDate,

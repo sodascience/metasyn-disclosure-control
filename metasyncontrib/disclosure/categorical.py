@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import polars as pl
 from metasyn.distribution.categorical import MultinoulliFitter
-from metasyn.var import MetaVar
+from metasyn.util import get_var_type
 
 from metasyncontrib.disclosure.base import disclosure_fitter
 
@@ -26,11 +26,12 @@ class DisclosureMultinoulli(MultinoulliFitter):
         # If no more categories are present or the dominance criterion is not satisfied return
         # the default distribution.
         if len(probs) == 0 or probs.max() >= self.privacy.group_disclosure_threshold:
-            if MetaVar.get_var_type(series) == "discrete":
-                return self.distribution([77777, 88888, 99999], [0.1, 0.2, 0.7])  # type: ignore
             return self.default_distribution()
         probs /= probs.sum()
         return self.distribution(labels, probs)
 
-    def default_distribution(self):  # noqa: D102
+    def default_distribution(self, series):  # noqa: D102
+        if get_var_type(series) == "discrete":
+            return self.distribution([77777, 88888, 99999], [0.1, 0.2, 0.7])  # type: ignore
         return self.distribution(["A_REDACTED", "B_REDACTED", "C_REDACTED"], [0.1, 0.3, 0.6])
+

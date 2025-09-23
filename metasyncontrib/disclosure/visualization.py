@@ -37,7 +37,7 @@ def plot_outliers(dist_type, distribution_name, series_size=50, n_outliers=1):
     base_class = dist_providers.find_distribution(disc_class.implements, var_type)
     base_privacy = BasicPrivacy()
     # Get the default distribution of the base class
-    dist = base_class.default_distribution()
+    dist = base_class.default_distribution(var_type)
 
     # Draw a series of random values
     series = pl.Series([dist.draw() for _ in range(series_size)])

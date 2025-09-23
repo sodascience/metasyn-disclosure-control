@@ -15,7 +15,7 @@ from metasyn.distribution.uniform import (
 from metasyncontrib.disclosure.base import disclosure_fitter
 from metasyncontrib.disclosure.numerical import DisclosureNumericalMixin
 from metasyncontrib.disclosure.utils import micro_aggregate
-
+from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 
 @disclosure_fitter()
 class DisclosureContinuousUniform(DisclosureNumericalMixin, ContinuousUniformFitter):
@@ -31,6 +31,8 @@ class DisclosureDiscreteUniform(DisclosureNumericalMixin, DiscreteUniformFitter)
 class DisclosureDateTime(DateTimeUniformFitter):
     """Disclosure implementation for the datetime distribution."""
 
+    privacy: DisclosurePrivacy
+
     def _fit(self, series: pl.Series) -> DisclosureDateTime:
         sub_series = micro_aggregate(series, self.privacy.partition_size,
                                      max_dominance=self.privacy.max_dominance)
@@ -40,6 +42,8 @@ class DisclosureDateTime(DateTimeUniformFitter):
 @disclosure_fitter()
 class DisclosureTime(TimeUniformFitter):
     """Disclosure implementation for the time distribution."""
+
+    privacy: DisclosurePrivacy
 
     def _fit(self, values: pl.Series):
         # Convert time to a datetime so that the microaggregation works
@@ -57,6 +61,8 @@ class DisclosureTime(TimeUniformFitter):
 @disclosure_fitter()
 class DisclosureDate(DateUniformFitter):
     """Disclosure implementation for the date distribution."""
+
+    privacy: DisclosurePrivacy
 
     def _fit(self, values: pl.Series) -> DisclosureDate:
         # Convert dates to datetimes

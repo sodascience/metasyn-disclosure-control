@@ -5,7 +5,7 @@ import numpy as np
 import polars as pl
 from matplotlib import pyplot as plt
 from metasyn.privacy import BasicPrivacy
-from metasyn.provider import DistributionProviderList
+from metasyn.registry import DistributionRegistry
 
 from metasyncontrib.disclosure import DisclosurePrivacy
 
@@ -25,16 +25,16 @@ def plot_outliers(dist_type, distribution_name, series_size=50, n_outliers=1):
         Number of outliers to be added to the default distribution, by default 1
 
     """
-    # Create a list of distribution providers
-    dist_providers = DistributionProviderList(["builtin", "metasyn-disclosure"])
-    disc_class = dist_providers.find_distribution(distribution_name, dist_type,
+    # Create the distribution registry
+    dist_registry = DistributionRegistry.parse(["builtin", "metasyn-disclosure"])
+    disc_class = dist_registry.find_distribution(distribution_name, dist_type,
                                                   privacy=DisclosurePrivacy())
     disc_privacy = DisclosurePrivacy()
 
     # Find the base class of the disclosure distribution
     var_type = (disc_class.var_type if isinstance(disc_class.var_type, str)
                 else disc_class.var_type[0])
-    base_class = dist_providers.find_distribution(disc_class.implements, var_type)
+    base_class = dist_registry.find_distribution(disc_class.implements, var_type)
     base_privacy = BasicPrivacy()
     # Get the default distribution of the base class
     dist = base_class.default_distribution(var_type)

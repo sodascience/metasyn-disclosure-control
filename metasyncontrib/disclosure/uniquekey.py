@@ -6,6 +6,7 @@ import polars as pl
 from metasyn.distribution.uniquekey import UniqueKeyFitter
 
 from metasyncontrib.disclosure.base import disclosure_fitter
+from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 from metasyncontrib.disclosure.utils import micro_aggregate
 
 
@@ -17,6 +18,9 @@ class DisclosureUniqueKey(UniqueKeyFitter):
     a) be consecutive from 0 if the original series is consecutive or
     b) Find the minimum of the microaggregated series.
     """
+
+    privacy: DisclosurePrivacy
+
 
     def _fit(self, series: pl.Series):
         # Return the default distribution if there are not enough series to micro aggregate

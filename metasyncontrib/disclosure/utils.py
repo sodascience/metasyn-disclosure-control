@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from collections.abc import Sequence
 from typing import Any, NamedTuple, Optional
 
 import numpy as np
@@ -15,7 +14,7 @@ except ImportError:
     from numpy._core._exceptions import UFuncTypeError  # type: ignore
 
 
-def _compute_dominance(block_values: npt.NDArray[Any, Any], reverse: bool=False):
+def _compute_dominance(block_values: npt.NDArray[[Any, Any]], reverse: bool=False):
     """Compute the dominance over a set of microaggregated values.
 
     Parameters
@@ -47,7 +46,7 @@ def _compute_dominance(block_values: npt.NDArray[Any, Any], reverse: bool=False)
 
 
 def _create_subsample( # pylint: disable=too-many-locals
-    values: Sequence,
+    values: pl.Series,
     partition_size: int = 11,
     pre_remove: int = 0,
     post_remove: int = 0,

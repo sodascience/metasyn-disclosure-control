@@ -9,6 +9,7 @@ from metasyn.util import get_var_type
 from metasyncontrib.disclosure.base import disclosure_fitter
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 
+
 @disclosure_fitter()
 class DisclosureMultinoulli(MultinoulliFitter):
     """Disclosure variant for multinoulli distribution.

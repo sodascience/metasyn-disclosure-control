@@ -13,6 +13,7 @@ from metasyn.distribution.constant import (
 from metasyncontrib.disclosure.base import disclosure_fitter
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 
+
 class DisclosureConstantMixin(BaseFitter):
     """Mixin class to overload fit method for constant distributions."""
 

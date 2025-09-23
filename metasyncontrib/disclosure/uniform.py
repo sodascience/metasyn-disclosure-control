@@ -14,8 +14,9 @@ from metasyn.distribution.uniform import (
 
 from metasyncontrib.disclosure.base import disclosure_fitter
 from metasyncontrib.disclosure.numerical import DisclosureNumericalMixin
-from metasyncontrib.disclosure.utils import micro_aggregate
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy
+from metasyncontrib.disclosure.utils import micro_aggregate
+
 
 @disclosure_fitter()
 class DisclosureContinuousUniform(DisclosureNumericalMixin, ContinuousUniformFitter):

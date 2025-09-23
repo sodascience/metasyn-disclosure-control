@@ -1,22 +1,22 @@
 import numpy as np
-from metasyn.provider import get_distribution_provider
-from metasyn.testutils import check_distribution_provider, check_fitter
+from metasyn.registry import DistributionRegistry
+from metasyn.testutils import check_distribution_registry, check_fitter
 from pytest import mark
 
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 
 
 def test_disclosure_provider():
-    check_distribution_provider("metasyn-disclosure")
+    check_distribution_registry("metasyn-disclosure")
 
 
-@mark.parametrize("distribution", get_distribution_provider("metasyn-disclosure").fitters)
+@mark.parametrize("fitter", DistributionRegistry.parse("metasyn-disclosure").fitters)
 @mark.parametrize("privacy_kwargs", ({}, {"partition_size": 10}, {"partition_size": 15}))
-def test_dist_validation(distribution, privacy_kwargs):
+def test_dist_validation(fitter, privacy_kwargs):
     np.random.seed(45)
     privacy = DisclosurePrivacy(**privacy_kwargs)
     # Testing empty series will fail with a convergence error, so skip these tests.
     try:
-        check_fitter(distribution, privacy=privacy, provenance="metasyn-disclosure", test_empty=False)
+        check_fitter(fitter, privacy=privacy, provenance="metasyn-disclosure", test_empty=False)
     except TypeError:
-        check_fitter(distribution, privacy=privacy, provenance="metasyn-disclosure")
+        check_fitter(fitter, privacy=privacy, provenance="metasyn-disclosure")

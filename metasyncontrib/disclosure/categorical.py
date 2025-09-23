@@ -7,7 +7,7 @@ from metasyn.distribution.categorical import MultinoulliFitter
 from metasyn.util import get_var_type
 
 from metasyncontrib.disclosure.base import disclosure_fitter
-
+from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 
 @disclosure_fitter()
 class DisclosureMultinoulli(MultinoulliFitter):
@@ -16,6 +16,8 @@ class DisclosureMultinoulli(MultinoulliFitter):
     It checks that all labels appear at least partition_size times, and that
     there is no label with >90% of the counts.
     """
+
+    privacy: DisclosurePrivacy
 
     def _fit(self, series: pl.Series):
         dist = super()._fit(series)

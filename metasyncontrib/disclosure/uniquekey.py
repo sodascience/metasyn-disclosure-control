@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import polars as pl
-from metasyn.distribution.uniquekey import UniqueKeyFitter, UniqueKeyDistribution
+from metasyn.distribution.uniquekey import UniqueKeyDistribution, UniqueKeyFitter
 
 from metasyncontrib.disclosure.base import disclosure_fitter
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy

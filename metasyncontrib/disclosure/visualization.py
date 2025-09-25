@@ -28,7 +28,8 @@ def plot_outliers(dist_type, distribution_name, series_size=50, n_outliers=1):
     # Create the distribution registry
     dist_registry = DistributionRegistry.parse(["builtin", "metasyn-disclosure"])
     disc_class = dist_registry.find_distribution(distribution_name, dist_type)
-    disc_fit_class = dist_registry.find_fitter(distribution_name, dist_type, privacy=DisclosurePrivacy())
+    disc_fit_class = dist_registry.find_fitter(distribution_name, dist_type,
+                                               privacy=DisclosurePrivacy())
     disc_privacy = DisclosurePrivacy()
 
     # Find the base class of the disclosure distribution

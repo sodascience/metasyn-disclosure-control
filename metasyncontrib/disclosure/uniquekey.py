@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import polars as pl
-from metasyn.distribution.uniquekey import UniqueKeyFitter
+from metasyn.distribution.uniquekey import UniqueKeyFitter, UniqueKeyDistribution
 
 from metasyncontrib.disclosure.base import disclosure_fitter
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy
@@ -22,7 +22,7 @@ class DisclosureUniqueKey(UniqueKeyFitter):
     privacy: DisclosurePrivacy
 
 
-    def _fit(self, series: pl.Series):
+    def _fit(self, series: pl.Series) -> UniqueKeyDistribution:
         # Return the default distribution if there are not enough series to micro aggregate
         if len(series) < self.privacy.partition_size:
             return self.distribution.default_distribution()

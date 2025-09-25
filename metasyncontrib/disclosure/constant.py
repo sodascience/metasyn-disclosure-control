@@ -23,7 +23,7 @@ class DisclosureConstantMixin(BaseFitter):
         """Fit constant distributions with disclosure control rules in place."""
         # NB: dominance rule ensures that constant distribution is essentially never
         # allowed under formal disclosure control. Always return default distribution.
-        return self.default_distribution()
+        return self.distribution.default_distribution()
 
 
 @disclosure_fitter()

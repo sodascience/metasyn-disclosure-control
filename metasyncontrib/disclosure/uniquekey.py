@@ -20,6 +20,7 @@ class DisclosureUniqueKey(UniqueKeyFitter):
     """
 
     privacy: DisclosurePrivacy
+    distribution: type[UniqueKeyDistribution]
 
 
     def _fit(self, series: pl.Series) -> UniqueKeyDistribution:

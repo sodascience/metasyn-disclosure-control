@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, NamedTuple, Optional
+from typing import NamedTuple, Optional
 
 import numpy as np
 import numpy.typing as npt

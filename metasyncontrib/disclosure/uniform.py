@@ -6,9 +6,12 @@ import datetime as dt
 import polars as pl
 from metasyn.distribution.uniform import (
     ContinuousUniformFitter,
+    DateTimeUniformDistribution,
     DateTimeUniformFitter,
+    DateUniformDistribution,
     DateUniformFitter,
     DiscreteUniformFitter,
+    TimeUniformDistribution,
     TimeUniformFitter,
 )
 
@@ -34,7 +37,7 @@ class DisclosureDateTime(DateTimeUniformFitter):
 
     privacy: DisclosurePrivacy
 
-    def _fit(self, series: pl.Series) -> DisclosureDateTime:
+    def _fit(self, series: pl.Series) -> DateTimeUniformDistribution:
         sub_series = micro_aggregate(series, self.privacy.partition_size,
                                      max_dominance=self.privacy.max_dominance)
         return self.distribution(sub_series.min(), sub_series.max(), self._get_precision(series))
@@ -46,7 +49,7 @@ class DisclosureTime(TimeUniformFitter):
 
     privacy: DisclosurePrivacy
 
-    def _fit(self, values: pl.Series):
+    def _fit(self, values: pl.Series) -> TimeUniformDistribution:
         # Convert time to a datetime so that the microaggregation works
         today = dt.date(1970, 1, 1)
         dt_series = pl.Series([dt.datetime.combine(today, t) for t in values])
@@ -65,7 +68,7 @@ class DisclosureDate(DateUniformFitter):
 
     privacy: DisclosurePrivacy
 
-    def _fit(self, values: pl.Series) -> DisclosureDate:
+    def _fit(self, values: pl.Series) -> DateUniformDistribution:
         # Convert dates to datetimes
         dt_series = pl.Series([dt.datetime.combine(d, dt.time(hour=12)) for d in values])
         dt_sub_series = micro_aggregate(dt_series, self.privacy.partition_size,

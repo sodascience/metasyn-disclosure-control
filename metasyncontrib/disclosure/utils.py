@@ -14,7 +14,7 @@ except ImportError:
     from numpy._core._exceptions import UFuncTypeError  # type: ignore
 
 
-def _compute_dominance(block_values: npt.NDArray[[Any, Any]], reverse: bool=False):
+def _compute_dominance(block_values: npt.NDArray, reverse: bool=False):
     """Compute the dominance over a set of microaggregated values.
 
     Parameters

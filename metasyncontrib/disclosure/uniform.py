@@ -36,6 +36,7 @@ class DisclosureDateTime(DateTimeUniformFitter):
     """Disclosure implementation for the datetime distribution."""
 
     privacy: DisclosurePrivacy
+    distribution: type[DateTimeUniformDistribution]
 
     def _fit(self, series: pl.Series) -> DateTimeUniformDistribution:
         sub_series = micro_aggregate(series, self.privacy.partition_size,
@@ -48,6 +49,7 @@ class DisclosureTime(TimeUniformFitter):
     """Disclosure implementation for the time distribution."""
 
     privacy: DisclosurePrivacy
+    distribution: type[TimeUniformDistribution]
 
     def _fit(self, values: pl.Series) -> TimeUniformDistribution:
         # Convert time to a datetime so that the microaggregation works
@@ -67,6 +69,7 @@ class DisclosureDate(DateUniformFitter):
     """Disclosure implementation for the date distribution."""
 
     privacy: DisclosurePrivacy
+    distribution: type[DateUniformDistribution]
 
     def _fit(self, values: pl.Series) -> DateUniformDistribution:
         # Convert dates to datetimes

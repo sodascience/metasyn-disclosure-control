@@ -1,6 +1,5 @@
 """Disclosure control implementations for continuous distributions."""
 
-from metasyn.distribution.base import BaseDistribution, BaseFitter
 from metasyn.distribution.constant import (
     ContinuousConstantFitter,
     DateConstantFitter,
@@ -11,64 +10,51 @@ from metasyn.distribution.constant import (
 )
 
 from metasyncontrib.disclosure.base import disclosure_fitter
-from metasyncontrib.disclosure.privacy import DisclosurePrivacy
-
-
-class DisclosureConstantMixin(BaseFitter):
-    """Mixin class to overload fit method for constant distributions."""
-
-    privacy: DisclosurePrivacy
-
-    def _fit(self, series) -> BaseDistribution:  #pylint: disable=unused-argument
-        """Fit constant distributions with disclosure control rules in place."""
-        # NB: dominance rule ensures that constant distribution is essentially never
-        # allowed under formal disclosure control. Always return default distribution.
-        return self.distribution.default_distribution()
 
 
 @disclosure_fitter()
-class DisclosureConstant(DisclosureConstantMixin, ContinuousConstantFitter):
+class DisclosureConstant(ContinuousConstantFitter):
     """Disclosure controlled ConstantFitter."""
 
-    def default_distribution(self):  # noqa: D102
+    def _fit(self, series):
         return self.distribution(99999.9)
 
 
 @disclosure_fitter()
-class DisclosureDiscreteConstant(DisclosureConstantMixin, DiscreteConstantFitter):
+class DisclosureDiscreteConstant(DiscreteConstantFitter):
     """Disclosure controlled DiscreteConstantFitter."""
 
-    def default_distribution(self):  # noqa: D102
+    def _fit(self, series):
         return self.distribution(99999)
 
 
 @disclosure_fitter()
-class DisclosureStringConstant(DisclosureConstantMixin, StringConstantFitter):
+class DisclosureStringConstant(StringConstantFitter):
     """Disclosure controlled StringConstantFitter."""
 
-    def default_distribution(self):  # noqa: D102
+    def _fit(self, series):
         return self.distribution("REDACTED")
 
 
 @disclosure_fitter()
-class DisclosureDateTimeConstant(DisclosureConstantMixin, DateTimeConstantFitter):
+class DisclosureDateTimeConstant(DateTimeConstantFitter):
     """Disclosure controlled DateTimeConstantFitter."""
 
-    def default_distribution(self):  # noqa: D102
+    def _fit(self, series):
         return self.distribution("1970-01-01T00:00:00")
 
 
 @disclosure_fitter()
-class DisclosureTimeConstant(DisclosureConstantMixin, TimeConstantFitter):
+class DisclosureTimeConstant(TimeConstantFitter):
     """Disclosure controlled TimeConstantFitter."""
 
-    def default_distribution(self):  # noqa: D102
+    def _fit(self, series):
         return self.distribution("00:00:00")
 
 
 @disclosure_fitter()
-class DisclosureDateConstant(DisclosureConstantMixin, DateConstantFitter):
+class DisclosureDateConstant(DateConstantFitter):
     """Disclosure controlled DateConstantFitter."""
 
-    def default_distribution(self):  # noqa: D102
+    def _fit(self, series):
         return self.distribution("1970-01-01")

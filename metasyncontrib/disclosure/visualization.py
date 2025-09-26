@@ -5,7 +5,7 @@ import numpy as np
 import polars as pl
 from matplotlib import pyplot as plt
 from metasyn.privacy import BasicPrivacy
-from metasyn.provider import DistributionProviderList
+from metasyn.registry import DistributionRegistry
 
 from metasyncontrib.disclosure import DisclosurePrivacy
 
@@ -25,26 +25,29 @@ def plot_outliers(dist_type, distribution_name, series_size=50, n_outliers=1):
         Number of outliers to be added to the default distribution, by default 1
 
     """
-    # Create a list of distribution providers
-    dist_providers = DistributionProviderList(["builtin", "metasyn-disclosure"])
-    disc_class = dist_providers.find_distribution(distribution_name, dist_type,
-                                                  privacy=DisclosurePrivacy())
+    # Create the distribution registry
+    dist_registry = DistributionRegistry.parse(["builtin", "metasyn-disclosure"])
+    disc_class = dist_registry.find_distribution(distribution_name, dist_type)
+    disc_fit_class = dist_registry.find_fitter(distribution_name, dist_type,
+                                               privacy=DisclosurePrivacy())
     disc_privacy = DisclosurePrivacy()
 
     # Find the base class of the disclosure distribution
     var_type = (disc_class.var_type if isinstance(disc_class.var_type, str)
                 else disc_class.var_type[0])
-    base_class = dist_providers.find_distribution(disc_class.implements, var_type)
+    base_class = dist_registry.find_distribution(disc_class.name, var_type)
+    base_fit_class = dist_registry.find_fitter(distribution_name, dist_type,
+                                               privacy=BasicPrivacy())
     base_privacy = BasicPrivacy()
     # Get the default distribution of the base class
-    dist = base_class.default_distribution()
+    dist = base_class.default_distribution(var_type)
 
     # Draw a series of random values
     series = pl.Series([dist.draw() for _ in range(series_size)])
 
     # Fit the distribution to the series
-    clean_base_param = base_class.fit(series, base_privacy).to_dict()["parameters"]
-    clean_disc_param = disc_class.fit(series, disc_privacy).to_dict()["parameters"]
+    clean_base_param = base_fit_class(base_privacy).fit(series).to_dict()["parameters"]
+    clean_disc_param = disc_fit_class(disc_privacy).fit(series).to_dict()["parameters"]
 
     # Initialize dictionaries to store the parameters of the distributions
     base_param = defaultdict(lambda: [])
@@ -62,8 +65,8 @@ def plot_outliers(dist_type, distribution_name, series_size=50, n_outliers=1):
         new_series = series.extend_constant(new_val, n_outliers)
 
         # Fit the distributions to the new series
-        base_dist = base_class.fit(new_series, base_privacy)
-        disc_dist = disc_class.fit(new_series, disc_privacy)
+        base_dist = base_fit_class(base_privacy).fit(new_series)
+        disc_dist = disc_fit_class(disc_privacy).fit(new_series)
 
         # Add the parameters of the fitted distributions to the dictionaries
         _add(base_param, base_dist.to_dict()["parameters"], new_val)

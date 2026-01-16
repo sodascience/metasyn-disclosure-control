@@ -34,7 +34,7 @@ Basic usage for our built-in titanic dataset is as follows:
 
 ```py
 from metasyncontrib.disclosure import DisclosurePrivacy
-from metasyncontrib.disclosure.string import DisclosureFaker
+from metasyncontrib.disclosure import DisclosureFaker
 
 from metasyn import MetaFrame, VarSpec, demo_dataframe
 

@@ -34,7 +34,7 @@ Basic usage for our built-in titanic dataset is as follows:
 
 ```py
 from metasyncontrib.disclosure import DisclosurePrivacy
-from metasyncontrib.disclosure import DisclosureFaker
+from metasyn.distribution import FakerDistribution
 
 from metasyn import MetaFrame, VarSpec, demo_dataframe
 
@@ -42,7 +42,7 @@ df = demo_dataframe("titanic")
 
 spec = [
     VarSpec(name="PassengerId", unique=True),
-    VarSpec(name="Name", distribution=DisclosureFaker("name")),
+    VarSpec(name="Name", distribution=FakerDistribution("name")),
 ]
 
 mf = MetaFrame.fit_dataframe(

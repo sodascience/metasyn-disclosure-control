@@ -6,14 +6,16 @@
 A privacy plugin for [metasyn](https://github.com/sodascience/metasyn), based on statistical disclosure control (SDC) rules of thumb as found in the following documents:
 
 - The [SDC handbook](https://securedatagroup.org/guides-and-resources/sdc-handbook/) of the Secure Data group in the UK
-- The Data Without Boundaries document [Guidelines for output checking](https://wayback.archive-it.org/12090/*/https:/cros-legacy.ec.europa.eu/system/files/dwb_standalone-document_output-checking-guidelines.pdf) (pdf)
-- Statistics Netherlands' output guidelines
+- The EU-funded Data Without Boundaries document on [Guidelines for output checking](https://wayback.archive-it.org/12090/*/https:/cros-legacy.ec.europa.eu/system/files/dwb_standalone-document_output-checking-guidelines.pdf) (pdf)
+- Statistics Netherlands' statistical disclosure control guidelines for microdata output
+
+> [!NOTE]
+> Disclaimer: although this plugin is written according to disclosure control guidelines (and we seek input from their authors), we are not officially affiliated with any of the organisations above. 
 
 Producing synthetic data with [metasyn](https://github.com/sodascience/metasyn) is already a great first step towards protecting privacy, but it doesn't adhere to official standards. For example, fitting a uniform distribution will disclose the lowest and highest values in the dataset, which may be a privacy issue in particularly sensitive data. This plugin solves these kinds of problems.
 
 > [!WARNING]
-> Currently, the disclosure control plugin is work in progress. Especially in light of this, we disclaim
-any responsibility as a result of using this plugin. 
+> Currently, the disclosure control plugin is work in progress. In light of this, we disclaim any responsibility as a result of using this plugin. 
 
 ## Installing the plugin
 

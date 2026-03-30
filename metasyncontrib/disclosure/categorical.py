@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import polars as pl
 import numpy as np
+import polars as pl
 from metasyn.distribution.categorical import MultinoulliFitter
 from metasyn.util import get_var_type
 

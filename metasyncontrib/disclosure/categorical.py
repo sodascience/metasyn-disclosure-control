@@ -32,9 +32,10 @@ class DisclosureMultinoulli(MultinoulliFitter):
         if len(probs) == 0 or probs.max() >= self.privacy.group_disclosure_threshold:
             return self.default_distribution(series)
         probs /= probs.sum()
+
+        # Add random noise to probabilities to hide the exact counts of removed categories
         noise = np.random.randn(len(labels))/len(series)
-        noise -= noise.sum()/len(probs)
-        probs += noise
+        probs += noise - noise.mean()
         return self.distribution(labels, probs)
 
     def default_distribution(self, series):  # noqa: D102

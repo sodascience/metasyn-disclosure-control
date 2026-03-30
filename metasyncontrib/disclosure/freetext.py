@@ -11,3 +11,6 @@ class DisclosureFreetext(FreeTextFitter):
 
     This implementation is the same as the original.
     """
+
+    def _fit(self, series, max_values: int = 50):
+        return self.distribution.default_distribution()

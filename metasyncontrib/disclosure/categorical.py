@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import polars as pl
+import numpy as np
 from metasyn.distribution.categorical import MultinoulliFitter
 from metasyn.util import get_var_type
 
@@ -31,6 +32,9 @@ class DisclosureMultinoulli(MultinoulliFitter):
         if len(probs) == 0 or probs.max() >= self.privacy.group_disclosure_threshold:
             return self.default_distribution(series)
         probs /= probs.sum()
+        noise = np.random.randn(len(labels))/len(series)
+        noise -= noise.sum()/len(probs)
+        probs += noise
         return self.distribution(labels, probs)
 
     def default_distribution(self, series):  # noqa: D102

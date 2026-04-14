@@ -37,13 +37,35 @@ def _compute_dominance(block_values: npt.NDArray, reverse: bool=False):
         max_values = np.max(block_values, axis=1).reshape(-1, 1)
         diff_values = max_values - block_values
         same_vals = np.all(block_values == max_values, axis=1)
+    if same_vals.any():
+        return 1+same_vals.mean()
     diff_sum = diff_values.sum(axis=1)
     dominance = diff_values[~same_vals].max(axis=1) / diff_sum[~same_vals]
     # If all values are the same, then dominance is 0.
     if len(dominance) == 0:
-        return 0
+        return 1
+    print(same_vals)
     return np.max(dominance)
 
+
+def _meanify(block_values):
+    try:
+        mean_vals = block_values.mean(axis=1)
+    except UFuncTypeError:
+        # Datetime detected
+        # Workaround for years < 1970 that should work for Windows and Linux/OS X
+        mean_vals = []
+        for block in block_values:
+            mean_vals.append(pl.Series(block).dt.cast_time_unit("us").mean())
+        mean_vals = np.array(mean_vals)
+    return mean_vals
+
+    # if block_values.size > 0:
+        # if np.issubdtype(block_values.dtype, np.integer):
+            # block_values[:] = np.round(mean_vals.reshape(-1, 1))
+        # else:
+            # block_values[:] = mean_vals.reshape(-1, 1)
+    # return block_values
 
 def _create_subsample( # pylint: disable=too-many-locals
     values: pl.Series,
@@ -85,37 +107,36 @@ def _create_subsample( # pylint: disable=too-many-locals
     # Get the number of aggregation blocks and the remainder
     n_blocks = n_values // partition_size
     leftover = n_values % partition_size
-    if n_blocks <= 1:
+    if n_blocks < 1:
         raise ValueError("Cannot find subsample with current settings.")
 
+    blocks_left = sorted_values[:leftover*(partition_size+1)].reshape(leftover, partition_size+1)
+    blocks_right = sorted_values[leftover*(partition_size+1):].reshape(
+        n_blocks-leftover, partition_size)
+
+    assert blocks_left.size + blocks_right.size == len(sorted_values)
     # Remove leftover points
-    if leftover == 1:
-        sorted_values = np.delete(sorted_values, [n_values // 2])
-    if leftover > 1:
-        base_skip = round(n_values / (leftover + 1))
-        skip_start = (n_values - base_skip * (leftover - 1) + 1) // 2
-        delete_values = skip_start + base_skip * np.arange(leftover)
-        sorted_values = np.delete(sorted_values, delete_values)
-    assert len(sorted_values) == n_blocks * partition_size
+    # if leftover == 1:
+        # sorted_values = np.delete(sorted_values, [n_values // 2])
+    # if leftover > 1:
+        # base_skip = round(n_values / (leftover + 1))
+        # skip_start = (n_values - base_skip * (leftover - 1) + 1) // 2
+        # delete_values = skip_start + base_skip * np.arange(leftover)
+        # sorted_values = np.delete(sorted_values, delete_values)
+    # assert len(sorted_values) == n_blocks * partition_size
 
     # Rearrange data for easier dominance computation
-    block_values = sorted_values.reshape(n_blocks, partition_size)
+    # block_values = sorted_values.reshape(n_blocks, partition_size)
 
     # Comput dominance both for high and low values
     dominance = max(
-        _compute_dominance(block_values, reverse=False),
-        _compute_dominance(block_values, reverse=True),
+        _compute_dominance(blocks_left, reverse=False),
+        _compute_dominance(blocks_left, reverse=True),
+        _compute_dominance(blocks_right, reverse=False),
+        _compute_dominance(blocks_right, reverse=True)
     )
-    try:
-        sub_values = block_values.mean(axis=1)
-    except UFuncTypeError:
-        # Datetime detected
-        # Workaround for years < 1970 that should work for Windows and Linux/OS X
-        sub_values = []
-        for block in block_values:
-            mean_time = pl.Series(block).dt.cast_time_unit("us").mean()
-            sub_values.append(mean_time)
-    return sub_values, dominance
+    mean_vals = np.concatenate((_meanify(blocks_left).reshape(-1), _meanify(blocks_right).reshape(-1)))
+    return mean_vals, dominance
 
 
 def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterations: int = 1000,
@@ -165,6 +186,7 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
                 new_settings = [
                     x if j_par != i_par else x + add_par for j_par, x in enumerate(cur_settings)
                 ]
+                print(new_settings)
                 try:
                     new_bin, new_dom = _create_subsample(values, *new_settings)
                 except ValueError:

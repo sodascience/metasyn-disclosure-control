@@ -29,6 +29,8 @@ def _compute_dominance(block_values: npt.NDArray, reverse: bool=False):
         The maximum of the dominance for all microaggregated bis.
 
     """
+    if len(block_values) == 0:
+        return 0
     if not reverse:  # dominance of highest value
         min_values = np.min(block_values, axis=1).reshape(-1, 1)
         diff_values = block_values - min_values
@@ -37,14 +39,12 @@ def _compute_dominance(block_values: npt.NDArray, reverse: bool=False):
         max_values = np.max(block_values, axis=1).reshape(-1, 1)
         diff_values = max_values - block_values
         same_vals = np.all(block_values == max_values, axis=1)
+
+    # If any of the bins have values that are the same, the dominance critereon has failed.
     if same_vals.any():
+        # Dominance can't be more than 1, but using the number of failed bins aids the convergence.
         return 1+same_vals.mean()
-    diff_sum = diff_values.sum(axis=1)
-    dominance = diff_values[~same_vals].max(axis=1) / diff_sum[~same_vals]
-    # If all values are the same, then dominance is 0.
-    if len(dominance) == 0:
-        return 1
-    print(same_vals)
+    dominance = diff_values.max(axis=1) / diff_values.sum(axis=1)
     return np.max(dominance)
 
 
@@ -60,16 +60,9 @@ def _meanify(block_values):
         mean_vals = np.array(mean_vals)
     return mean_vals
 
-    # if block_values.size > 0:
-        # if np.issubdtype(block_values.dtype, np.integer):
-            # block_values[:] = np.round(mean_vals.reshape(-1, 1))
-        # else:
-            # block_values[:] = mean_vals.reshape(-1, 1)
-    # return block_values
-
 def _create_subsample( # pylint: disable=too-many-locals
     values: pl.Series,
-    partition_size: int = 11,
+    n_blocks: int,
     pre_remove: int = 0,
     post_remove: int = 0,
 ) -> tuple[list, float]:
@@ -104,8 +97,10 @@ def _create_subsample( # pylint: disable=too-many-locals
     sorted_values = sorted_values[pre_remove : len(values) - post_remove]
     n_values = len(sorted_values)
 
+
     # Get the number of aggregation blocks and the remainder
-    n_blocks = n_values // partition_size
+    partition_size = n_values // n_blocks
+    # n_blocks = n_values // partition_size
     leftover = n_values % partition_size
     if n_blocks < 1:
         raise ValueError("Cannot find subsample with current settings.")
@@ -114,21 +109,9 @@ def _create_subsample( # pylint: disable=too-many-locals
     blocks_right = sorted_values[leftover*(partition_size+1):].reshape(
         n_blocks-leftover, partition_size)
 
-    assert blocks_left.size + blocks_right.size == len(sorted_values)
-    # Remove leftover points
-    # if leftover == 1:
-        # sorted_values = np.delete(sorted_values, [n_values // 2])
-    # if leftover > 1:
-        # base_skip = round(n_values / (leftover + 1))
-        # skip_start = (n_values - base_skip * (leftover - 1) + 1) // 2
-        # delete_values = skip_start + base_skip * np.arange(leftover)
-        # sorted_values = np.delete(sorted_values, delete_values)
-    # assert len(sorted_values) == n_blocks * partition_size
+    # assert blocks_left.size + blocks_right.size == len(sorted_values)
 
-    # Rearrange data for easier dominance computation
-    # block_values = sorted_values.reshape(n_blocks, partition_size)
-
-    # Comput dominance both for high and low values
+    # Compute dominance both for high and low values
     dominance = max(
         _compute_dominance(blocks_left, reverse=False),
         _compute_dominance(blocks_left, reverse=True),
@@ -164,7 +147,8 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
     # Compute initial settings of parition_size, start_remove, end_remove
     assert min_partition_size > 6, ("Please use a bigger minimum bin size, or disclosure "
                                     "control will not work.")
-    cur_settings = [min_partition_size, 0, 0]
+    
+    cur_settings = [len(values) // min_partition_size, 0, 0]
     sub_values, dominance = _create_subsample(values, *cur_settings)
 
     class Solution(NamedTuple):  # pylint: disable=missing-class-docstring
@@ -174,28 +158,30 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
         grad: float
 
     for _ in range(max_iterations):
+        print(dominance, max_dominance)
         # Found a viable solution
         if dominance < max_dominance:
             break
 
         best_solution: Optional[Solution] = None
-        max_diff = cur_settings[0] // 2  # Maximally try changes with partition_size/2
+        # max_diff = cur_settings[0] // 2  # Maximally try changes with partition_size/2
         # Iterate over parameter to change
-        for i_par in range(3):
-            for add_par in range(1, max_diff):
-                new_settings = [
-                    x if j_par != i_par else x + add_par for j_par, x in enumerate(cur_settings)
-                ]
-                print(new_settings)
-                try:
-                    new_bin, new_dom = _create_subsample(values, *new_settings)
-                except ValueError:
-                    continue
+        for new_settings in _search_domain(*cur_settings, min_partition_size, len(values)):
+        # for i_par in range(3):
+            # for add_par in range(1, max_diff):
+                # new_settings = [
+                    # x if j_par != i_par else x + add_par for j_par, x in enumerate(cur_settings)
+            # ]
+            # print(new_settings)
+            try:
+                new_bin, new_dom = _create_subsample(values, *new_settings)
+            except ValueError:
+                continue
 
-                # Find the solution with the best gradient
-                grad = (dominance - new_dom) / add_par
-                if best_solution is None or best_solution.grad < grad:
-                    best_solution = Solution(new_bin, new_dom, new_settings, grad)
+            # Find the solution with the best gradient
+            grad = (dominance - new_dom)/_diff_settings(cur_settings, new_settings)
+            if best_solution is None or best_solution.grad < grad:
+                best_solution = Solution(new_bin, new_dom, new_settings, grad)
         if best_solution is None:
             raise ValueError(
                 "Could not find solution satisfying dominance conditions for column"
@@ -209,3 +195,27 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
     if values.dtype in [pl.datatypes.Int64, pl.datatypes.Int32, pl.datatypes.Int32]:
         return pl.Series((np.array(sub_values) + 0.5).astype(np.int64))
     return pl.Series(sub_values)
+
+def _search_domain(n_partitions, pre_remove, post_remove, min_partition_size, series_size):
+    delta_part = max(1, n_partitions//5)
+    for part in range(n_partitions-delta_part, n_partitions+delta_part+1):
+        partition_size = series_size // part
+        delta_remove = max(1, partition_size // 4)
+        if partition_size < min_partition_size:
+            continue
+        for new_pre_remove in range(pre_remove-delta_remove, pre_remove+delta_remove+1):
+            if new_pre_remove < 0:
+                continue
+            for new_post_remove in range(post_remove-delta_remove, post_remove+delta_remove+1):
+                if new_post_remove < 0:
+                    continue
+                if ((part, new_pre_remove, new_post_remove)
+                        == (n_partitions, pre_remove, post_remove)):
+                    continue
+                yield part, new_pre_remove, new_post_remove
+
+def _diff_settings(cur_settings, new_settings):
+    diff = 0
+    for i in range(len(cur_settings)):
+        diff += abs(cur_settings[i]-new_settings[i])
+    return diff

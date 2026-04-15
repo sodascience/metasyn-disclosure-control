@@ -30,7 +30,7 @@ def _compute_dominance(block_values: npt.NDArray, reverse: bool=False):
 
     """
     if len(block_values) == 0:
-        return 0
+        return 0, 0.0
     if not reverse:  # dominance of highest value
         min_values = np.min(block_values, axis=1).reshape(-1, 1)
         diff_values = block_values - min_values
@@ -41,11 +41,14 @@ def _compute_dominance(block_values: npt.NDArray, reverse: bool=False):
         same_vals = np.all(block_values == max_values, axis=1)
 
     # If any of the bins have values that are the same, the dominance critereon has failed.
-    if same_vals.any():
+    # if same_vals.any():
         # Dominance can't be more than 1, but using the number of failed bins aids the convergence.
-        return 1+same_vals.mean()
-    dominance = diff_values.max(axis=1) / diff_values.sum(axis=1)
-    return np.max(dominance)
+        # return 1+same_vals.mean()
+    if same_vals.all():
+        dominance = 0
+    else:
+        dominance = diff_values[~same_vals].max(axis=1) / diff_values[~same_vals].sum(axis=1)
+    return np.max(dominance), same_vals.sum()
 
 
 def _meanify(block_values):
@@ -57,8 +60,18 @@ def _meanify(block_values):
         mean_vals = []
         for block in block_values:
             mean_vals.append(pl.Series(block).dt.cast_time_unit("us").mean())
-        mean_vals = np.array(mean_vals)
+        # mean_vals = np.array(mean_vals)
+    # print(mean_vals.dtype)
     return mean_vals
+
+def _add_dominances(*args):
+    dom = 0
+    n_same = 0
+    for cur_dom, cur_n_same in args:
+        dom = max(dom, cur_dom)
+        n_same += cur_n_same
+
+    return dom + n_same
 
 def _create_subsample( # pylint: disable=too-many-locals
     values: pl.Series,
@@ -112,13 +125,17 @@ def _create_subsample( # pylint: disable=too-many-locals
     # assert blocks_left.size + blocks_right.size == len(sorted_values)
 
     # Compute dominance both for high and low values
-    dominance = max(
+    dominance = _add_dominances(
         _compute_dominance(blocks_left, reverse=False),
         _compute_dominance(blocks_left, reverse=True),
         _compute_dominance(blocks_right, reverse=False),
         _compute_dominance(blocks_right, reverse=True)
     )
-    mean_vals = np.concatenate((_meanify(blocks_left).reshape(-1), _meanify(blocks_right).reshape(-1)))
+    mean_left, mean_right = _meanify(blocks_left), _meanify(blocks_right)
+    try:
+        mean_vals = np.concatenate((mean_left.reshape(-1), mean_right.reshape(-1)))
+    except AttributeError:
+        mean_vals = mean_left + mean_right
     return mean_vals, dominance
 
 
@@ -147,42 +164,38 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
     # Compute initial settings of parition_size, start_remove, end_remove
     assert min_partition_size > 6, ("Please use a bigger minimum bin size, or disclosure "
                                     "control will not work.")
-    
+
     cur_settings = [len(values) // min_partition_size, 0, 0]
     sub_values, dominance = _create_subsample(values, *cur_settings)
-
+    cache = set()
     class Solution(NamedTuple):  # pylint: disable=missing-class-docstring
         sub_values: list
         dominance: float
         settings: list
         grad: float
 
-    for _ in range(max_iterations):
-        print(dominance, max_dominance)
+    for i_iter in range(max_iterations):  # noqa
+        # print(dominance, max_dominance)
         # Found a viable solution
         if dominance < max_dominance:
             break
 
         best_solution: Optional[Solution] = None
-        # max_diff = cur_settings[0] // 2  # Maximally try changes with partition_size/2
         # Iterate over parameter to change
         for new_settings in _search_domain(*cur_settings, min_partition_size, len(values)):
-        # for i_par in range(3):
-            # for add_par in range(1, max_diff):
-                # new_settings = [
-                    # x if j_par != i_par else x + add_par for j_par, x in enumerate(cur_settings)
-            # ]
-            # print(new_settings)
+            if new_settings in cache:
+                continue
+            cache.add(new_settings)
             try:
                 new_bin, new_dom = _create_subsample(values, *new_settings)
             except ValueError:
                 continue
-
+            # print(new_settings, new_dom)
             # Find the solution with the best gradient
             grad = (dominance - new_dom)/_diff_settings(cur_settings, new_settings)
             if best_solution is None or best_solution.grad < grad:
                 best_solution = Solution(new_bin, new_dom, new_settings, grad)
-        if best_solution is None:
+        if best_solution is None or best_solution.grad <= 0:
             raise ValueError(
                 "Could not find solution satisfying dominance conditions for column"
                 f" '{values.name}'."
@@ -191,16 +204,19 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
         cur_settings = best_solution.settings
         sub_values = best_solution.sub_values
 
+    if dominance > max_dominance:
+        raise ValueError(f"Failed to converge for column '{values.name}'")
+
     # If the values are integer types, round the values to the nearest integer.
     if values.dtype in [pl.datatypes.Int64, pl.datatypes.Int32, pl.datatypes.Int32]:
         return pl.Series((np.array(sub_values) + 0.5).astype(np.int64))
     return pl.Series(sub_values)
 
 def _search_domain(n_partitions, pre_remove, post_remove, min_partition_size, series_size):
-    delta_part = max(1, n_partitions//5)
-    for part in range(n_partitions-delta_part, n_partitions+delta_part+1):
+    delta_part = max(3, n_partitions//5)
+    for part in range(max(1, n_partitions-delta_part), n_partitions+delta_part+1):
         partition_size = series_size // part
-        delta_remove = max(1, partition_size // 4)
+        delta_remove = max(3, partition_size // 4)
         if partition_size < min_partition_size:
             continue
         for new_pre_remove in range(pre_remove-delta_remove, pre_remove+delta_remove+1):

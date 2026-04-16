@@ -34,7 +34,7 @@ class DisclosureMultinoulli(MultinoulliFitter):
         probs /= probs.sum()
 
         # Add random noise to probabilities to hide the exact counts of removed categories
-        noise = np.random.randn(len(labels))/len(series)
+        noise = (np.random.rand(len(labels))-0.5)/len(series)
         probs += noise - noise.mean()
         return self.distribution(labels, probs)
 

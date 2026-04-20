@@ -15,7 +15,7 @@ A privacy plugin for [metasyn](https://github.com/sodascience/metasyn), based on
 Producing synthetic data with [metasyn](https://github.com/sodascience/metasyn) is already a great first step towards protecting privacy, but it doesn't adhere to official standards. For example, fitting a uniform distribution will disclose the lowest and highest values in the dataset, which may be a privacy issue in particularly sensitive data. This plugin solves these kinds of problems.
 
 > [!WARNING]
-> Currently, the disclosure control plugin is work in progress. In light of this, we disclaim any responsibility as a result of using this plugin. 
+> This plugin does not eliminate the need to check the output of metasyn; you cannot assume that the output is completely free of privacy sensitive information or that it will adhere to the SDC rules completely. For example, one of the SDC rules states that There should not be any groups with more than 90% of the items in that group. This will be checked by the disclosure control plugin. However, sometimes groups could be sensibly aggregated (for example different cancer types into a cancer diagnosis) so that the group disclosure rule is violated. This examplifies the need for a human to manually check the output. We disclaim any responsibility as a result of using this plugin.
 
 ## Installing the plugin
 

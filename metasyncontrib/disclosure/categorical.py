@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import math
+
 import numpy as np
 import polars as pl
 from metasyn.distribution.categorical import MultinoulliFitter
@@ -31,11 +33,34 @@ class DisclosureMultinoulli(MultinoulliFitter):
         # the default distribution.
         if len(probs) == 0 or probs.max() >= self.privacy.group_disclosure_threshold:
             return self.default_distribution(series)
-        probs /= probs.sum()
+        n_leftover = round((1-probs.sum())*len(series))
 
-        # Add random noise to probabilities to hide the exact counts of removed categories
-        noise = (np.random.rand(len(labels))-0.5)/len(series)
-        probs += noise - noise.mean()
+        # Redistribute labels non-randomly
+        # Attempt to distribute the counts as best we can
+        n_dist = np.round((probs/probs.sum())*n_leftover)
+
+        # Due to rounding, we could have a few more or less, so those are distributed differently
+        n_still_leftover = n_leftover-n_dist.sum()
+
+        # Get the difference between the optimal and current distribution
+        n_diff = probs*len(series) + n_dist - (probs/probs.sum()*len(series))
+
+        # If there are a positive number of leftovers, then the highest differential probability
+        # gets one first, then the second highest differential, etc.
+        if n_still_leftover > 0:
+            for i_label in np.argsort(n_diff).reverse():
+                n_dist[i_label] += 1
+                n_still_leftover -= 1
+                if n_still_leftover == 0:
+                    break
+        # If the number leftover is negative (distributed too many values), then do the reverse.
+        elif n_still_leftover < 0:
+            for i_label in np.argsort(n_diff):
+                n_dist[i_label] -= 1
+                n_still_leftover += 1
+                if n_still_leftover == 0:
+                    break
+        probs += n_dist/len(series)
         return self.distribution(labels, probs)
 
     def default_distribution(self, series):  # noqa: D102

@@ -46,19 +46,20 @@ class DisclosureMultinoulli(MultinoulliFitter):
         # If there are a positive number of leftovers, then the highest differential probability
         # gets one first, then the second highest differential, etc.
         if n_still_leftover > 0:
-            for i_label in np.argsort(n_diff).reverse():
+            for i_label in np.argsort(n_diff):
                 n_dist[i_label] += 1
                 n_still_leftover -= 1
                 if n_still_leftover == 0:
                     break
         # If the number leftover is negative (distributed too many values), then do the reverse.
         elif n_still_leftover < 0:
-            for i_label in np.argsort(n_diff):
+            for i_label in reversed(np.argsort(n_diff)):
                 n_dist[i_label] -= 1
                 n_still_leftover += 1
                 if n_still_leftover == 0:
                     break
         probs += n_dist/len(series)
+        assert np.all(probs+1e-8)
         return self.distribution(labels, probs)
 
     def default_distribution(self, series):  # noqa: D102

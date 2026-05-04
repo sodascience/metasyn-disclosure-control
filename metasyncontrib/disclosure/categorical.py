@@ -59,7 +59,6 @@ class DisclosureMultinoulli(MultinoulliFitter):
                 if n_still_leftover == 0:
                     break
         probs += n_dist/len(series)
-        assert np.all(probs+1e-8)
         return self.distribution(labels, probs)
 
     def default_distribution(self, series):  # noqa: D102

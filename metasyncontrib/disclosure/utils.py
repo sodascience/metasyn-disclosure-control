@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
-from typing import NamedTuple, Optional
+from typing import NamedTuple, Optional, Union
 
 import numpy as np
 import numpy.typing as npt
@@ -74,7 +74,7 @@ def _create_subsample( # pylint: disable=too-many-locals
     n_blocks: int,
     pre_remove: int = 0,
     post_remove: int = 0,
-) -> tuple[list, float]:
+) -> tuple[Union[list, npt.NDArray], float]:
     """Use microaggregation on a list of values.
 
     Parameters

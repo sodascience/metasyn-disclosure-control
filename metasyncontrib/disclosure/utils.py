@@ -173,7 +173,7 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
     class Solution(NamedTuple):  # pylint: disable=missing-class-docstring
         sub_values: list
         dominance: float
-        settings: list
+        settings: tuple[int, int, int]
         grad: float
 
     for i_iter in range(max_iterations):  # noqa

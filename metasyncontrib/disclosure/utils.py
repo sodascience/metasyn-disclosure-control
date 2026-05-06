@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import Iterator, NamedTuple, Optional
+from collections.abc import Iterator
+from typing import NamedTuple, Optional
 
 import numpy as np
 import numpy.typing as npt

@@ -171,7 +171,7 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
     sub_values, dominance = _create_subsample(values, *cur_settings)
     cache = set()  # A cache that stores all visited solutions.
     class Solution(NamedTuple):  # pylint: disable=missing-class-docstring
-        sub_values: list
+        sub_values: Union[list, npt.NDArray]
         dominance: float
         settings: tuple[int, int, int]
         grad: float

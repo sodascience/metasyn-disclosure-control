@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import NamedTuple, Optional
+from collections.abc import Iterator
+from typing import NamedTuple, Optional, Union
 
 import numpy as np
 import numpy.typing as npt
@@ -47,7 +48,7 @@ def _compute_dominance(block_values: npt.NDArray, reverse: bool=False):
     return np.max(dominance), same_vals.sum()
 
 
-def _meanify(block_values):
+def _meanify(block_values) -> npt.NDArray:
     try:
         mean_vals = block_values.mean(axis=1)
     except UFuncTypeError:
@@ -58,7 +59,7 @@ def _meanify(block_values):
             mean_vals.append(pl.Series(block).dt.cast_time_unit("us").mean())
     return mean_vals
 
-def _add_dominances(*args):
+def _add_dominances(*args) -> int:
     """Add results from the dominance calculations together."""
     dom = 0
     n_same = 0
@@ -73,7 +74,7 @@ def _create_subsample( # pylint: disable=too-many-locals
     n_blocks: int,
     pre_remove: int = 0,
     post_remove: int = 0,
-) -> tuple[list, float]:
+) -> tuple[Union[list, npt.NDArray], float]:
     """Use microaggregation on a list of values.
 
     Parameters
@@ -166,13 +167,13 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
     assert min_partition_size > 6, ("Please use a bigger minimum bin size, or disclosure "
                                     "control will not work.")
 
-    cur_settings = [len(values) // min_partition_size, 0, 0]
+    cur_settings = (len(values) // min_partition_size, 0, 0)
     sub_values, dominance = _create_subsample(values, *cur_settings)
     cache = set()  # A cache that stores all visited solutions.
     class Solution(NamedTuple):  # pylint: disable=missing-class-docstring
-        sub_values: list
+        sub_values: Union[list, npt.NDArray]
         dominance: float
-        settings: list
+        settings: tuple[int, int, int]
         grad: float
 
     for i_iter in range(max_iterations):  # noqa
@@ -182,7 +183,7 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
 
         best_solution: Optional[Solution] = None
         # Iterate over the parameter space around the current best solution
-        for new_settings in _search_domain(*cur_settings, min_partition_size, len(values)):
+        for new_settings in _search_domain(*cur_settings, min_partition_size, len(values)):  # type: ignore
             # We're searching greedily, so settings that have been tried are always worse.
             if new_settings in cache:
                 continue
@@ -212,7 +213,9 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
         return pl.Series((np.array(sub_values) + 0.5).astype(np.int64))
     return pl.Series(sub_values)
 
-def _search_domain(n_partitions, pre_remove, post_remove, min_partition_size, series_size):
+def _search_domain(n_partitions: int, pre_remove: int, post_remove: int,
+                   min_partition_size: int, series_size: int
+                   ) -> Iterator[tuple[int, int, int]]:
     """Find all neighboring solutions around the current solution.
 
     Parameters
@@ -251,7 +254,7 @@ def _search_domain(n_partitions, pre_remove, post_remove, min_partition_size, se
                     continue
                 yield part, new_pre_remove, new_post_remove
 
-def _diff_settings(cur_settings: tuple, new_settings: tuple):
+def _diff_settings(cur_settings: tuple, new_settings: tuple) -> int:
     """Get the distance between two settings. Used for the gradient."""
     diff = 0
     for i in range(len(cur_settings)):

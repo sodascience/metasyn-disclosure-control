@@ -141,7 +141,7 @@ def _create_subsample( # pylint: disable=too-many-locals
     return mean_vals, dominance
 
 
-def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterations: int = 1000,
+def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterations: int = 1000,  # noqa: C901
                     max_dominance: float = 0.5) -> pl.Series:
     """Use micro-aggregation to make the data safe for disclosure purposes.
 

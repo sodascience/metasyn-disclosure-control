@@ -141,7 +141,7 @@ def _create_subsample( # pylint: disable=too-many-locals
     return mean_vals, dominance
 
 
-def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterations: int = 1000,
+def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterations: int = 1000,  # noqa: C901
                     max_dominance: float = 0.5) -> pl.Series:
     """Use micro-aggregation to make the data safe for disclosure purposes.
 
@@ -187,13 +187,14 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
             # We're searching greedily, so settings that have been tried are always worse.
             if new_settings in cache:
                 continue
-            cache.add(new_settings)
             try:
                 new_bin, new_dom = _create_subsample(values, *new_settings)
             except ValueError:
                 continue
             # Find the solution with the best gradient
             grad = (dominance - new_dom)/_diff_settings(cur_settings, new_settings)
+            if new_dom >= dominance:
+                cache.add(new_settings)
             if best_solution is None or best_solution.grad < grad:
                 best_solution = Solution(new_bin, new_dom, new_settings, grad)
         if best_solution is None or best_solution.grad <= 0:

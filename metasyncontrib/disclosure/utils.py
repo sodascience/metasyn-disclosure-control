@@ -8,6 +8,7 @@ from typing import NamedTuple, Optional, Union
 import numpy as np
 import numpy.typing as npt
 import polars as pl
+from metasyn.distribution.base import VarLog
 
 try:
     from numpy.core._exceptions import UFuncTypeError  # type: ignore
@@ -141,8 +142,8 @@ def _create_subsample( # pylint: disable=too-many-locals
     return mean_vals, dominance
 
 
-def micro_aggregate(values: pl.Series, fit_log, min_partition_size: int = 11,
-                    max_iterations: int = 1000,  # noqa: C901
+def micro_aggregate(values: pl.Series, fit_log: VarLog, min_partition_size: int = 11,  # noqa: C901
+                    max_iterations: int = 1000,
                     max_dominance: float = 0.5) -> pl.Series:
     """Use micro-aggregation to make the data safe for disclosure purposes.
 
@@ -150,6 +151,8 @@ def micro_aggregate(values: pl.Series, fit_log, min_partition_size: int = 11,
     ---------
     values:
         Values that need to be micro-aggregated.
+    fit_log:
+        Logging utility to give pointers on the process of microaggregation.
     min_partition_size:
         Micro-aggregate over at least this many values.
     max_iterations:
@@ -188,13 +191,13 @@ def micro_aggregate(values: pl.Series, fit_log, min_partition_size: int = 11,
         settings: tuple[int, int, int]
         grad: float
 
-    best_solution = cur_settings
+    best_solution: Optional[Solution] = Solution(sub_values, dominance, cur_settings, 0.0)
     for i_iter in range(max_iterations):  # noqa
         # Found a viable solution
         if dominance < max_dominance:
             break
 
-        best_solution: Optional[Solution] = None
+        best_solution = None
         # Iterate over the parameter space around the current best solution
         for new_settings in _search_domain(*cur_settings, min_partition_size, len(values)):  # type: ignore
             # We're searching greedily, so settings that have been tried are always worse.
@@ -222,10 +225,12 @@ def micro_aggregate(values: pl.Series, fit_log, min_partition_size: int = 11,
     if dominance > max_dominance:
         raise ValueError(f"Failed to converge for column '{values.name}'")
 
+    assert best_solution is not None
+
     fit_log.add(privacy="Used microgregation with {best_solution[0]} partitions, "
-                f" {best_solution[1]} lowest records removed, "
-                f" {best_solution[2]} highest records removed, "
-                f" and a partition size of {len(values) // best_solution[0]}.")
+                f" {best_solution.settings[1]} lowest records removed, "
+                f" {best_solution.settings[2]} highest records removed, "
+                f" and a partition size of {len(values) // best_solution.settings[0]}.")
 
     # If the values are integer types, round the values to the nearest integer.
     if values.dtype in [pl.datatypes.Int64, pl.datatypes.Int32, pl.datatypes.Int32]:

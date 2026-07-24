@@ -1,7 +1,7 @@
 """Module that contains a class useful for both discrete and continuous distributions."""
 from __future__ import annotations
 
-from metasyn.distribution.base import BaseDistribution, BaseFitter, convert_to_series, VarLog
+from metasyn.distribution.base import BaseDistribution, BaseFitter, VarLog, convert_to_series
 
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 from metasyncontrib.disclosure.utils import micro_aggregate

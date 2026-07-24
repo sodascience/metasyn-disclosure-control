@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import polars as pl
+from metasyn.distribution.base import VarLog
 from metasyn.distribution.categorical import MultinoulliFitter
 from metasyn.util import get_var_type
 
@@ -21,17 +22,34 @@ class DisclosureMultinoulli(MultinoulliFitter):
 
     privacy: DisclosurePrivacy
 
-    def _fit(self, series: pl.Series):
-        dist = super()._fit(series)
+    def _fit(self, series: pl.Series, fit_log: VarLog):
+        dist = super()._fit(series, VarLog())
         # Remove labels with counts < partition_size
         labels = dist.labels[dist.probs >= self.privacy.partition_size / len(series)]
         probs = dist.probs[dist.probs >= self.privacy.partition_size / len(series)]
 
+        fit_log.add(
+            privacy="Removed labels "
+            + str(dist.labels[dist.probs < self.privacy.partition_size / len(series)])
+            + ", because counts were less than the partion size threshold of "
+            f"{self.privacy.partition_size}.")
         # If no more categories are present or the dominance criterion is not satisfied return
         # the default distribution.
-        if len(probs) == 0 or probs.max() >= self.privacy.group_disclosure_threshold:
+        if len(probs) == 0:
+            fit_log.add(privacy="Using default distribution, because after removing all categories "
+                        "with counts less than the partition size no data was left to fit.")
+            return self.default_distribution(series)
+        if probs.max() >= self.privacy.group_disclosure_threshold:
+            fit_log.add(privacy="Using default distribution, because a category is exceeding the "
+                        "group disclosure threshold: "
+                        f"{probs.max()} > {self.privacy.group_disclosure_threshold}")
             return self.default_distribution(series)
         n_leftover = round((1-probs.sum())*len(series))
+
+        if n_leftover > 0:
+            fit_log.add(method="After removing labels for privacy concerns, renormalize the "
+                        "remaining categories, while making sure that the new probabilities so that"
+                        " it cannot be deduced how many values were removed.")
 
         # Redistribute labels non-randomly
         # Attempt to distribute the counts as best we can

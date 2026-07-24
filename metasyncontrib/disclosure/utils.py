@@ -141,7 +141,8 @@ def _create_subsample( # pylint: disable=too-many-locals
     return mean_vals, dominance
 
 
-def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterations: int = 1000,  # noqa: C901
+def micro_aggregate(values: pl.Series, fit_log, min_partition_size: int = 11,
+                    max_iterations: int = 1000,  # noqa: C901
                     max_dominance: float = 0.5) -> pl.Series:
     """Use micro-aggregation to make the data safe for disclosure purposes.
 
@@ -166,9 +167,20 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
     # Compute initial settings of parition_size, start_remove, end_remove
     assert min_partition_size > 6, ("Please use a bigger minimum bin size, or disclosure "
                                     "control will not work.")
-
     cur_settings = (len(values) // min_partition_size, 0, 0)
     sub_values, dominance = _create_subsample(values, *cur_settings)
+    fit_log.add(privacy=f"Using micro-aggregation with minimum partition size {min_partition_size} "
+                f"and maximum dominance of {max_dominance}.")
+
+    _, counts = np.unique(values, return_counts=True)
+    new_min_partition_size = round(counts.max() / (2*max_dominance))
+    if new_min_partition_size > min_partition_size:
+        min_partition_size = new_min_partition_size
+        cur_settings = (len(values) // new_min_partition_size, 0, 0)
+        sub_values, dominance = _create_subsample(values, *cur_settings)
+        fit_log.add(privacy="Detected significant numbers of duplicate values, increasing minimum "
+                    f"partition size to {min_partition_size}")
+
     cache = set()  # A cache that stores all visited solutions.
     class Solution(NamedTuple):  # pylint: disable=missing-class-docstring
         sub_values: Union[list, npt.NDArray]
@@ -176,6 +188,7 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
         settings: tuple[int, int, int]
         grad: float
 
+    best_solution = cur_settings
     for i_iter in range(max_iterations):  # noqa
         # Found a viable solution
         if dominance < max_dominance:
@@ -208,6 +221,11 @@ def micro_aggregate(values: pl.Series, min_partition_size: int = 11, max_iterati
 
     if dominance > max_dominance:
         raise ValueError(f"Failed to converge for column '{values.name}'")
+
+    fit_log.add(privacy="Used microgregation with {best_solution[0]} partitions, "
+                f" {best_solution[1]} lowest records removed, "
+                f" {best_solution[2]} highest records removed, "
+                f" and a partition size of {len(values) // best_solution[0]}.")
 
     # If the values are integer types, round the values to the nearest integer.
     if values.dtype in [pl.datatypes.Int64, pl.datatypes.Int32, pl.datatypes.Int32]:

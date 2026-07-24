@@ -12,5 +12,7 @@ class DisclosureFreetext(FreeTextFitter):
     This implementation is the same as the original.
     """
 
-    def _fit(self, series, max_values: int = 50):
+    def _fit(self, series, fit_log):
+        fit_log.add(privacy="For safety reasons the free text fitter doesn't use data, "
+                    "but uses a default distribution.")
         return self.distribution.default_distribution()

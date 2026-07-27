@@ -182,7 +182,7 @@ def micro_aggregate(values: pl.Series, fit_log: VarLog, min_partition_size: int 
         cur_settings = (len(values) // new_min_partition_size, 0, 0)
         sub_values, dominance = _create_subsample(values, *cur_settings)
         fit_log.add(privacy="Detected significant numbers of duplicate values, increasing minimum "
-                    f"partition size to {min_partition_size}")
+                    f"partition size to {min_partition_size}.")
 
     cache = set()  # A cache that stores all visited solutions.
     class Solution(NamedTuple):  # pylint: disable=missing-class-docstring
@@ -227,9 +227,9 @@ def micro_aggregate(values: pl.Series, fit_log: VarLog, min_partition_size: int 
 
     assert best_solution is not None
 
-    fit_log.add(privacy="Used microgregation with {best_solution[0]} partitions, "
-                f" {best_solution.settings[1]} lowest records removed, "
-                f" {best_solution.settings[2]} highest records removed, "
+    fit_log.add(privacy=f"Used microgregation with {best_solution.settings[0]} partitions,"
+                f" {best_solution.settings[1]} lowest records removed,"
+                f" {best_solution.settings[2]} highest records removed,"
                 f" and a partition size of {len(values) // best_solution.settings[0]}.")
 
     # If the values are integer types, round the values to the nearest integer.

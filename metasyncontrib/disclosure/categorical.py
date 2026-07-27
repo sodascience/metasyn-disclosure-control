@@ -28,11 +28,12 @@ class DisclosureMultinoulli(MultinoulliFitter):
         labels = dist.labels[dist.probs >= self.privacy.partition_size / len(series)]
         probs = dist.probs[dist.probs >= self.privacy.partition_size / len(series)]
 
-        fit_log.add(
-            privacy="Removed labels "
-            + str(dist.labels[dist.probs < self.privacy.partition_size / len(series)])
-            + ", because counts were less than the partion size threshold of "
-            f"{self.privacy.partition_size}.")
+        if (dist.probs < self.privacy.partition_size / len(series)).sum() > 0:
+            fit_log.add(
+                privacy="Removed labels "
+                + str(dist.labels[dist.probs < self.privacy.partition_size / len(series)])
+                + ", because counts were less than the partion size threshold of "
+                f"{self.privacy.partition_size}.")
         # If no more categories are present or the dominance criterion is not satisfied return
         # the default distribution.
         if len(probs) == 0:
@@ -47,8 +48,8 @@ class DisclosureMultinoulli(MultinoulliFitter):
         n_leftover = round((1-probs.sum())*len(series))
 
         if n_leftover > 0:
-            fit_log.add(method="After removing labels for privacy concerns, renormalize the "
-                        "remaining categories, while making sure that the new probabilities so that"
+            fit_log.add(method="After removing labels for privacy concerns, the remaining "
+                        "categories are renormalized. The new probabilities are chosen so that"
                         " it cannot be deduced how many values were removed.")
 
         # Redistribute labels non-randomly

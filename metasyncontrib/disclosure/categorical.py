@@ -22,7 +22,7 @@ class DisclosureMultinoulli(MultinoulliFitter):
 
     privacy: DisclosurePrivacy
 
-    def _fit(self, series: pl.Series, fit_log: VarLog):
+    def _fit(self, series: pl.Series, fit_log: VarLog):  # noqa: C901
         dist = super()._fit(series, VarLog())
         # Remove labels with counts < partition_size
         labels = dist.labels[dist.probs >= self.privacy.partition_size / len(series)]

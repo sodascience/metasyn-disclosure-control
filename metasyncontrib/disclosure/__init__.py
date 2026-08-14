@@ -27,10 +27,10 @@ from metasyncontrib.disclosure.poisson import DisclosurePoisson
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy
 from metasyncontrib.disclosure.uniform import (
     DisclosureContinuousUniform,
-    DisclosureDate,
-    DisclosureDateTime,
+    DisclosureDateTimeUniform,
+    DisclosureDateUniform,
     DisclosureDiscreteUniform,
-    DisclosureTime,
+    DisclosureTimeUniform,
 )
 from metasyncontrib.disclosure.uniquekey import DisclosureUniqueKey
 
@@ -47,9 +47,9 @@ disclosure_fitters = [
     DisclosureNormal,
     DisclosureTruncatedNormal,
     DisclosureContinuousUniform,
-    DisclosureDate,
-    DisclosureDateTime,
-    DisclosureTime,
+    DisclosureDateUniform,
+    DisclosureDateTimeUniform,
+    DisclosureTimeUniform,
     DisclosureDiscreteNormal,
     DisclosureDiscreteTruncatedNormal,
     DisclosureDiscreteUniform,

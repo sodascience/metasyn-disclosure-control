@@ -14,15 +14,15 @@ from pytest import mark
 from metasyncontrib.disclosure.categorical import DisclosureMultinoulli
 from metasyncontrib.disclosure.faker import DisclosureFaker
 from metasyncontrib.disclosure.privacy import DisclosurePrivacy
-from metasyncontrib.disclosure.uniform import DisclosureDate, DisclosureDateTime, DisclosureTime
+from metasyncontrib.disclosure.uniform import DisclosureDateUniform, DisclosureDateTimeUniform, DisclosureTimeUniform
 
 
 @mark.parametrize(
     "fitter_norm,fitter_disc,input_type",
     [
-        (DateUniformFitter, DisclosureDate, dt.date),
-        (DateTimeUniformFitter, DisclosureDateTime, dt.datetime),
-        (TimeUniformFitter, DisclosureTime, dt.time),
+        (DateUniformFitter, DisclosureDateUniform, dt.date),
+        (DateTimeUniformFitter, DisclosureDateTimeUniform, dt.datetime),
+        (TimeUniformFitter, DisclosureTimeUniform, dt.time),
     ],
 )
 def test_datetime(fitter_norm, fitter_disc, input_type):

@@ -32,7 +32,7 @@ class DisclosureDiscreteUniform(DisclosureNumericalMixin, DiscreteUniformFitter)
 
 
 @disclosure_fitter()
-class DisclosureDateTime(DateTimeUniformFitter):
+class DisclosureDateTimeUniform(DateTimeUniformFitter):
     """Disclosure implementation for the datetime distribution."""
 
     privacy: DisclosurePrivacy
@@ -46,7 +46,7 @@ class DisclosureDateTime(DateTimeUniformFitter):
 
 
 @disclosure_fitter()
-class DisclosureTime(TimeUniformFitter):
+class DisclosureTimeUniform(TimeUniformFitter):
     """Disclosure implementation for the time distribution."""
 
     privacy: DisclosurePrivacy
@@ -67,7 +67,7 @@ class DisclosureTime(TimeUniformFitter):
 
 
 @disclosure_fitter()
-class DisclosureDate(DateUniformFitter):
+class DisclosureDateUniform(DateUniformFitter):
     """Disclosure implementation for the date distribution."""
 
     privacy: DisclosurePrivacy

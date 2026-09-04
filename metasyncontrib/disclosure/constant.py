@@ -16,7 +16,8 @@ from metasyncontrib.disclosure.base import disclosure_fitter
 class DisclosureConstant(ContinuousConstantFitter):
     """Disclosure controlled ConstantFitter."""
 
-    def _fit(self, series):
+    def _fit(self, series, fit_log):
+        fit_log.add(privacy="For disclosure reasons the constant fitter doesn't use data.")
         return self.distribution(99999.9)
 
 
@@ -24,7 +25,8 @@ class DisclosureConstant(ContinuousConstantFitter):
 class DisclosureDiscreteConstant(DiscreteConstantFitter):
     """Disclosure controlled DiscreteConstantFitter."""
 
-    def _fit(self, series):
+    def _fit(self, series, fit_log):
+        fit_log.add(privacy="For disclosure reasons the constant fitter doesn't use data.")
         return self.distribution(99999)
 
 
@@ -32,7 +34,8 @@ class DisclosureDiscreteConstant(DiscreteConstantFitter):
 class DisclosureStringConstant(StringConstantFitter):
     """Disclosure controlled StringConstantFitter."""
 
-    def _fit(self, series):
+    def _fit(self, series, fit_log):
+        fit_log.add(privacy="For disclosure reasons the constant fitter doesn't use data.")
         return self.distribution("REDACTED")
 
 
@@ -40,7 +43,8 @@ class DisclosureStringConstant(StringConstantFitter):
 class DisclosureDateTimeConstant(DateTimeConstantFitter):
     """Disclosure controlled DateTimeConstantFitter."""
 
-    def _fit(self, series):
+    def _fit(self, series, fit_log):
+        fit_log.add(privacy="For disclosure reasons the constant fitter doesn't use data.")
         return self.distribution("1970-01-01T00:00:00")
 
 
@@ -48,7 +52,8 @@ class DisclosureDateTimeConstant(DateTimeConstantFitter):
 class DisclosureTimeConstant(TimeConstantFitter):
     """Disclosure controlled TimeConstantFitter."""
 
-    def _fit(self, series):
+    def _fit(self, series, fit_log):
+        fit_log.add(privacy="For disclosure reasons the constant fitter doesn't use data.")
         return self.distribution("00:00:00")
 
 
@@ -56,5 +61,6 @@ class DisclosureTimeConstant(TimeConstantFitter):
 class DisclosureDateConstant(DateConstantFitter):
     """Disclosure controlled DateConstantFitter."""
 
-    def _fit(self, series):
+    def _fit(self, series, fit_log):
+        fit_log.add(privacy="For disclosure reasons the constant fitter doesn't use data.")
         return self.distribution("1970-01-01")

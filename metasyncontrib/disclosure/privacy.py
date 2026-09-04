@@ -72,3 +72,9 @@ class DisclosurePrivacy(BasePrivacy):
                          f" average of the {self.partition_size} lowest or highest values.")
 
         return base_msg
+
+    def describe(self) -> str:
+        """Give a description for the privacy class to be logged."""
+        return (f"The privacy was done using disclosure control privacy with a partition sum of"
+                f" {self.partition_size}, maximum dominance of {self.max_dominance} and group"
+                f" disclosure threshold of {self.group_disclosure_threshold}.")

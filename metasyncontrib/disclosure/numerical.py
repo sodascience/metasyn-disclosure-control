@@ -16,9 +16,15 @@ class DisclosureNumericalMixin(BaseFitter):
         """Fit numeric distributions with disclosure control rules in place."""
         fit_log = VarLog() if fit_log is None else fit_log
         series = convert_to_series(values)
-        sub_series = micro_aggregate(series,
-                                     fit_log,
-                                     min_partition_size=self.privacy.partition_size,
-                                     max_dominance=self.privacy.max_dominance)
+        try:
+            sub_series = micro_aggregate(series,
+                                        fit_log,
+                                        min_partition_size=self.privacy.partition_size,
+                                        max_dominance=self.privacy.max_dominance)
+        except (ValueError, AssertionError) as exc:
+            fit_log.add(method="Failed to micro-aggregate data, using default distribution.")
+            fit_log.add(method=f"Exception: {exc}.")
+            return self.distribution.default_distribution()
+
         fit_log.add(method="Applying normal fit method on micro-aggregated data.")
         return self._fit(sub_series, fit_log)

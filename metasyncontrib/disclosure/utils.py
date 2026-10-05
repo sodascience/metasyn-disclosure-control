@@ -170,6 +170,9 @@ def micro_aggregate(values: pl.Series, fit_log: VarLog, min_partition_size: int 
     # Compute initial settings of parition_size, start_remove, end_remove
     assert min_partition_size > 6, ("Please use a bigger minimum bin size, or disclosure "
                                     "control will not work.")
+    if len(values) < min_partition_size:
+        raise ValueError(f"Cannot micro-aggregate series with name {values.name}, because there are"
+                         f" not enough values: {len(values)} < {min_partition_size}.")
     cur_settings = (len(values) // min_partition_size, 0, 0)
     sub_values, dominance = _create_subsample(values, *cur_settings)
     fit_log.add(privacy=f"Using micro-aggregation with minimum partition size {min_partition_size} "

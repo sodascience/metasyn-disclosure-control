@@ -21,7 +21,7 @@ jobs:
         metasyn-version: [ "git+https://github.com/sodascience/metasyn.git@develop"]
         include:
           - python-version: "3.11"
-            metasyn-version: "metasyn==2.1.0"
+            metasyn-version: "metasyn==3.0.0"
 
     steps:
     - uses: actions/checkout@v4
